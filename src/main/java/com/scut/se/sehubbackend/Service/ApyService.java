@@ -81,10 +81,78 @@ public class ApyService {
                         .build();
                 break;
             }
-            // To do
-//            case Event: {
-//                break;
-//            }
+            case Event: {
+                joinInformation = ApplicationJoinInformation.builder()
+                        .eventName(form.getActname())
+                        .eventSite(form.getActaddr())
+                        .eventTime(form.getActtime())
+                        .eventBackground(form.getActback())
+                        .eventAim(form.getActaim())
+                        .eventIntroduction(form.getActintro())
+                        .eventHost(form.getHostunit())
+                        .eventOrganization(form.getOrganizer())
+                        .eventTarget(form.getTarget())
+                        .build();
+                break;
+            }
+            case Host:{
+                joinInformation = ApplicationJoinInformation.builder()
+                        .eventName(form.getActname())
+                        .eventSite(form.getActaddr())
+                        .eventTime(form.getActtime())
+                        .rehearsalTime(form.getRehtime())
+                        .amount(form.getNumber())
+                        .remarks(form.getOthers())
+                        .build();
+                break;
+            }
+            case NewMedia:{
+                joinInformation = ApplicationJoinInformation.builder()
+                        .eventName(form.getActname())
+                        .eventSite(form.getActaddr())
+                        .eventTime(form.getActtime())
+                        .deadline(form.getDeadline())
+                        .task(form.getWork())
+                        .remarks(form.getOthers())
+                        .build();
+                break;
+            }
+            case Reporter:{
+                joinInformation= ApplicationJoinInformation.builder()
+                        .eventName(form.getActname())
+                        .eventSite(form.getActaddr())
+                        .eventTime(form.getActtime())
+                        .deadline(form.getDeadline())
+                        .task(form.getWork())
+                        .remarks(form.getOthers())
+                        .build();
+                break;
+            }
+            case Publicity:{
+                joinInformation= ApplicationJoinInformation.builder()
+                        .eventName(form.getActname())
+                        .eventSite(form.getActaddr())
+                        .eventTime(form.getActtime())
+                        .deadline(form.getDeadline())
+                        .eventIntroduction(form.getActintro())
+                        .materialList(form.getNeeds())
+                        .content(form.getContent())
+                        .remarks(form.getOthers())
+                        .build();
+                break;
+            }
+            case Material:{
+                joinInformation= ApplicationJoinInformation.builder()
+                        .eventName(form.getActname())
+                        .eventSite(form.getActaddr())
+                        .lendTime(form.getLendtime())
+                        .returnTime(form.getBacktime())
+                        .materialList(form.getNeeds())
+                        .remarks(form.getOthers())
+                        .build();
+                break;
+            }
+            case Ticket://to do 讲座票申请表
             default:
                 return SeStatus.InvalidApyType;
         }
