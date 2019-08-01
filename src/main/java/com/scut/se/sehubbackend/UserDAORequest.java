@@ -1,6 +1,6 @@
 package com.scut.se.sehubbackend;
 
-import com.scut.se.sehubbackend.Enumeration.Department;
+import com.scut.se.sehubbackend.Enumeration.DepartmentEnum;
 import com.scut.se.sehubbackend.Enumeration.Position;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -21,7 +21,7 @@ public class UserDAORequest implements Serializable {
     private String password;
     private String name;
     private Long year;
-    private Department department;
+    private DepartmentEnum departmentEnum;
     private Position position;
     private List<GrantedAuthority> grantedAuthorities;
 }

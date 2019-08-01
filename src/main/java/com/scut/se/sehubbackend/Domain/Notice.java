@@ -33,7 +33,7 @@ public class Notice implements Serializable {
     @ManyToOne
     UserAuthentication sponsor;
 
-    @ManyToOne
+    @ManyToOne //应该@ManyToMany吧
     @NotNull
     UserAuthentication acceptor;
 

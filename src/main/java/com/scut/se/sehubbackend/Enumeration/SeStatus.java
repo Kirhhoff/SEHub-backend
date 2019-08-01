@@ -8,7 +8,7 @@ public enum SeStatus {
     InvalidApyType(400, "invalid application type");
 
     private int code;
-    private String msg;
+    private String msg; // msg：message
 
     private SeStatus(int code, String msg){
         this.code = code;

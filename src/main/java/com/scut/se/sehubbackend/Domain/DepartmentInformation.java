@@ -1,6 +1,6 @@
 package com.scut.se.sehubbackend.Domain;
 
-import com.scut.se.sehubbackend.Enumeration.Department;
+import com.scut.se.sehubbackend.Enumeration.DepartmentEnum;
 import org.hibernate.annotations.NaturalId;
 
 import javax.persistence.*;
@@ -20,7 +20,7 @@ public class DepartmentInformation implements Serializable {
     @NotNull
     @Enumerated(value = EnumType.STRING)
     @NaturalId
-    Department department;
+    DepartmentEnum departmentEnum;
 
     @NotNull
     int memberAmount;

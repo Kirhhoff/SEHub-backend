@@ -1,4 +1,4 @@
-package com.scut.se.sehubbackend.Domain.activityNEW;
+package com.scut.se.sehubbackend.Domain.activityN;
 
 
 import lombok.AllArgsConstructor;
@@ -14,8 +14,12 @@ import javax.persistence.*;
 public class ActivitySupplementaryInfo {
 
     @Id
-    @GeneratedValue
-    private String id;
+    @Column(name="activity_id")
+    private Long id;
+
+    @OneToOne
+    @PrimaryKeyJoinColumn(name="activity_id", referencedColumnName="activity_id")
+    private ActivityMainInfo activityMainInfo;
 
     @Lob
     @Basic(fetch = FetchType.LAZY)

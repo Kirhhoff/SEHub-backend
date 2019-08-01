@@ -18,6 +18,7 @@ import java.util.SortedSet;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+// 保存用户信息
 public class UserAuthentication implements Serializable, UserDetails {
 
     private static final long serialVersionUID=1L;

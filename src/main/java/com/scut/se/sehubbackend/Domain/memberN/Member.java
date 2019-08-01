@@ -1,6 +1,6 @@
-package com.scut.se.sehubbackend.Domain.memberNEW;
+package com.scut.se.sehubbackend.Domain.memberN;
 
-import com.scut.se.sehubbackend.Domain.activityNEW.ActivityApplication;
+import com.scut.se.sehubbackend.Domain.activityN.ActivityApplication;
 import com.scut.se.sehubbackend.Enumeration.PositionEnum;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -16,7 +16,7 @@ import java.util.List;
 public class Member {
 
     @Id
-    private String studentNumber;
+    private Long studentNumber;
 
     private String name;
 
@@ -25,14 +25,14 @@ public class Member {
     private String phoneNumber;
 
     @ManyToOne
-    @JoinColumn(name = "department_fk")
+    @JoinColumn(name = "department_name")
     private Department department;
 
     @OneToMany(mappedBy = "member")
     private List<Authority> authorityList;
 
     @OneToMany(mappedBy = "member")
-    private List<MemberServedRecords> servedRecords;
+    private List<MemberServedRecord> servedRecords;
 
     @OneToMany(mappedBy="initializer")
     List<ActivityApplication> activityApplicationList;

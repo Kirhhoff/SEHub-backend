@@ -1,4 +1,4 @@
-package com.scut.se.sehubbackend.Domain.activityNEW;
+package com.scut.se.sehubbackend.Domain.activityN;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -16,8 +16,7 @@ import java.util.Date;
 public class ActivityMainInfo {
 
     @Id
-    @GeneratedValue
-    private String id;
+    private Long activityId;
 
     private String name;
 

@@ -26,7 +26,7 @@ public class ManagerService {
     public Response createUser(UserDAORequest userDAORequest){
         UserHistory userHistory=UserHistory.builder()
                 .year(userDAORequest.getYear())
-                .department(userDAORequest.getDepartment())
+                .departmentEnum(userDAORequest.getDepartmentEnum())
                 .position(userDAORequest.getPosition())
                 .build();
 
@@ -41,12 +41,12 @@ public class ManagerService {
                 .userInformation(userInformation)
                 .build();
 
-        GrantedAuthority staticAuthority=authorityMapper.map(userDAORequest.getPosition(),userDAORequest.getDepartment());
+        GrantedAuthority staticAuthority=authorityMapper.map(userDAORequest.getPosition(),userDAORequest.getDepartmentEnum());
         if(staticAuthority!=null){
             Set<GrantedAuthority> authorityRecords=new HashSet<>();
             authorityRecords.add(staticAuthority);
             if(userDAORequest.getPosition()== Position.Minister)
-                authorityRecords.addAll(authorityMapper.mapAllDynamic(userDAORequest.getDepartment()));
+                authorityRecords.addAll(authorityMapper.mapAllDynamic(userDAORequest.getDepartmentEnum()));
             userAuthentication.setAuthorityRecords(authorityRecords);
         }
         userHistory.setUserAuthentication(userAuthentication);

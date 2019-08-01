@@ -1,4 +1,4 @@
-package com.scut.se.sehubbackend.Domain.activityNEW;
+package com.scut.se.sehubbackend.Domain.activityN;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -13,11 +13,11 @@ import javax.persistence.*;
 public class HostApplication {
 
     @Id
-    @GeneratedValue
-    private String id;
+    @Column(name="activity_id")
+    private Long id;
 
     @OneToOne
-    @JoinColumn(name="activityMainInfo_fk")
+    @PrimaryKeyJoinColumn(name="activity_id", referencedColumnName="activity_id")
     private ActivityMainInfo activityMainInfo;
 
     private Integer numOfHost;

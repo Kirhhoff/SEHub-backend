@@ -1,4 +1,4 @@
-package com.scut.se.sehubbackend.Domain.memberNEW;
+package com.scut.se.sehubbackend.Domain.memberN;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

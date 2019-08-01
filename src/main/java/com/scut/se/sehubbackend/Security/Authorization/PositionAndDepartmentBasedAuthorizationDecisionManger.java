@@ -1,7 +1,7 @@
 package com.scut.se.sehubbackend.Security.Authorization;
 
 import com.scut.se.sehubbackend.Domain.user.UserAuthentication;
-import com.scut.se.sehubbackend.Enumeration.Department;
+import com.scut.se.sehubbackend.Enumeration.DepartmentEnum;
 import com.scut.se.sehubbackend.Enumeration.Position;
 import com.scut.se.sehubbackend.Security.Authorization.interfaces.AuthorizationDecisionManager;
 import org.springframework.security.core.GrantedAuthority;
@@ -37,14 +37,14 @@ public class PositionAndDepartmentBasedAuthorizationDecisionManger implements Au
         //获取操作者和被操作者的职位和部门
         Position operatorPosition=((UserAuthentication) operator).getUserHistories().first().getPosition();
         Position userPosition=((UserAuthentication)user).getUserHistories().first().getPosition();
-        Department operatorDepartment=((UserAuthentication) operator).getUserHistories().first().getDepartment();
-        Department userDepartment=((UserAuthentication)user).getUserHistories().first().getDepartment();
+        DepartmentEnum operatorDepartmentEnum =((UserAuthentication) operator).getUserHistories().first().getDepartmentEnum();
+        DepartmentEnum userDepartmentEnum =((UserAuthentication)user).getUserHistories().first().getDepartmentEnum();
 
         if(isNotImmutable(dynamicAuthority)){//若权限可变
             if(operatorPosition==Position.StandingCommittee){//操作者为常委时
                 return userPosition!=Position.StandingCommittee;//被操作对象不是常委即可
             }else if (operatorPosition==Position.Minister){//操作者为部长时
-                return userPosition==Position.Staff&&userDepartment==operatorDepartment;//被操作者为部员且时相同部门
+                return userPosition==Position.Staff&& userDepartmentEnum == operatorDepartmentEnum;//被操作者为部员且时相同部门
             }else return false;//部员不得操作
         }
         return false;

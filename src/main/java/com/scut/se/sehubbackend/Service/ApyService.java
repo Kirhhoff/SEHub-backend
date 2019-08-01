@@ -20,6 +20,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.*;
 
+// 提交申请表的服务
+// 保存申请信息和保存通知用户
 @Service
 public class ApyService {
 
@@ -35,20 +37,21 @@ public class ApyService {
     @Autowired
     public ApyService(AuthorityMapper authorityMapper){
         applicationType2GrantedAuthority=new HashMap<>();
-        applicationType2GrantedAuthority.put(ApplicationType.Etiquette,authorityMapper.mapDynamic(Department.Relation,null));
-        applicationType2GrantedAuthority.put(ApplicationType.Event,authorityMapper.mapDynamic(Department.StandingCommittee,null));
-        applicationType2GrantedAuthority.put(ApplicationType.Host,authorityMapper.mapDynamic(Department.Literary,null));
-        applicationType2GrantedAuthority.put(ApplicationType.Material,authorityMapper.mapDynamic(Department.Secretary,null));
-        applicationType2GrantedAuthority.put(ApplicationType.NewMedia,authorityMapper.mapDynamic(Department.Media, DynamicDetail.NewMediaApplication));
-        applicationType2GrantedAuthority.put(ApplicationType.Publicity,authorityMapper.mapDynamic(Department.Propaganda,null));
-        applicationType2GrantedAuthority.put(ApplicationType.Reporter,authorityMapper.mapDynamic(Department.Media,DynamicDetail.ReporterApplication));
+        // 每个部门对应一种动态权限
+        applicationType2GrantedAuthority.put(ApplicationType.Etiquette,authorityMapper.mapDynamic(DepartmentEnum.Relation,null));
+        applicationType2GrantedAuthority.put(ApplicationType.Event,authorityMapper.mapDynamic(DepartmentEnum.StandingCommittee,null));
+        applicationType2GrantedAuthority.put(ApplicationType.Host,authorityMapper.mapDynamic(DepartmentEnum.Literary,null));
+        applicationType2GrantedAuthority.put(ApplicationType.Material,authorityMapper.mapDynamic(DepartmentEnum.Secretary,null));
+        applicationType2GrantedAuthority.put(ApplicationType.NewMedia,authorityMapper.mapDynamic(DepartmentEnum.Media, DynamicDetail.NewMediaApplication));
+        applicationType2GrantedAuthority.put(ApplicationType.Publicity,authorityMapper.mapDynamic(DepartmentEnum.Propaganda,null));
+        applicationType2GrantedAuthority.put(ApplicationType.Reporter,authorityMapper.mapDynamic(DepartmentEnum.Media,DynamicDetail.ReporterApplication));
     }
 
     // 获取所有有权限的接收者
     public List<UserAuthentication> getAcceptors(ApplicationType applicationType){
         List<OwnerOnly> owners=authorityRecordRepository
                 .findAllByAuthority(
-                        applicationType2GrantedAuthority.get(applicationType).getAuthority()
+                        applicationType2GrantedAuthority.get(applicationType).getAuthority() //GrantedAuthority.getAuthority()
                 );
         List<UserAuthentication> result=new ArrayList<>();
         for (OwnerOnly ownerOnly:owners)
@@ -56,9 +59,11 @@ public class ApyService {
         return result;
     }
 
-    // 提交申请表
+    // 提交申请
+    // ReqApplicationForm 申请表
     public SeStatus SubmitApplication(UserAuthentication applicant, ReqApplicationForm form){
-        // 构造共有信息
+
+        // ApplicationInternalInformation 申请提交信息，如审核状态，修改时间，发起人等
         ApplicationInternalInformation internalInformation = ApplicationInternalInformation.builder()
                 .status(ApprovalStatus.Submit)
                 .lastModifiedTime(new Date())
@@ -68,7 +73,9 @@ public class ApyService {
                 .build();
         internalInformationRepository.save(internalInformation);
 
+        // ApplicationJoinInformation 申请信息，如活动申请，物资申请，礼仪队申请等
         ApplicationJoinInformation joinInformation;
+        // 根据得到的申请表中的申请类型信息，构建不同的申请信息
         switch (form.getType()){
             case Etiquette: {
                 joinInformation = ApplicationJoinInformation.builder()
@@ -161,6 +168,8 @@ public class ApyService {
         joinInformation.setType(form.getType());
         joinInformationRepository.save(joinInformation);
 
+        // 之前的ReqApplicationForm是用户提交的申请表，ApplicationForm是最终的申请表信息
+        // 包括申请的提交信息和申请信息
         ApplicationForm applicationForm = ApplicationForm.builder()
                 .internalInformation(internalInformation).joinInformation(joinInformation).build();
         formRepository.save(applicationForm);
@@ -179,7 +188,6 @@ public class ApyService {
             notices.add(notice);
         }
         noticeRepository.saveAll(notices);
-
 
         return SeStatus.Success;
     }

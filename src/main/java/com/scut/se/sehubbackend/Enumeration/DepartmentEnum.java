@@ -1,6 +1,6 @@
 package com.scut.se.sehubbackend.Enumeration;
 
-public enum Department {
+public enum DepartmentEnum {
     Other,//阿猫阿狗
     StandingCommittee,//常委
     Secretary,//秘书部

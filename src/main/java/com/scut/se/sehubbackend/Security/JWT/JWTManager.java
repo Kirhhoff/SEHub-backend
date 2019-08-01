@@ -50,6 +50,9 @@ public class JWTManager {
      */
     public UserAuthentication decode(String jwt) throws MalformedClaimException {
         try {
+            // 从 Java 8 引入的一个很有趣的特性是 Optional  类。
+            // Optional 类主要解决的问题是臭名昭著的空指针异常（NullPointerException） —— 每个 Java 程序员都非常了解的异常。
+            // 本质上，这是一个包含有可选值的包装类，这意味着 Optional 类既可以含有对象也可以为空。
             Optional<UserAuthentication> user=userRepository.findById(jwtConsumer.processToClaims(jwt).getSubject());
             if(user.isPresent())
                 return user.get();

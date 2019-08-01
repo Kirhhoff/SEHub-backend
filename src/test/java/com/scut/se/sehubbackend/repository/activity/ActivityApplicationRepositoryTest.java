@@ -70,12 +70,12 @@ public class ActivityApplicationRepositoryTest {
         posterApplication.setPosterSize(PosterSizeEnum.K8.getCode());
         posterApplication.setPropagandaTextRequirement("大力宣传");
 
-        Member initializerAndModifier = new Member();
-
-        Department department= new Department();
-        department.setName("软件学院");
-        department.setNumOfMember(30);
-        department.setMemberList(null);
+//        Member initializerAndModifier = new Member();
+//
+//        Department department= new Department();
+//        department.setName("软件学院");
+//        department.setNumOfMember(30);
+//        department.setMemberList(null);
 
 //        initializerAndModifier.setStudentNumber(new Long(2017));
 //        initializerAndModifier.setDepartment(department);

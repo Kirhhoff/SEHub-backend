@@ -35,6 +35,7 @@ public class SimpleAuthorityManager implements AuthorityManager {
             UserAuthentication userToBeGranted=userToBeGrantedOpt.get();//获取用户
             Set<GrantedAuthority> grantedAuthoritySet= UserAuthorityRecord.toGrantedAuthorities(userToBeGranted.getAuthorityRecords());//获取权限列表
             if(!grantedAuthoritySet.contains(authority)) {//如果没有此权限进行追加并存储
+                // ？
                 Set<GrantedAuthority> changeable=new HashSet<>(grantedAuthoritySet);//防止查询本身是由数组转化而成导致的不可修改
                 changeable.add(authority);//添加权限
                 userToBeGranted.setAuthorityRecords(changeable);//重设

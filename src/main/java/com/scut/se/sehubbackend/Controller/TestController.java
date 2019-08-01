@@ -4,7 +4,7 @@ import com.scut.se.sehubbackend.Domain.Notice;
 import com.scut.se.sehubbackend.Domain.user.UserAuthentication;
 import com.scut.se.sehubbackend.Domain.user.UserHistory;
 import com.scut.se.sehubbackend.Domain.user.UserInformation;
-import com.scut.se.sehubbackend.Enumeration.Department;
+import com.scut.se.sehubbackend.Enumeration.DepartmentEnum;
 import com.scut.se.sehubbackend.Enumeration.NoticeType;
 import com.scut.se.sehubbackend.Enumeration.Position;
 import com.scut.se.sehubbackend.Repository.NoticeRepository;
@@ -39,7 +39,7 @@ public class TestController {
     @RequestMapping("/adduser")
     public void addUser(){
         UserHistory userHistory=UserHistory.builder()
-                .year(Long.valueOf(2017)).position(Position.Minister).department(Department.Research)
+                .year(Long.valueOf(2017)).position(Position.Minister).departmentEnum(DepartmentEnum.Research)
                 .build();
         UserInformation userInformation=UserInformation.builder()
                 .name("ptx")
@@ -61,7 +61,7 @@ public class TestController {
             Notice notice=Notice.builder()
                     .type(NoticeType.Application)
                     .initiateTime(Date.valueOf(LocalDate.now()))
-                    .principalId(Long.valueOf(1999))
+                    .id(Long.valueOf(1999))
                     .sponsor(userAuthentication)
                     .acceptor(userAuthentication)
                     .remarks("测试用备注")

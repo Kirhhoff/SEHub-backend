@@ -1,6 +1,6 @@
-package com.scut.se.sehubbackend.Domain.activityNEW;
+package com.scut.se.sehubbackend.Domain.activityN;
 
-import com.scut.se.sehubbackend.Domain.memberNEW.Member;
+import com.scut.se.sehubbackend.Domain.memberN.Member;
 import com.scut.se.sehubbackend.Enumeration.CheckStatusEnum;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -16,47 +16,53 @@ import java.util.Date;
 public class ActivityApplication {
 
     @Id
-    @GeneratedValue
-    private String id;
+    @Column(name="activity_id")
+    private Long id;
 
     @OneToOne
-    @JoinColumn(name="activityMainInfo_fk")
+    @PrimaryKeyJoinColumn(name="activity_id", referencedColumnName="activity_id")
     private ActivityMainInfo activityMainInfo;
 
     @OneToOne
-    @JoinColumn(name="activitySupplementaryInfo_fk")
+    @PrimaryKeyJoinColumn(name="activity_id", referencedColumnName="activity_id")
     private ActivitySupplementaryInfo activitySupplementaryInfo;
 
     @OneToOne
-    @JoinColumn(name="etiquetteApplication_fk")
+    @PrimaryKeyJoinColumn(name="activity_id", referencedColumnName="activity_id")
     private EtiquetteApplication etiquetteApplication;
 
     @OneToOne
-    @JoinColumn(name="hostApplication_fk")
+    @PrimaryKeyJoinColumn(name="activity_id", referencedColumnName="activity_id")
     private HostApplication hostApplication;
 
     @OneToOne
-    @JoinColumn(name="lectureTicketApplication_fk")
+    @PrimaryKeyJoinColumn(name="activity_id", referencedColumnName="activity_id")
     private LectureTicketApplication lectureTicketApplication;
 
     @OneToOne
-    @JoinColumn(name="posterApplication_fk")
+    @PrimaryKeyJoinColumn(name="activity_id", referencedColumnName="activity_id")
     private PosterApplication posterApplication;
 
     private Integer checkStatus = CheckStatusEnum.WAIT.getCode();
 
+    @Lob
+    @Basic(fetch = FetchType.LAZY)
+    @Column(columnDefinition = "text")
+    private String checkFeedback;
+
     @Temporal(TemporalType.DATE)
+    @org.hibernate.annotations.CreationTimestamp
     private Date submissionDate;
 
     @Temporal(TemporalType.DATE)
     private Date checkDate;
 
     @ManyToOne
-    @JoinColumn(name = "initializer_fk")
+    @JoinColumn(name = "initializer_id")
     private Member initializer;
 
     @ManyToOne
-    @JoinColumn(name = "lastModifier_fk")
+    @JoinColumn(name = "lastModifier_id")
     private Member lastModifier;
 
 }

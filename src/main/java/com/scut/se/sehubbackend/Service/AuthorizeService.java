@@ -31,6 +31,16 @@ import java.util.Optional;
  */
 @Service
 @CrossOrigin
+// @CrossOrigin是用来处理跨域请求的注解
+// http://www.123.com/index.html 调用 http://www.123.com/server.PHP （非跨域）
+// http://www.123.com/index.html 调用 http://www.456.com/server.php （主域名不同:123/456，跨域）
+// http://abc.123.com/index.html 调用 http://def.123.com/server.php（子域名不同:abc/def，跨域）
+// http://www.123.com:8080/index.html调用 http://www.123.com:8081/server.php（端口不同:8080/8081，跨域）
+// http://www.123.com/index.html 调用 https://www.123.com/server.php（协议不同:http/https，跨域）
+// 请注意：localhost和127.0.0.1虽然都指向本机，但也属于跨域。
+// 浏览器执行javascript脚本时，会检查这个脚本属于哪个页面，如果不是同源页面，就不会被执行。
+// @CrossOrigin可以处理跨域请求，让你能访问不是一个域的文件。
+
 public class AuthorizeService {
 
     @Autowired UserAuthenticationRepository userRepository;

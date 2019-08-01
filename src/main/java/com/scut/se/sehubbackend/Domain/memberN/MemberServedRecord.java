@@ -13,10 +13,10 @@ import javax.persistence.ManyToOne;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class MemberServedRecords {
+public class MemberServedRecord {
 
     @Id
-    private String id;
+    private Long id;
 
     @ManyToOne
     @JoinColumn(name="student_number")

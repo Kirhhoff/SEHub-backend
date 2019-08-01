@@ -34,6 +34,7 @@ public class ApplicationJoinInformation implements Serializable {
 
     Date eventTime;//活动时间
 
+    // @Lob：大字段，对应Blob字段类型
     @Lob
     String eventBackground;//活动背景
 
