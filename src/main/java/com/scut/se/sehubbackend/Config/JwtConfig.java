@@ -18,14 +18,14 @@ import org.springframework.stereotype.Component;
 @ConfigurationProperties(prefix = "jwt")
 @Data
 @Component
-public class JWTConfig {
+public class JwtConfig {
 
     Integer rsaKeySize;
     Integer expired;
     String issuer;
 
     @Bean
-    RsaJsonWebKey rsaJsonWebKey(JWTConfig jwtConfig) throws JoseException {
+    RsaJsonWebKey rsaJsonWebKey(JwtConfig jwtConfig) throws JoseException {
         return RsaJwkGenerator.generateJwk(jwtConfig.getRsaKeySize());
     }
 
@@ -35,7 +35,7 @@ public class JWTConfig {
     }
 
     @Bean
-    JwtConsumer jwtConsumer(RsaJsonWebKey rsaJsonWebKey, JWTConfig jwtConfig){
+    JwtConsumer jwtConsumer(RsaJsonWebKey rsaJsonWebKey, JwtConfig jwtConfig){
         return new JwtConsumerBuilder()
                 .setRequireSubject()//要求有被发行对象
                 .setExpectedIssuer(jwtConfig.getIssuer())//检查发行者

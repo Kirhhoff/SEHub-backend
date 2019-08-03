@@ -5,7 +5,7 @@ import com.scut.se.sehubbackend.Enumeration.AuthorityOperation;
 import com.scut.se.sehubbackend.Repository.user.UserAuthenticationRepository;
 import com.scut.se.sehubbackend.Security.Authorization.interfaces.AuthorityManager;
 import com.scut.se.sehubbackend.Security.Authorization.interfaces.AuthorizationDecisionManager;
-import com.scut.se.sehubbackend.Security.JWT.JWTManager;
+import com.scut.se.sehubbackend.Security.JWT.JwtManager;
 import org.jose4j.lang.JoseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -44,7 +44,8 @@ import java.util.Optional;
 public class AuthorizeService {
 
     @Autowired UserAuthenticationRepository userRepository;
-    @Autowired JWTManager jwtManager;
+    @Autowired
+    JwtManager jwtManager;
     @Autowired AuthorizationDecisionManager decisionManager;
     @Autowired AuthorityManager authorityManager;
 

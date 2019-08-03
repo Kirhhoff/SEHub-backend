@@ -1,8 +1,9 @@
-package com.scut.se.sehubbackend;
+package com.scut.se.sehubbackend.unit;
 
 
 import com.scut.se.sehubbackend.Domain.user.UserAuthentication;
-import com.scut.se.sehubbackend.Security.JWT.JWTManager;
+import com.scut.se.sehubbackend.SeHubBackendApplication;
+import com.scut.se.sehubbackend.Security.JWT.JwtManager;
 import org.jose4j.jwt.MalformedClaimException;
 import org.jose4j.jwt.consumer.InvalidJwtException;
 import org.jose4j.lang.JoseException;
@@ -19,10 +20,10 @@ import static org.mockito.Mockito.when;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = SeHubBackendApplication.class)
-public class JWTManagerTest {
+public class JwtManagerTest {
 
     @Autowired
-    JWTManager jwtManager;
+    JwtManager jwtManager;
 
     @Mock
     UserAuthentication user;

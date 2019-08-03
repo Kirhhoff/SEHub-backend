@@ -2,8 +2,7 @@ package com.scut.se.sehubbackend.Security.Authentication.provider;
 
 import com.scut.se.sehubbackend.Domain.user.UserAuthentication;
 import com.scut.se.sehubbackend.Domain.user.UserAuthorityRecord;
-import com.scut.se.sehubbackend.Security.JWT.JWTManager;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.scut.se.sehubbackend.Security.JWT.JwtManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -12,9 +11,13 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Component;
 
 @Component
-public class JWTAuthenticationProvider implements AuthenticationProvider {
+public class JwtAuthenticationProvider implements AuthenticationProvider {
 
-    @Autowired JWTManager jwtManager;
+    final JwtManager jwtManager;
+
+    public JwtAuthenticationProvider(JwtManager jwtManager) {
+        this.jwtManager = jwtManager;
+    }
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {

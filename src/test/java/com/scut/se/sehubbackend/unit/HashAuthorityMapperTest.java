@@ -1,4 +1,4 @@
-package com.scut.se.sehubbackend;
+package com.scut.se.sehubbackend.unit;
 
 
 import com.scut.se.sehubbackend.Enumeration.DepartmentEnum;

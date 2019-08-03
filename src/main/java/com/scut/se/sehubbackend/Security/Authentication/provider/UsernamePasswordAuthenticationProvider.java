@@ -1,36 +1,37 @@
 package com.scut.se.sehubbackend.Security.Authentication.provider;
 
-import com.scut.se.sehubbackend.Domain.user.UserAuthentication;
-import com.scut.se.sehubbackend.Domain.user.UserAuthorityRecord;
-import com.scut.se.sehubbackend.Repository.user.UserAuthenticationRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
-
-import java.util.Optional;
 
 @Component
 public class UsernamePasswordAuthenticationProvider implements AuthenticationProvider {
 
-    @Autowired
-    UserAuthenticationRepository userRepository;
+    final UserDetailsService userDetailsService;
+
+    public UsernamePasswordAuthenticationProvider(UserDetailsService userDetailsService) {
+        this.userDetailsService = userDetailsService;
+    }
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
-        Optional<UserAuthentication> userOptional=userRepository.findById((String) authentication.getPrincipal());//查找用户信息
-        if (!userOptional.isPresent()||!((String)userOptional.get().getPassword()).equals(((String)authentication.getCredentials())))//若未找到或密码错误
-            throw new AuthenticationServiceException("Fail to find the user");
-        else {//正确时授权认证
+        String username=(String)authentication.getPrincipal();
+        String password=(String)authentication.getCredentials();
+        UserDetails userDetailsInDatabase=userDetailsService.loadUserByUsername(username);
+
+        if (password.equals(userDetailsInDatabase.getPassword())){
             return new UsernamePasswordAuthenticationToken(
-                    userOptional.get(),
+                    userDetailsInDatabase,
                     null,
-                    UserAuthorityRecord.toGrantedAuthorities(userOptional.get().getAuthorityRecords())
+                    userDetailsInDatabase.getAuthorities()
             );
-        }
+        }else
+            throw new AuthenticationServiceException("Password match failed!");
     }
 
     @Override
