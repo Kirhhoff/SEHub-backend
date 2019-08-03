@@ -1,4 +1,4 @@
-package com.scut.se.sehubbackend.Security.JWT;
+package com.scut.se.sehubbackend.Security.Jwt;
 
 import com.scut.se.sehubbackend.Config.JwtConfig;
 import org.jose4j.jwk.RsaJsonWebKey;
@@ -10,27 +10,24 @@ import org.jose4j.jwt.consumer.InvalidJwtException;
 import org.jose4j.jwt.consumer.JwtConsumer;
 import org.jose4j.lang.JoseException;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 /**
  * 提供将一个用户编码为{@code jwt}的{@link #encode(UserDetails)}、将一个{@code jwt}解码为用户的{@link #decode(String)}功能<br/>
  */
-@Service
+@Component
 public class JwtManager {
 
     final RsaJsonWebKey rsaJsonWebKey;//密钥对
     final JsonWebSignature jsonWebSignature;//签名
     final JwtConsumer jwtConsumer;//反向构造器
     final JwtConfig jwtConfig;//配置类
-    final UserDetailsService userDetailsService;
 
-    public JwtManager(RsaJsonWebKey rsaJsonWebKey, JsonWebSignature jsonWebSignature, JwtConsumer jwtConsumer, JwtConfig jwtConfig, UserDetailsService userDetailsService) {
+    public JwtManager(RsaJsonWebKey rsaJsonWebKey, JsonWebSignature jsonWebSignature, JwtConsumer jwtConsumer, JwtConfig jwtConfig) {
         this.rsaJsonWebKey = rsaJsonWebKey;
         this.jsonWebSignature = jsonWebSignature;
         this.jwtConsumer = jwtConsumer;
         this.jwtConfig = jwtConfig;
-        this.userDetailsService = userDetailsService;
     }
 
     public String encode(UserDetails userDetails) throws JoseException {

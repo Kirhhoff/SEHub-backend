@@ -1,6 +1,6 @@
 package com.scut.se.sehubbackend.Security.Authentication;
 
-import com.scut.se.sehubbackend.Security.JWT.JwtManager;
+import com.scut.se.sehubbackend.Security.Jwt.JwtManager;
 import org.jose4j.lang.JoseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -17,12 +17,12 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @Component
-public class UsernamePasswordAuthenticationProcessingFilterKKK extends UsernamePasswordAuthenticationFilter {
+public class CustomUsernamePasswordAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
     final JwtManager jwtManager;
 
     @Autowired
-    public UsernamePasswordAuthenticationProcessingFilterKKK(JwtManager jwtManager, AuthenticationManager authenticationManager){
+    public CustomUsernamePasswordAuthenticationFilter(JwtManager jwtManager, AuthenticationManager authenticationManager){
         this.jwtManager = jwtManager;
         setAuthenticationManager(authenticationManager);
     }

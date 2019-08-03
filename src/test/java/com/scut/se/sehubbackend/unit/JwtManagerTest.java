@@ -1,41 +1,82 @@
 package com.scut.se.sehubbackend.unit;
 
 
-import com.scut.se.sehubbackend.Domain.user.UserAuthentication;
-import com.scut.se.sehubbackend.SeHubBackendApplication;
-import com.scut.se.sehubbackend.Security.JWT.JwtManager;
+import com.scut.se.sehubbackend.Security.Jwt.JwtManager;
 import org.jose4j.jwt.MalformedClaimException;
-import org.jose4j.jwt.consumer.InvalidJwtException;
 import org.jose4j.lang.JoseException;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import static org.mockito.Mockito.when;
+import java.util.ArrayList;
+import java.util.Collection;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = SeHubBackendApplication.class)
+@SpringBootTest
 public class JwtManagerTest {
 
-    @Autowired
-    JwtManager jwtManager;
-
-    @Mock
-    UserAuthentication user;
-
-    @Before
-    public void before(){
-        when(user.getStudentNO()).thenReturn("201730683314");
-    }
+    @Autowired JwtManager jwtManager;
 
     @Test
-    public void testEncodeAndDecode() throws JoseException, MalformedClaimException, InvalidJwtException {
-        String jwt=jwtManager.encode(user);//对user编码
-//        UserAuthentication edUser=jwtManager.decode(jwt);//再解码
-//        Assert.assertEquals(user.getStudentNO(),edUser.getStudentNO());//两者的studentNO应该一样
+    public void testEncodeAndDecode() throws JoseException, MalformedClaimException {
+        //编码，同时设置一个修改版的
+        String jwt=jwtManager.encode(mockUserDetails);
+        String jwtM=modify(jwt);
+
+        //对两者同时解码
+        String username=jwtManager.decode(jwt);
+        String usernameM=jwtManager.decode(jwtM);
+
+        //原始的应当相同，修改的应当不同
+        assertEquals(mockUserDetails.getUsername(),username);
+        assertNotEquals(mockUserDetails.getUsername(),usernameM);
     }
+
+    private String modify(String originJwt){
+        return originJwt.toUpperCase();
+    }
+
+    UserDetails mockUserDetails=new UserDetails() {
+        @Override
+        public Collection<? extends GrantedAuthority> getAuthorities() {
+            return new ArrayList<>();
+        }
+
+        @Override
+        public String getPassword() {
+            return "";
+        }
+
+        @Override
+        public String getUsername() {
+            return "Luminosity";
+        }
+
+        @Override
+        public boolean isAccountNonExpired() {
+            return true;
+        }
+
+        @Override
+        public boolean isAccountNonLocked() {
+            return true;
+        }
+
+        @Override
+        public boolean isCredentialsNonExpired() {
+            return true;
+        }
+
+        @Override
+        public boolean isEnabled() {
+            return true;
+        }
+    };
 }

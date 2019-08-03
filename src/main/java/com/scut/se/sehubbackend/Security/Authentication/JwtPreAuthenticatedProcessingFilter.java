@@ -1,6 +1,6 @@
 package com.scut.se.sehubbackend.Security.Authentication;
 
-import com.scut.se.sehubbackend.Security.JWT.JwtManager;
+import com.scut.se.sehubbackend.Security.Jwt.JwtManager;
 import org.jose4j.jwt.MalformedClaimException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.ProviderManager;

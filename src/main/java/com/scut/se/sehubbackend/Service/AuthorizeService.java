@@ -5,7 +5,7 @@ import com.scut.se.sehubbackend.Enumeration.AuthorityOperation;
 import com.scut.se.sehubbackend.Repository.user.UserAuthenticationRepository;
 import com.scut.se.sehubbackend.Security.Authorization.interfaces.AuthorityManager;
 import com.scut.se.sehubbackend.Security.Authorization.interfaces.AuthorizationDecisionManager;
-import com.scut.se.sehubbackend.Security.JWT.JwtManager;
+import com.scut.se.sehubbackend.Security.Jwt.JwtManager;
 import org.jose4j.lang.JoseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
