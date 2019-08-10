@@ -18,4 +18,6 @@ public class Authority {
     @ManyToOne
     @JoinColumn(name = "student_number")
     private Member member;
+
+    String authorityName;
 }

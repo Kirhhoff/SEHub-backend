@@ -18,6 +18,8 @@ public class Member {
     @Id
     private Long studentNumber;
 
+    private String password;
+
     private String name;
 
     private Integer position = PositionEnum.MINISTER.getCode();
