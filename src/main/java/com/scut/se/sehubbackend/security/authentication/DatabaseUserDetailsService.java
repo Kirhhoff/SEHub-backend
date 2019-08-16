@@ -1,7 +1,7 @@
 package com.scut.se.sehubbackend.security.authentication;
 
-import com.scut.se.sehubbackend.domain.memberN.Member;
-import com.scut.se.sehubbackend.dao.memberN.MemberRepository;
+import com.scut.se.sehubbackend.domain.member.Member;
+import com.scut.se.sehubbackend.dao.member.MemberRepository;
 import com.scut.se.sehubbackend.security.AuthorityUtil;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

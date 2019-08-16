@@ -3,7 +3,6 @@ package com.scut.se.sehubbackend.security.authorization.interfaces;
 import com.scut.se.sehubbackend.enumeration.DepartmentNameEnum;
 import com.scut.se.sehubbackend.enumeration.DynamicDetail;
 import com.scut.se.sehubbackend.enumeration.PositionEnum;
-import com.scut.se.sehubbackend.security.authorization.HashAuthorityMapper;
 import org.springframework.security.core.GrantedAuthority;
 
 import java.util.Set;
@@ -12,7 +11,6 @@ import java.util.Set;
  * 由字符串构建权限的服务<br/>
  * 应当实现一个由输入字符串返回相应权限的功能<br/>
  * <b>注意，所有权限都应当通过{@code mapper}提供的方法获取而不是手动创建，这样可以实现权限描述的规范化</b><br/>
- * 提供了一个基本实现{@link HashAuthorityMapper}
  */
 public interface AuthorityMapper {
 

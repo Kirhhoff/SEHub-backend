@@ -1,8 +1,8 @@
 package com.scut.se.sehubbackend.dto;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.scut.se.sehubbackend.domain.activityN.ActivityMainInfo;
-import com.scut.se.sehubbackend.domain.activityN.ActivitySupplementaryInfo;
+import com.scut.se.sehubbackend.domain.activity.ActivityMainInfo;
+import com.scut.se.sehubbackend.domain.activity.ActivitySupplementaryInfo;
 import com.scut.se.sehubbackend.enumeration.CheckStatusEnum;
 import com.scut.se.sehubbackend.utils.Date2LongSerializer;
 import lombok.Data;

@@ -1,6 +1,5 @@
 package com.scut.se.sehubbackend.security.authorization.interfaces;
 
-import com.scut.se.sehubbackend.security.authorization.SimpleAuthorityManager;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -8,8 +7,6 @@ import org.springframework.security.core.userdetails.UserDetails;
  * 权限管理服务<br/>
  * 应当实现的功能应当包括增加、移除权限等等，同时还提供通过字符串生成权限的功能<br/>
  * <b>注意这个服务只负责执行，该不该执行由上层调用者决定</b><br/>
- * 具体的实现类可以参考{@link SimpleAuthorityManager}
- * @see SimpleAuthorityManager
 * */
 public interface AuthorityManager {
     /**

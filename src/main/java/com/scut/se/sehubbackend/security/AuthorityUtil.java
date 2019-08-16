@@ -1,6 +1,6 @@
 package com.scut.se.sehubbackend.security;
 
-import com.scut.se.sehubbackend.domain.memberN.Authority;
+import com.scut.se.sehubbackend.domain.member.Authority;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
