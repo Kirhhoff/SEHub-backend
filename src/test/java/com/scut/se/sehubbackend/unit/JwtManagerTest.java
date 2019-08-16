@@ -1,7 +1,7 @@
 package com.scut.se.sehubbackend.unit;
 
 
-import com.scut.se.sehubbackend.Security.Jwt.JwtManager;
+import com.scut.se.sehubbackend.security.jwt.JwtManager;
 import org.jose4j.jwt.MalformedClaimException;
 import org.jose4j.lang.JoseException;
 import org.junit.Test;

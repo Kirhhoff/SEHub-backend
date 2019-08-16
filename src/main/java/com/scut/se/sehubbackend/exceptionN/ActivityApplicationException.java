@@ -1,6 +1,6 @@
 package com.scut.se.sehubbackend.exceptionN;
 
-import com.scut.se.sehubbackend.Enumeration.ResultEnum;
+import com.scut.se.sehubbackend.enumeration.ResultEnum;
 
 public class ActivityApplicationException extends RuntimeException{
 

@@ -1,12 +1,12 @@
 package com.scut.se.sehubbackend.unit;
 
 
-import com.scut.se.sehubbackend.Domain.memberN.Authority;
-import com.scut.se.sehubbackend.Domain.memberN.Member;
-import com.scut.se.sehubbackend.Repository.memberN.MemberRepository;
-import com.scut.se.sehubbackend.Security.AuthorityUtil;
-import com.scut.se.sehubbackend.Security.Authentication.DatabaseUserDetailsService;
-import com.scut.se.sehubbackend.Security.Role;
+import com.scut.se.sehubbackend.domain.memberN.Authority;
+import com.scut.se.sehubbackend.domain.memberN.Member;
+import com.scut.se.sehubbackend.dao.memberN.MemberRepository;
+import com.scut.se.sehubbackend.security.AuthorityUtil;
+import com.scut.se.sehubbackend.security.authentication.DatabaseUserDetailsService;
+import com.scut.se.sehubbackend.security.Role;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

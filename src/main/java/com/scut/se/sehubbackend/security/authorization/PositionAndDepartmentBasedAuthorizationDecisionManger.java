@@ -1,0 +1,62 @@
+package com.scut.se.sehubbackend.security.authorization;
+
+import com.scut.se.sehubbackend.domain.user.UserAuthentication;
+import com.scut.se.sehubbackend.enumeration.DepartmentNameEnum;
+import com.scut.se.sehubbackend.enumeration.PositionEnum;
+import com.scut.se.sehubbackend.security.authorization.interfaces.AuthorizationDecisionManager;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Service;
+
+
+/**
+ * 一个基于部门和职位进行决策的实现，可参考{@link AuthorizationDecisionManager}<br/>
+ * 决策的依据是:<br/>
+ * 1.{@code operator}与{@code user}应位于相同部门，常委不受限<br/>
+ * 2.{@code operator}的职位应高于{@code user}<br/>
+ * 3 部员无权进行权限变更操作<br/>
+ * @see AuthorizationDecisionManager
+ */
+@Service
+public class PositionAndDepartmentBasedAuthorizationDecisionManger implements AuthorizationDecisionManager {
+
+    /**
+     * 具体描述见{@link AuthorizationDecisionManager#decide(UserDetails, UserDetails, GrantedAuthority)}<br/>
+     * 此处采取的依据见{@link PositionAndDepartmentBasedAuthorizationDecisionManger}
+     * @param operator 变更行为的发起者
+     * @param user 变更行为的承受者
+     * @param dynamicAuthority 要变更的权限
+     * @return 决策结果
+     */
+    @Override
+    public Boolean decide(UserDetails operator, UserDetails user, GrantedAuthority dynamicAuthority) {
+        if(!(operator instanceof UserAuthentication)||!(user instanceof UserAuthentication)||dynamicAuthority==null){//检测类型，以防万一
+            return false;
+        }
+
+        //获取操作者和被操作者的职位和部门
+        PositionEnum operatorPositionEnum =((UserAuthentication) operator).getUserHistories().first().getPositionEnum();
+        PositionEnum userPositionEnum =((UserAuthentication)user).getUserHistories().first().getPositionEnum();
+        DepartmentNameEnum operatorDepartmentNameEnum =((UserAuthentication) operator).getUserHistories().first().getDepartmentNameEnum();
+        DepartmentNameEnum userDepartmentNameEnum =((UserAuthentication)user).getUserHistories().first().getDepartmentNameEnum();
+
+        if(isNotImmutable(dynamicAuthority)){//若权限可变
+            if(operatorPositionEnum == PositionEnum.StandingCommittee){//操作者为常委时
+                return userPositionEnum != PositionEnum.StandingCommittee;//被操作对象不是常委即可
+            }else if (operatorPositionEnum == PositionEnum.Minister){//操作者为部长时
+                return userPositionEnum == PositionEnum.Staff&& userDepartmentNameEnum == operatorDepartmentNameEnum;//被操作者为部员且时相同部门
+            }else return false;//部员不得操作
+        }
+        return false;
+    }
+
+    /**
+     * 检测目标权限是否可变<br/>
+     * 此处直接检测权限是否以{@code Dynamic}开头
+     * @param dynamicAuthority 目标权限是否可变
+     * @return 结果
+     */
+    Boolean isNotImmutable(GrantedAuthority dynamicAuthority){
+        return dynamicAuthority.getAuthority().startsWith("Dynamic");
+    }
+}

@@ -1,7 +1,7 @@
 package com.scut.se.sehubbackend;
 
-import com.scut.se.sehubbackend.Enumeration.DepartmentNameEnum;
-import com.scut.se.sehubbackend.Enumeration.PositionEnum;
+import com.scut.se.sehubbackend.enumeration.DepartmentNameEnum;
+import com.scut.se.sehubbackend.enumeration.PositionEnum;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

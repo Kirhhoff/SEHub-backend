@@ -1,12 +1,12 @@
 package com.scut.se.sehubbackend;
 
-import com.scut.se.sehubbackend.Domain.user.UserAuthentication;
-import com.scut.se.sehubbackend.Domain.user.UserHistory;
-import com.scut.se.sehubbackend.Enumeration.DepartmentNameEnum;
-import com.scut.se.sehubbackend.Enumeration.PositionEnum;
-import com.scut.se.sehubbackend.Security.Authorization.HashAuthorityMapper;
-import com.scut.se.sehubbackend.Security.Authorization.PositionAndDepartmentBasedAuthorizationDecisionManger;
-import com.scut.se.sehubbackend.Security.Authorization.interfaces.AuthorityMapper;
+import com.scut.se.sehubbackend.domain.user.UserAuthentication;
+import com.scut.se.sehubbackend.domain.user.UserHistory;
+import com.scut.se.sehubbackend.enumeration.DepartmentNameEnum;
+import com.scut.se.sehubbackend.enumeration.PositionEnum;
+import com.scut.se.sehubbackend.security.authorization.HashAuthorityMapper;
+import com.scut.se.sehubbackend.security.authorization.PositionAndDepartmentBasedAuthorizationDecisionManger;
+import com.scut.se.sehubbackend.security.authorization.interfaces.AuthorityMapper;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

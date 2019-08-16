@@ -1,10 +1,10 @@
 package com.scut.se.sehubbackend.unit;
 
 
-import com.scut.se.sehubbackend.Enumeration.DepartmentNameEnum;
-import com.scut.se.sehubbackend.Enumeration.DynamicDetail;
-import com.scut.se.sehubbackend.Enumeration.PositionEnum;
-import com.scut.se.sehubbackend.Security.Authorization.HashAuthorityMapper;
+import com.scut.se.sehubbackend.enumeration.DepartmentNameEnum;
+import com.scut.se.sehubbackend.enumeration.DynamicDetail;
+import com.scut.se.sehubbackend.enumeration.PositionEnum;
+import com.scut.se.sehubbackend.security.authorization.HashAuthorityMapper;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.powermock.modules.junit4.PowerMockRunner;
