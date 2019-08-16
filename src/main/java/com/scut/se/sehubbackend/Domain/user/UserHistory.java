@@ -1,8 +1,8 @@
 package com.scut.se.sehubbackend.Domain.user;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.scut.se.sehubbackend.Enumeration.DepartmentEnum;
-import com.scut.se.sehubbackend.Enumeration.Position;
+import com.scut.se.sehubbackend.Enumeration.DepartmentNameEnum;
+import com.scut.se.sehubbackend.Enumeration.PositionEnum;
 import lombok.*;
 
 import javax.persistence.*;
@@ -36,11 +36,11 @@ public class UserHistory implements Serializable,Comparable {
     Long year;
 
     @Enumerated(EnumType.STRING)
-    DepartmentEnum departmentEnum;
+    DepartmentNameEnum departmentNameEnum;
 
     @NotNull
     @Enumerated(EnumType.STRING)
-    Position position;
+    PositionEnum positionEnum;
 
     @ManyToOne(optional = false)
     @ToString.Exclude

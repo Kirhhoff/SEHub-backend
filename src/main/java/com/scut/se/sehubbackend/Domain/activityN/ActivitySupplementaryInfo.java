@@ -7,39 +7,33 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
-@Entity
+/**
+ * 对活动申请表的补充信息，包括活动背景、目标受众等等
+ */
+@Embeddable
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class ActivitySupplementaryInfo {
 
-    @Id
-    @Column(name="activity_id")
-    private Long id;
-
-    @OneToOne
-    @PrimaryKeyJoinColumn(name="activity_id", referencedColumnName="activity_id")
-    private ActivityMainInfo activityMainInfo;
+    @Lob
+    @Basic(fetch = FetchType.LAZY)
+    @Column(columnDefinition = "text")
+    String background;//活动背景
 
     @Lob
     @Basic(fetch = FetchType.LAZY)
     @Column(columnDefinition = "text")
-    private String background;
+    String objective;//活动的目标受众
+
+    String organizer;//活动隶属的组织
+
+    String hostUnit;//活动主办方
+
+    Integer expectedNumOfParticipants;//预计参与人数
 
     @Lob
     @Basic(fetch = FetchType.LAZY)
     @Column(columnDefinition = "text")
-    private String objective;
-
-    private String organizer;
-
-    private String hostUnit;
-
-    private Integer expectedNumOfParticipants;
-
-    @Lob
-    @Basic(fetch = FetchType.LAZY)
-    @Column(columnDefinition = "text")
-    private String note;
-
+    String note;//补充说明
 }

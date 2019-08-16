@@ -3,7 +3,7 @@ package com.scut.se.sehubbackend.Service;
 import com.scut.se.sehubbackend.Domain.user.UserAuthentication;
 import com.scut.se.sehubbackend.Domain.user.UserHistory;
 import com.scut.se.sehubbackend.Domain.user.UserInformation;
-import com.scut.se.sehubbackend.Enumeration.Position;
+import com.scut.se.sehubbackend.Enumeration.PositionEnum;
 import com.scut.se.sehubbackend.Enumeration.SeStatus;
 import com.scut.se.sehubbackend.Others.Response;
 import com.scut.se.sehubbackend.Repository.user.UserAuthenticationRepository;
@@ -26,8 +26,8 @@ public class ManagerService {
     public Response createUser(UserDAORequest userDAORequest){
         UserHistory userHistory=UserHistory.builder()
                 .year(userDAORequest.getYear())
-                .departmentEnum(userDAORequest.getDepartmentEnum())
-                .position(userDAORequest.getPosition())
+                .departmentNameEnum(userDAORequest.getDepartmentNameEnum())
+                .positionEnum(userDAORequest.getPositionEnum())
                 .build();
 
         UserInformation userInformation= UserInformation.builder()
@@ -41,12 +41,12 @@ public class ManagerService {
                 .userInformation(userInformation)
                 .build();
 
-        GrantedAuthority staticAuthority=authorityMapper.map(userDAORequest.getPosition(),userDAORequest.getDepartmentEnum());
+        GrantedAuthority staticAuthority=authorityMapper.map(userDAORequest.getPositionEnum(),userDAORequest.getDepartmentNameEnum());
         if(staticAuthority!=null){
             Set<GrantedAuthority> authorityRecords=new HashSet<>();
             authorityRecords.add(staticAuthority);
-            if(userDAORequest.getPosition()== Position.Minister)
-                authorityRecords.addAll(authorityMapper.mapAllDynamic(userDAORequest.getDepartmentEnum()));
+            if(userDAORequest.getPositionEnum()== PositionEnum.Minister)
+                authorityRecords.addAll(authorityMapper.mapAllDynamic(userDAORequest.getDepartmentNameEnum()));
             userAuthentication.setAuthorityRecords(authorityRecords);
         }
         userHistory.setUserAuthentication(userAuthentication);

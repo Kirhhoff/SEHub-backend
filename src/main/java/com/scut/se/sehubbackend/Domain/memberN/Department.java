@@ -1,26 +1,37 @@
 package com.scut.se.sehubbackend.Domain.memberN;
 
+import com.scut.se.sehubbackend.Enumeration.DepartmentNameEnum;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.NaturalId;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import java.util.List;
 
+/**
+ * 部门
+ */
 @Entity
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class Department {
 
-    @Id
-    private String name;
+    @Id@GeneratedValue
+    Long id;
 
-    private Integer numOfMember;
+    @NaturalId
+    @Enumerated(value = EnumType.STRING)
+    DepartmentNameEnum departmentName;//部门名称
 
     @OneToMany(mappedBy = "department")
-    private List<Member> memberList;
+    List<Member> memberList;//部门成员列表
 
+    @Lob
+    @Basic(fetch=FetchType.LAZY)
+    @Column(columnDefinition = "text")
+    String departmentDescription;//部门描述
 }

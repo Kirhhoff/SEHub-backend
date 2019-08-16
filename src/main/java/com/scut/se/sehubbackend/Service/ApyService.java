@@ -38,13 +38,13 @@ public class ApyService {
     public ApyService(AuthorityMapper authorityMapper){
         applicationType2GrantedAuthority=new HashMap<>();
         // 每个部门对应一种动态权限
-        applicationType2GrantedAuthority.put(ApplicationType.Etiquette,authorityMapper.mapDynamic(DepartmentEnum.Relation,null));
-        applicationType2GrantedAuthority.put(ApplicationType.Event,authorityMapper.mapDynamic(DepartmentEnum.StandingCommittee,null));
-        applicationType2GrantedAuthority.put(ApplicationType.Host,authorityMapper.mapDynamic(DepartmentEnum.Literary,null));
-        applicationType2GrantedAuthority.put(ApplicationType.Material,authorityMapper.mapDynamic(DepartmentEnum.Secretary,null));
-        applicationType2GrantedAuthority.put(ApplicationType.NewMedia,authorityMapper.mapDynamic(DepartmentEnum.Media, DynamicDetail.NewMediaApplication));
-        applicationType2GrantedAuthority.put(ApplicationType.Publicity,authorityMapper.mapDynamic(DepartmentEnum.Propaganda,null));
-        applicationType2GrantedAuthority.put(ApplicationType.Reporter,authorityMapper.mapDynamic(DepartmentEnum.Media,DynamicDetail.ReporterApplication));
+        applicationType2GrantedAuthority.put(ApplicationType.Etiquette,authorityMapper.mapDynamic(DepartmentNameEnum.Relation,null));
+        applicationType2GrantedAuthority.put(ApplicationType.Event,authorityMapper.mapDynamic(DepartmentNameEnum.StandingCommittee,null));
+        applicationType2GrantedAuthority.put(ApplicationType.Host,authorityMapper.mapDynamic(DepartmentNameEnum.Literary,null));
+        applicationType2GrantedAuthority.put(ApplicationType.Material,authorityMapper.mapDynamic(DepartmentNameEnum.Secretary,null));
+        applicationType2GrantedAuthority.put(ApplicationType.NewMedia,authorityMapper.mapDynamic(DepartmentNameEnum.Media, DynamicDetail.NewMediaApplication));
+        applicationType2GrantedAuthority.put(ApplicationType.Publicity,authorityMapper.mapDynamic(DepartmentNameEnum.Propaganda,null));
+        applicationType2GrantedAuthority.put(ApplicationType.Reporter,authorityMapper.mapDynamic(DepartmentNameEnum.Media,DynamicDetail.ReporterApplication));
     }
 
     // 获取所有有权限的接收者

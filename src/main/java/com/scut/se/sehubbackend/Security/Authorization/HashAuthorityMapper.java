@@ -1,8 +1,8 @@
 package com.scut.se.sehubbackend.Security.Authorization;
 
-import com.scut.se.sehubbackend.Enumeration.DepartmentEnum;
+import com.scut.se.sehubbackend.Enumeration.DepartmentNameEnum;
 import com.scut.se.sehubbackend.Enumeration.DynamicDetail;
-import com.scut.se.sehubbackend.Enumeration.Position;
+import com.scut.se.sehubbackend.Enumeration.PositionEnum;
 import com.scut.se.sehubbackend.Security.Authorization.interfaces.AuthorityMapper;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -24,9 +24,9 @@ public class HashAuthorityMapper implements AuthorityMapper {
 
     private static Map<String,GrantedAuthority> authorityMapper =new HashMap<>();//内部维护的映射表
     private static final String SEPARATOR ="_";//分割符
-    private static final String STANDING_COMMITTEE_PREFIX=Position.StandingCommittee.toString();//常委前缀
-    private static final String MINISTER_PREFIX = Position.Minister.toString();//部长前缀
-    private static final String STUFF_PREFIX=Position.Staff.toString();//部员前缀
+    private static final String STANDING_COMMITTEE_PREFIX= PositionEnum.StandingCommittee.toString();//常委前缀
+    private static final String MINISTER_PREFIX = PositionEnum.Minister.toString();//部长前缀
+    private static final String STUFF_PREFIX= PositionEnum.Staff.toString();//部员前缀
     private static final String MUTABLE_PREFIX="Dynamic";//动态权限前缀
 
     /**
@@ -34,17 +34,17 @@ public class HashAuthorityMapper implements AuthorityMapper {
      */
     // 静态方法，权限字符串：职位 + 部门 or 部门
     static {
-         authorityMapper.put(Position.StandingCommittee.toString(),new SimpleGrantedAuthority(STANDING_COMMITTEE_PREFIX));//常委权限
-        for (DepartmentEnum departmentEnum : DepartmentEnum.values()){
+         authorityMapper.put(PositionEnum.StandingCommittee.toString(),new SimpleGrantedAuthority(STANDING_COMMITTEE_PREFIX));//常委权限
+        for (DepartmentNameEnum departmentNameEnum : DepartmentNameEnum.values()){
             //部长权限
-            authorityMapper.put(MINISTER_PREFIX + SEPARATOR + departmentEnum.toString(),new SimpleGrantedAuthority(MINISTER_PREFIX + SEPARATOR + departmentEnum.toString()));
+            authorityMapper.put(MINISTER_PREFIX + SEPARATOR + departmentNameEnum.toString(),new SimpleGrantedAuthority(MINISTER_PREFIX + SEPARATOR + departmentNameEnum.toString()));
             //部员权限
-            authorityMapper.put(STUFF_PREFIX + SEPARATOR + departmentEnum.toString(),new SimpleGrantedAuthority(STUFF_PREFIX + SEPARATOR + departmentEnum.toString()));
+            authorityMapper.put(STUFF_PREFIX + SEPARATOR + departmentNameEnum.toString(),new SimpleGrantedAuthority(STUFF_PREFIX + SEPARATOR + departmentNameEnum.toString()));
             //部门动态权限
-            authorityMapper.put(MUTABLE_PREFIX+ SEPARATOR + departmentEnum.toString(),new SimpleGrantedAuthority(MUTABLE_PREFIX+ SEPARATOR + departmentEnum.toString()));
+            authorityMapper.put(MUTABLE_PREFIX+ SEPARATOR + departmentNameEnum.toString(),new SimpleGrantedAuthority(MUTABLE_PREFIX+ SEPARATOR + departmentNameEnum.toString()));
         }
-        authorityMapper.put(MUTABLE_PREFIX+ SEPARATOR + DepartmentEnum.Media+SEPARATOR+DynamicDetail.NewMediaApplication,new SimpleGrantedAuthority(MUTABLE_PREFIX+ SEPARATOR + DepartmentEnum.Media+SEPARATOR+DynamicDetail.NewMediaApplication));
-        authorityMapper.put(MUTABLE_PREFIX+ SEPARATOR + DepartmentEnum.Media+SEPARATOR+DynamicDetail.ReporterApplication,new SimpleGrantedAuthority(MUTABLE_PREFIX+ SEPARATOR + DepartmentEnum.Media+SEPARATOR+DynamicDetail.ReporterApplication));
+        authorityMapper.put(MUTABLE_PREFIX+ SEPARATOR + DepartmentNameEnum.Media+SEPARATOR+DynamicDetail.NewMediaApplication,new SimpleGrantedAuthority(MUTABLE_PREFIX+ SEPARATOR + DepartmentNameEnum.Media+SEPARATOR+DynamicDetail.NewMediaApplication));
+        authorityMapper.put(MUTABLE_PREFIX+ SEPARATOR + DepartmentNameEnum.Media+SEPARATOR+DynamicDetail.ReporterApplication,new SimpleGrantedAuthority(MUTABLE_PREFIX+ SEPARATOR + DepartmentNameEnum.Media+SEPARATOR+DynamicDetail.ReporterApplication));
     }
 
     /**
@@ -58,42 +58,42 @@ public class HashAuthorityMapper implements AuthorityMapper {
     }
 
     /**
-     * 描述见{@link AuthorityMapper#map(Position, DepartmentEnum)}<br/>
+     * 描述见{@link AuthorityMapper#map(PositionEnum, DepartmentNameEnum)}<br/>
      * 这里直接由{@code position}和{@code departmentEnum}构造字符串后调用{@link #map(String)}
-     * @param position 权限对应的职位
-     * @param departmentEnum 权限对应的部门
+     * @param positionEnum 权限对应的职位
+     * @param departmentNameEnum 权限对应的部门
      * @return 查找到的权限
      */
     @Override
-    public GrantedAuthority map(Position position, DepartmentEnum departmentEnum) {
-        if(position==null)//职位为空时非法，返回空
+    public GrantedAuthority map(PositionEnum positionEnum, DepartmentNameEnum departmentNameEnum) {
+        if(positionEnum ==null)//职位为空时非法，返回空
             return null;
-        return departmentEnum ==null?map(position.toString()):map(position.toString()+ SEPARATOR + departmentEnum.toString());
+        return departmentNameEnum ==null?map(positionEnum.toString()):map(positionEnum.toString()+ SEPARATOR + departmentNameEnum.toString());
     }
 
     /**
-     * 描述见{@link AuthorityMapper#mapDynamic(DepartmentEnum, DynamicDetail)}<br/>
+     * 描述见{@link AuthorityMapper#mapDynamic(DepartmentNameEnum, DynamicDetail)}<br/>
      * 这里直接由{@code departmentEnum}和{@code detail}构造字符串后调用{@link #map(String)}
-     * @param departmentEnum 动态权限所属的部门
+     * @param departmentNameEnum 动态权限所属的部门
      * @param detail 用于标志同一部门的不同权限，目前因每个部门只有至多一种动态权限，传入{@code null}即可
      * @return 查找到的权限
      */
     @Override
-    public GrantedAuthority mapDynamic(DepartmentEnum departmentEnum, DynamicDetail detail) {
-        if (departmentEnum ==null)//部门为空时（如常委）直接返回空
+    public GrantedAuthority mapDynamic(DepartmentNameEnum departmentNameEnum, DynamicDetail detail) {
+        if (departmentNameEnum ==null)//部门为空时（如常委）直接返回空
             return null;
-        return detail==null?map(MUTABLE_PREFIX+ SEPARATOR + departmentEnum.toString()):map(MUTABLE_PREFIX+ SEPARATOR + departmentEnum.toString()+ SEPARATOR +detail.toString());
+        return detail==null?map(MUTABLE_PREFIX+ SEPARATOR + departmentNameEnum.toString()):map(MUTABLE_PREFIX+ SEPARATOR + departmentNameEnum.toString()+ SEPARATOR +detail.toString());
     }
 
     @Override
-    public Set<GrantedAuthority> mapAllDynamic(DepartmentEnum departmentEnum) {
+    public Set<GrantedAuthority> mapAllDynamic(DepartmentNameEnum departmentNameEnum) {
         Set<GrantedAuthority> grantedAuthoritySet=new HashSet<>();
-        if(departmentEnum !=null){
-            if(departmentEnum == DepartmentEnum.Media){
-                grantedAuthoritySet.add(mapDynamic(DepartmentEnum.Media,DynamicDetail.NewMediaApplication));
-                grantedAuthoritySet.add(mapDynamic(DepartmentEnum.Media,DynamicDetail.ReporterApplication));
+        if(departmentNameEnum !=null){
+            if(departmentNameEnum == DepartmentNameEnum.Media){
+                grantedAuthoritySet.add(mapDynamic(DepartmentNameEnum.Media,DynamicDetail.NewMediaApplication));
+                grantedAuthoritySet.add(mapDynamic(DepartmentNameEnum.Media,DynamicDetail.ReporterApplication));
             }else
-                grantedAuthoritySet.add(mapDynamic(departmentEnum,null));
+                grantedAuthoritySet.add(mapDynamic(departmentNameEnum,null));
             return grantedAuthoritySet;
         }
         return grantedAuthoritySet;

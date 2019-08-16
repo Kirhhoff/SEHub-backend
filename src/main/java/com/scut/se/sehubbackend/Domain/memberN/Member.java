@@ -1,45 +1,40 @@
 package com.scut.se.sehubbackend.Domain.memberN;
 
-import com.scut.se.sehubbackend.Domain.activityN.ActivityApplication;
 import com.scut.se.sehubbackend.Enumeration.PositionEnum;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.List;
 
+/**
+ * 团委学生会成员
+ */
 @Entity
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class Member {
 
     @Id
-    private Long studentNumber;
+    Long studentNumber;//学号
 
-    private String password;
+    String password;//密码
 
-    private String name;
+    String name;//成员姓名
 
-    private Integer position = PositionEnum.MINISTER.getCode();
+    @Enumerated(value = EnumType.STRING)
+    PositionEnum position;//职位
 
-    private String phoneNumber;
+    String phoneNumber;//手机号
 
     @ManyToOne
     @JoinColumn(name = "department_name")
-    private Department department;
+    Department department;//所属部门
 
-    @OneToMany(mappedBy = "member")
-    private List<Authority> authorityList;
-
-    @OneToMany(mappedBy = "member")
-    private List<MemberServedRecord> servedRecords;
-
-    @OneToMany(mappedBy="initializer")
-    List<ActivityApplication> activityApplicationList;
-
-    @OneToMany(mappedBy="lastModifier")
-    List<ActivityApplication> activityModificationList;
-
+    @OneToMany(mappedBy = "authorityOwner")
+    List<Authority> authorityList;//该成员具备的所有权限
 }

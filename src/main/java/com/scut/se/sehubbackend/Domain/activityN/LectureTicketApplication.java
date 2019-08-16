@@ -3,25 +3,29 @@ package com.scut.se.sehubbackend.Domain.activityN;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
 
+/**
+ * 讲座篇申请表
+ */
 @Entity
-@DynamicUpdate
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class LectureTicketApplication {
 
-    @Id
-    @Column(name="activity_id")
-    private Long id;
+    @Id@GeneratedValue
+    Long id;
 
-    @OneToOne
-    @PrimaryKeyJoinColumn(name="activity_id", referencedColumnName="activity_id")
-    private ActivityMainInfo activityMainInfo;
+    @Embedded
+    ActivityMainInfo activityMainInfo;//申请表的公有信息，包括{名称，地点，开始时间，结束时间}等等
 
-    private Integer numOfTicket;
+    Integer numOfTicket;//讲座票数量
 
+    @OneToOne(
+            cascade = CascadeType.REMOVE,
+            fetch = FetchType.LAZY
+    )
+    ActivityApplication activityThisBelongsTo;//该申请表所属于的活动（也可为空，说明这张申请表是独立的）
 }

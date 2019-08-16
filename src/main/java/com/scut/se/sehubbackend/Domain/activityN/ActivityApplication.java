@@ -3,66 +3,64 @@ package com.scut.se.sehubbackend.Domain.activityN;
 import com.scut.se.sehubbackend.Domain.memberN.Member;
 import com.scut.se.sehubbackend.Enumeration.CheckStatusEnum;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.util.Date;
 
+/**
+ * 活动申请表
+ */
 @Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class ActivityApplication {
 
-    @Id
-    @Column(name="activity_id")
-    private Long id;
+    @Id@GeneratedValue
+    Long id;
 
-    @OneToOne
-    @PrimaryKeyJoinColumn(name="activity_id", referencedColumnName="activity_id")
-    private ActivityMainInfo activityMainInfo;
+    @Embedded
+    ActivityMainInfo activityMainInfo;//申请表的公有信息，包括{名称，地点，开始时间，结束时间}等等
 
-    @OneToOne
-    @PrimaryKeyJoinColumn(name="activity_id", referencedColumnName="activity_id")
-    private ActivitySupplementaryInfo activitySupplementaryInfo;
+    @Embedded
+    ActivitySupplementaryInfo activitySupplementaryInfo;//活动申请表的补充信息，包括{背景，受众，主办方}等等
 
-    @OneToOne
-    @PrimaryKeyJoinColumn(name="activity_id", referencedColumnName="activity_id")
-    private EtiquetteApplication etiquetteApplication;
+    @OneToOne(mappedBy = "activityThisBelongsTo")
+    EtiquetteApplication etiquetteApplication;//相关的礼仪申请（可为空）
 
-    @OneToOne
-    @PrimaryKeyJoinColumn(name="activity_id", referencedColumnName="activity_id")
-    private HostApplication hostApplication;
+    @OneToOne(mappedBy = "activityThisBelongsTo")
+    HostApplication hostApplication;//相关的主持人申请（可为空）
 
-    @OneToOne
-    @PrimaryKeyJoinColumn(name="activity_id", referencedColumnName="activity_id")
-    private LectureTicketApplication lectureTicketApplication;
+    @OneToOne(mappedBy = "activityThisBelongsTo")
+    LectureTicketApplication lectureTicketApplication;//相关的讲座票申请（可为空）
 
-    @OneToOne
-    @PrimaryKeyJoinColumn(name="activity_id", referencedColumnName="activity_id")
-    private PosterApplication posterApplication;
+    @OneToOne(mappedBy = "activityThisBelongsTo")
+    PosterApplication posterApplication;//相关的海报申请（可为空）
 
-    private Integer checkStatus = CheckStatusEnum.WAIT.getCode();
+    @Enumerated(value = EnumType.STRING)
+    CheckStatusEnum checkStatus;//申请表的审核状态
 
     @Lob
     @Basic(fetch = FetchType.LAZY)
     @Column(columnDefinition = "text")
-    private String checkFeedback;
+    String checkFeedback;//审核后的反馈
 
     @Temporal(TemporalType.DATE)
-    @org.hibernate.annotations.CreationTimestamp
-    private Date submissionDate;
+    @CreationTimestamp
+    Date submissionDate;//活动的提交日期(自动生成)
 
     @Temporal(TemporalType.DATE)
-    private Date checkDate;
+    Date checkDate;//审核日期
 
     @ManyToOne
-    @JoinColumn(name = "initializer_id")
-    private Member initializer;
+    Member initializer;//申请表发起人
 
     @ManyToOne
-    @JoinColumn(name = "lastModifier_id")
-    private Member lastModifier;
+    Member lastModifier;//申请表的最后修改人
 
 }
