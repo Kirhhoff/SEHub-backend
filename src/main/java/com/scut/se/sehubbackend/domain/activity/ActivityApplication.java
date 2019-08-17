@@ -63,4 +63,27 @@ public class ActivityApplication {
     @ManyToOne
     Member lastModifier;//申请表的最后修改人
 
+    public void setEtiquetteApplication(EtiquetteApplication etiquetteApplication){
+        assert(etiquetteApplication!=null);
+        this.etiquetteApplication=etiquetteApplication;
+        etiquetteApplication.setActivityThisBelongsTo(this);
+    }
+
+    public void setHostApplication(HostApplication hostApplication){
+        assert(hostApplication!=null);
+        this.hostApplication=hostApplication;
+        hostApplication.setActivityThisBelongsTo(this);
+    }
+
+    public void setLectureTicketApplication(LectureTicketApplication lectureTicketApplication){
+        assert(lectureTicketApplication!=null);
+        this.lectureTicketApplication=lectureTicketApplication;
+        lectureTicketApplication.setActivityThisBelongsTo(this);
+    }
+
+    public void setPosterApplication(PosterApplication posterApplication){
+        assert(posterApplication!=null);
+        this.posterApplication=posterApplication;
+        posterApplication.setActivityThisBelongsTo(this);
+    }
 }

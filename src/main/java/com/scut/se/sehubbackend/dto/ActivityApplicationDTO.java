@@ -1,42 +1,37 @@
 package com.scut.se.sehubbackend.dto;
 
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.scut.se.sehubbackend.domain.activity.ActivityMainInfo;
-import com.scut.se.sehubbackend.domain.activity.ActivitySupplementaryInfo;
+import com.scut.se.sehubbackend.domain.activity.*;
+import com.scut.se.sehubbackend.domain.member.Member;
 import com.scut.se.sehubbackend.enumeration.CheckStatusEnum;
-import com.scut.se.sehubbackend.utils.Date2LongSerializer;
+import lombok.Builder;
 import lombok.Data;
-import lombok.Getter;
+import lombok.Singular;
 
 import java.util.Date;
+import java.util.List;
 
 @Data
-@Getter
+@Builder
 public class ActivityApplicationDTO {
 
-    private String id;
+    Long id;
 
-    private ActivityMainInfo activityMainInfo;
+    ActivityMainInfo activityMainInfo;//申请表的公有信息，包括{名称，地点，开始时间，结束时间}等等
 
-    private ActivitySupplementaryInfo activitySupplementaryInfo;
+    ActivitySupplementaryInfo activitySupplementaryInfo;//活动申请表的补充信息，包括{背景，受众，主办方}等等
 
-    private boolean ifEtiquetteApplication;
+    @Singular
+    List<Object> subApplications;//相关的子申请表（礼仪、主持人..）
 
-    private boolean ifHostApplication;
+    CheckStatusEnum checkStatus;//申请表的审核状态
 
-    private boolean ifLectureApplication;
+    String checkFeedback;//审核后的反馈
 
-    private boolean ifPosterApplication;
+    Date submissionDate;//活动的提交日期(自动生成)
 
-    private Integer checkStatus = CheckStatusEnum.WAIT.getCode();
+    Date checkDate;//审核日期
 
-    @JsonSerialize(using = Date2LongSerializer.class)
-    private Date submissionDate;
+    Member initializer;//申请表发起人
 
-    @JsonSerialize(using = Date2LongSerializer.class)
-    private Date checkDate;
-
-    private String CheckFeedback;
-
-    // member的数据表保存似乎有BUG，而且不知道该数据是不是由前端传过来，似乎涉及到认证和权限管理，暂时不处理
+    Member lastModifier;//申请表的最后修改人
 }
