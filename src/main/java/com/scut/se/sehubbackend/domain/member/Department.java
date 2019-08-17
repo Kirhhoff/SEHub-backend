@@ -34,4 +34,18 @@ public class Department {
     @Basic(fetch=FetchType.LAZY)
     @Column(columnDefinition = "text")
     String departmentDescription;//部门描述
+
+    public void addMember(Member member){
+        if (!memberList.contains(member)){
+            memberList.add(member);
+            member.setDepartment(this);
+        }
+    }
+
+    public void removeMember(Member member){
+        if (memberList.contains(member)){
+            member.setDepartment(null);
+            memberList.remove(member);
+        }
+    }
 }

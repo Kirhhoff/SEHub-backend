@@ -1,97 +1,168 @@
 package com.scut.se.sehubbackend.repository.activity;
 
+import com.scut.se.sehubbackend.dao.activity.ActivityApplicationRepository;
+import com.scut.se.sehubbackend.dao.member.DepartmentRepository;
+import com.scut.se.sehubbackend.dao.member.MemberRepository;
+import com.scut.se.sehubbackend.domain.activity.ActivityApplication;
+import com.scut.se.sehubbackend.domain.activity.ActivityMainInfo;
+import com.scut.se.sehubbackend.domain.activity.ActivitySupplementaryInfo;
+import com.scut.se.sehubbackend.domain.member.Department;
+import com.scut.se.sehubbackend.domain.member.Member;
+import com.scut.se.sehubbackend.enumeration.CheckStatusEnum;
+import com.scut.se.sehubbackend.enumeration.DepartmentNameEnum;
+import com.scut.se.sehubbackend.enumeration.PositionEnum;
+import org.junit.Before;
+import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import static org.junit.Assert.*;
+
+/**
+ * <p>对活动申请表dao自定义api测试</p>
+ */
 @RunWith(SpringRunner.class)
-@SpringBootTest
+@DataJpaTest
 public class ActivityApplicationRepositoryTest {
-//
-//    @Autowired
-//    private ActivityApplicationRepository activityApplicationRepository;
-//
-//    @Test
-//    public void saveTest() {
-//        ActivityApplication activityApplication = new ActivityApplication();
-//
-//        ActivityMainInfo activityMainInfo = new ActivityMainInfo();
-//        activityMainInfo.setActivityId(new Long(0));
-//        activityMainInfo.setName("黑框框");
-//        activityMainInfo.setLocation("B8");
-//        activityMainInfo.setStartTime(new Date());
-//        activityMainInfo.setEndTime(new Date());
-//        activityMainInfo.setDescription("大佬激情互殴");
-//
-//        ActivitySupplementaryInfo activitySupplementaryInfo = new ActivitySupplementaryInfo();
-//        activitySupplementaryInfo.setActivityMainInfo(activityMainInfo);
-//        activitySupplementaryInfo.setId(activityMainInfo.getActivityId());
-//        activitySupplementaryInfo.setBackground("大家都闲得慌");
-//        activitySupplementaryInfo.setObjective("寻找巨佬");
-//        activitySupplementaryInfo.setOrganizer("学术部");
-//        activitySupplementaryInfo.setExpectedNumOfParticipants(new Integer(5));
-//        activitySupplementaryInfo.setNote("给多点经费行不行");
-//
-//        EtiquetteApplication etiquetteApplication = new EtiquetteApplication();
-//        etiquetteApplication.setActivityMainInfo(activityMainInfo);
-//        etiquetteApplication.setId(activityMainInfo.getActivityId());
-//        etiquetteApplication.setDescOfJob("女装大佬为巨佬跳舞");
-//        etiquetteApplication.setNumOfEtiquette(3);
-//        etiquetteApplication.setRehearsalTime(new Date());
-//
-//        HostApplication hostApplication = new HostApplication();
-//        hostApplication.setActivityMainInfo(activityMainInfo);
-//        hostApplication.setId(activityMainInfo.getActivityId());
-//        hostApplication.setDescOfJob("为大佬们喊666");
-//        hostApplication.setNumOfHost(2);
-//
-//        LectureTicketApplication lectureTicketApplication = new LectureTicketApplication();
-//        lectureTicketApplication.setActivityMainInfo(activityMainInfo);
-//        lectureTicketApplication.setId(activityMainInfo.getActivityId());
-//        lectureTicketApplication.setNumOfTicket(50);
-//
-//        PosterApplication posterApplication = new PosterApplication();
-//        posterApplication.setActivityMainInfo(activityMainInfo);
-//        posterApplication.setId(activityMainInfo.getActivityId());
-//        posterApplication.setDeadline(new Date());
-//        posterApplication.setPosterSize(PosterSizeEnum.K8.getCode());
-//        posterApplication.setPropagandaTextRequirement("大力宣传");
-//
-////        Member initializerAndModifier = new Member();
-////
-////        Department department= new Department();
-////        department.setName("软件学院");
-////        department.setNumOfMember(30);
-////        department.setMemberList(null);
-//
-////        initializerAndModifier.setStudentNumber(new Long(2017));
-////        initializerAndModifier.setDepartment(department);
-////        initializerAndModifier.setName("小明");
-////        initializerAndModifier.setPhoneNumber("10000");
-////        initializerAndModifier.setPosition(PositionEnum.MINISTER.getCode());
-////        initializerAndModifier.setServedRecords(null);
-////        List<ActivityApplication> activityApplicationList = new ArrayList<ActivityApplication>();
-////        activityApplicationList.add(activityApplication);
-////        List<ActivityApplication> activityModificationList = new ArrayList<ActivityApplication>();
-////        activityModificationList.add(activityApplication);
-////        initializerAndModifier.setActivityApplicationList(activityApplicationList);
-////        initializerAndModifier.setActivityModificationList(activityModificationList);
-//
-//        activityApplication.setActivityMainInfo(activityMainInfo);
-//        activityApplication.setId(activityMainInfo.getActivityId());
-//        activityApplication.setActivitySupplementaryInfo(activitySupplementaryInfo);
-//        activityApplication.setEtiquetteApplication(etiquetteApplication);
-//        activityApplication.setHostApplication(hostApplication);
-//        activityApplication.setLectureTicketApplication(lectureTicketApplication);
-//        activityApplication.setPosterApplication(posterApplication);
-//        activityApplication.setCheckStatus(CheckStatusEnum.WAIT.getCode());
-//        activityApplication.setSubmissionDate(new Date());
-//        activityApplication.setCheckDate(new Date());
-//        activityApplication.setInitializer(null);
-//        activityApplication.setLastModifier(null);
-//
-//        ActivityApplication result = activityApplicationRepository.save(activityApplication);
-//        Assert.assertNotNull(result);
-//
-//    }
+
+    @Autowired ActivityApplicationRepository activityApplicationRepository;
+    @Autowired DepartmentRepository departmentRepository;
+    @Autowired MemberRepository memberRepository;
+
+    /**
+     * <p>测试{@link ActivityApplicationRepository#findAllByDepartment(Department)}方法</p>
+     * <p>创建了两个部门调研部和秘书部，调研部一个部长一个部员，秘书部一个部长，每个人各发起过一次活动申请</p>
+     * <p>verify api能够根据输入调研部选出且仅选出调研部的两张申请表</p>
+     */
+    @Test
+    public void testFindAllByDepartment(){
+
+        List<ActivityApplication> queryResult=activityApplicationRepository
+                .findAllByDepartment(researchDepartment);
+
+        verifyResult(queryResult);
+    }
+
+    @Before
+    public void before(){
+        createDepartment();
+        createTwoMember();
+        createAnActivityApplicationForEachMember();
+        commitCreation();
+    }
+
+    private void createDepartment(){
+        researchDepartment= Department.builder()
+                .departmentName(DepartmentNameEnum.Research)
+                .departmentDescription("")
+                .memberList(new ArrayList<>())
+                .build();
+
+        secretaryDepartment=Department.builder()
+                .departmentName(DepartmentNameEnum.Secretary)
+                .departmentDescription("")
+                .memberList(new ArrayList<>())
+                .build();
+    }
+    private void createTwoMember(){
+        luminosity=Member.builder()
+                .studentNumber(201730683314L)
+                .password("77777777")
+                .name("彭天祥")
+                .position(PositionEnum.Minister)
+                .authorityList(new ArrayList<>())
+                .build();
+        xingo=Member.builder()
+                .studentNumber(201830662011L)
+                .password("777")
+                .name("刘逸曦")
+                .position(PositionEnum.Staff)
+                .authorityList(new ArrayList<>())
+                .build();
+        haoGe=Member.builder()
+                .studentNumber(201730683318L)
+                .password("77")
+                .name("申浩")
+                .position(PositionEnum.Minister)
+                .authorityList(new ArrayList<>())
+                .build();
+
+        researchDepartment.addMember(luminosity);
+        researchDepartment.addMember(xingo);
+        secretaryDepartment.addMember(haoGe);
+    }
+
+    private void createAnActivityApplicationForEachMember(){
+        researchApplication1 =ActivityApplication.builder()
+                .activityMainInfo(new ActivityMainInfo())
+                .activitySupplementaryInfo(new ActivitySupplementaryInfo())
+                .initializer(luminosity)
+                .checkDate(null)
+                .checkFeedback(null)
+                .checkStatus(CheckStatusEnum.WAIT)
+                .submissionDate(new Date())
+                .lastModifier(luminosity)
+                .build();
+        researchApplication2 =ActivityApplication.builder()
+                .activityMainInfo(new ActivityMainInfo())
+                .activitySupplementaryInfo(new ActivitySupplementaryInfo())
+                .initializer(xingo)
+                .submissionDate(new Date())
+                .checkDate(new Date())
+                .checkFeedback("炒鸡棒！")
+                .checkStatus(CheckStatusEnum.PASS)
+                .lastModifier(luminosity)
+                .build();
+        secretaryApplication=ActivityApplication.builder()
+                .activityMainInfo(new ActivityMainInfo())
+                .activitySupplementaryInfo(new ActivitySupplementaryInfo())
+                .initializer(haoGe)
+                .submissionDate(new Date())
+                .checkDate(new Date())
+                .checkFeedback("胡扯蛋！")
+                .checkStatus(CheckStatusEnum.NOPASS)
+                .lastModifier(haoGe)
+                .build();
+    }
+
+    /**
+     * <p>提交所有数据库的改动</p>
+     * <p>此处必须使用{@code saveAndFlush}方法，因为测试的dao api是自定义的query，查询之前不会自动将未提交的改动提交</p>
+     */
+    private void commitCreation(){
+        departmentRepository.saveAndFlush(researchDepartment);
+        departmentRepository.saveAndFlush(secretaryDepartment);
+
+        memberRepository.saveAndFlush(luminosity);
+        memberRepository.saveAndFlush(xingo);
+        memberRepository.saveAndFlush(haoGe);
+
+        activityApplicationRepository.saveAndFlush(researchApplication1);
+        activityApplicationRepository.saveAndFlush(researchApplication2);
+        activityApplicationRepository.saveAndFlush(secretaryApplication);
+    }
+    private void verifyResult(List<ActivityApplication> queryResult){
+        assertNotNull(queryResult);
+        assertEquals(2,queryResult.size());
+        assertTrue(queryResult.contains(researchApplication1));
+        assertTrue(queryResult.contains(researchApplication2));
+        assertFalse(queryResult.contains(secretaryApplication));
+    }
+    private Department researchDepartment;
+    private Member luminosity;
+    private Member xingo;
+
+    private Department secretaryDepartment;
+    private Member haoGe;
+
+    private ActivityApplication researchApplication1;
+    private ActivityApplication researchApplication2;
+
+    private ActivityApplication secretaryApplication;
 }
