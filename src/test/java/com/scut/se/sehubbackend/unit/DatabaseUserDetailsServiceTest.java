@@ -7,13 +7,13 @@ import com.scut.se.sehubbackend.dao.member.MemberRepository;
 import com.scut.se.sehubbackend.security.AuthorityUtil;
 import com.scut.se.sehubbackend.security.authentication.DatabaseUserDetailsService;
 import com.scut.se.sehubbackend.security.Role;
+import com.scut.se.sehubbackend.utils.Member2UserDetailsUtil;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
-import org.powermock.modules.junit4.PowerMockRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -25,14 +25,16 @@ import java.util.List;
 
 import static java.util.Optional.ofNullable;
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.when;
 
-@RunWith(PowerMockRunner.class)
+@RunWith(MockitoJUnitRunner.class)
 public class DatabaseUserDetailsServiceTest {
 
-    @InjectMocks DatabaseUserDetailsService databaseUserDetailsService;
+    DatabaseUserDetailsService databaseUserDetailsService;
+    Member2UserDetailsUtil mockUserDetailsUtil;
     @Mock MemberRepository mockMemberRepository;
-    @Spy AuthorityUtil authorityUtil=new AuthorityUtil();
+    @Spy AuthorityUtil authorityUtil;
 
     Long mockId =123L;
     Long nonExistedId=777L;
@@ -70,6 +72,9 @@ public class DatabaseUserDetailsServiceTest {
 
     @Before
     public void before(){
+        //因为存在二级依赖，必须手动解决第二层的依赖关系（文档中警告Mockito不是一个依赖注入框架含义即在此..）
+        injectMockDependency();
+
         //设置authorityList及与其响应的grantedAuthorities,这也算是一种验证吧
         configureAuthorityList();
         configureGrantedAuthorities();
@@ -103,5 +108,8 @@ public class DatabaseUserDetailsServiceTest {
         grantedAuthorities.add(roleAuthority);
     }
 
-
+    private void injectMockDependency(){
+        mockUserDetailsUtil=new Member2UserDetailsUtil(mockMemberRepository,authorityUtil);
+        databaseUserDetailsService=new DatabaseUserDetailsService(mockUserDetailsUtil);
+    }
 }

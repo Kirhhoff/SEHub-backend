@@ -3,6 +3,8 @@ package com.scut.se.sehubbackend.security.authentication;
 import com.scut.se.sehubbackend.domain.member.Member;
 import com.scut.se.sehubbackend.dao.member.MemberRepository;
 import com.scut.se.sehubbackend.security.AuthorityUtil;
+import com.scut.se.sehubbackend.security.UserDetailsUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -19,63 +21,61 @@ import java.util.Optional;
 @Component
 public class DatabaseUserDetailsService implements UserDetailsService {
 
-    final MemberRepository memberRepository;
-    final AuthorityUtil authorityUtil;
+    final UserDetailsUtil userDetailsUtil;
 
-    public DatabaseUserDetailsService(MemberRepository memberRepository, AuthorityUtil authorityUtil) {
-        this.memberRepository = memberRepository;
-        this.authorityUtil = authorityUtil;
+    @Autowired
+    public DatabaseUserDetailsService(UserDetailsUtil userDetailsUtil) {
+        this.userDetailsUtil = userDetailsUtil;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<Member> memberOptional=memberRepository.findById(Long.valueOf(username));
-        if (memberOptional.isPresent())
-            return toUserDetails(memberOptional.get());
+
+        UserDetails usernameOnlyUserDetails=toUserDetails(username);
+        UserDetails fullUserDetails=userDetailsUtil.to(userDetailsUtil.from(usernameOnlyUserDetails));
+
+        if (fullUserDetails!=null)
+            return fullUserDetails;
         else
             throw new UsernameNotFoundException("Can not find the studentNO");
     }
 
-    /**
-     * 将数据库中层面的用户转化为Spring Security需要的认证形式
-     * @param member 数据库中的用户
-     * @return Spring Security需要的用户
-     */
-    private UserDetails toUserDetails(Member member){
+    private UserDetails toUserDetails(String username){
         return new UserDetails() {
             @Override
             public Collection<? extends GrantedAuthority> getAuthorities() {
-                return authorityUtil.toGrantedAuthority(member.getAuthorityList());
+                return null;
             }
 
             @Override
             public String getPassword() {
-                return member.getPassword();
+                return null;
             }
 
             @Override
             public String getUsername() {
-                return String.valueOf(member.getStudentNumber());
+                return username;
             }
 
             @Override
             public boolean isAccountNonExpired() {
-                return true;
+                return false;
             }
 
             @Override
             public boolean isAccountNonLocked() {
-                return true;
+                return false;
             }
 
             @Override
             public boolean isCredentialsNonExpired() {
-                return true;
+                return false;
             }
 
             @Override
             public boolean isEnabled() {
-                return true;
+                return false;
             }
         };
     }
