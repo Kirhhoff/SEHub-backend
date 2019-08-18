@@ -1,25 +1,37 @@
 package com.scut.se.sehubbackend.service;
 
-import com.scut.se.sehubbackend.domain.activity.*;
-import com.scut.se.sehubbackend.enumeration.CheckStatusEnum;
-import com.scut.se.sehubbackend.enumeration.ResultEnum;
 import com.scut.se.sehubbackend.dao.activity.ActivityApplicationRepository;
+import com.scut.se.sehubbackend.domain.activity.ActivityApplication;
+import com.scut.se.sehubbackend.domain.member.Member;
 import com.scut.se.sehubbackend.dto.ActivityApplicationDTO;
-import com.scut.se.sehubbackend.exception.ActivityApplicationException;
-import com.scut.se.sehubbackend.utils.KeyUtil;
-import lombok.extern.slf4j.Slf4j;
+import com.scut.se.sehubbackend.security.UserDetailsUtil;
+import com.scut.se.sehubbackend.utils.DTOUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
-@Slf4j
 public class ActivityApplicationService {
-//
+
+    final UserDetailsService userDetailsService;
+    final UserDetailsUtil<Member> userDetailsUtil;
+    final ActivityApplicationRepository activityApplicationRepository;
+    final DTOUtil dtoUtil;
+
+    public ActivityApplicationService(UserDetailsService userDetailsService, UserDetailsUtil<Member> userDetailsUtil, ActivityApplicationRepository activityApplicationRepository, DTOUtil dtoUtil) {
+        this.userDetailsService = userDetailsService;
+        this.userDetailsUtil = userDetailsUtil;
+        this.activityApplicationRepository = activityApplicationRepository;
+        this.dtoUtil = dtoUtil;
+    }
+
+    //
 //    @Autowired
 //    private ActivityApplicationRepository activityApplicationRepository;
 //
@@ -49,15 +61,15 @@ public class ActivityApplicationService {
 //        return activityApplicationDTO;
 //    }
 //
-//    public List<ActivityApplicationDTO> findAll() {
-//        List<ActivityApplication> activityApplicationList = activityApplicationRepository.findAll();
-//
-//        List<ActivityApplicationDTO> activityApplicationDTOList = new ArrayList<>();
-//
-//        BeanUtils.copyProperties(activityApplicationDTOList, activityApplicationList);
-//
-//        return activityApplicationDTOList;
-//    }
+    public List<ActivityApplicationDTO> getAllActivityApplicationOfCurrentDepartment() {
+        String currentUsername= (String)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        UserDetails currentUserDetails=userDetailsService.loadUserByUsername(currentUsername);
+        Member currentMember=userDetailsUtil.from(currentUserDetails);
+
+        return dtoUtil.toDTO(
+                activityApplicationRepository.findAllByDepartment(currentMember.getDepartment())
+        );
+    }
 //
 //    public ActivityApplicationDTO findById(Long id) {
 //        ActivityApplication activityApplication = activityApplicationRepository.findById(id).orElse(null);

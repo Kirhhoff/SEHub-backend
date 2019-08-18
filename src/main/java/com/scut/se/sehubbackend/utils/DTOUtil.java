@@ -14,7 +14,18 @@ import java.util.List;
 @Component
 public class DTOUtil {
 
-    ActivityApplicationDTO toDTO(ActivityApplication activityApplication){
+    public List<ActivityApplicationDTO> toDTO(List<ActivityApplication> activityApplications){
+        if (activityApplications==null)
+            return null;
+        else {
+            List<ActivityApplicationDTO> activityApplicationDTOs=new ArrayList<>();
+            for(ActivityApplication activityApplication:activityApplications)
+                activityApplicationDTOs.add(toDTO(activityApplication));
+            return activityApplicationDTOs;
+        }
+    }
+
+    public ActivityApplicationDTO toDTO(ActivityApplication activityApplication){
         return activityApplication==null
                 ?null
                 : ActivityApplicationDTO.builder()
@@ -34,7 +45,7 @@ public class DTOUtil {
                     .build();
     }
 
-    EtiquetteApplicationDTO toDTO(EtiquetteApplication etiquetteApplication){
+    public EtiquetteApplicationDTO toDTO(EtiquetteApplication etiquetteApplication){
         return etiquetteApplication==null
                 ?null
                 : EtiquetteApplicationDTO.builder()
@@ -49,7 +60,7 @@ public class DTOUtil {
                     .build();
     }
 
-    HostApplicationDTO toDTO(HostApplication hostApplication){
+    public HostApplicationDTO toDTO(HostApplication hostApplication){
         return hostApplication==null
                 ?null
                 : HostApplicationDTO.builder()
@@ -62,7 +73,7 @@ public class DTOUtil {
                     .build();
     }
 
-    LectureTicketApplicationDTO toDTO(LectureTicketApplication lectureTicketApplication){
+    public LectureTicketApplicationDTO toDTO(LectureTicketApplication lectureTicketApplication){
         return lectureTicketApplication==null
                 ?null
                 : LectureTicketApplicationDTO.builder()
@@ -74,7 +85,7 @@ public class DTOUtil {
                     .build();
     }
 
-    PosterApplicationDTO toDTO(PosterApplication posterApplication){
+    public PosterApplicationDTO toDTO(PosterApplication posterApplication){
         return posterApplication==null
                 ?null
                 : PosterApplicationDTO.builder()
