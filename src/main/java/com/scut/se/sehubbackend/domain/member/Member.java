@@ -37,4 +37,19 @@ public class Member {
 
     @OneToMany(mappedBy = "authorityOwner")
     List<Authority> authorityList;//该成员具备的所有权限
+
+    public void addAuthority(Authority authority){
+        for (Authority _authority: authorityList)
+            if (_authority.getAuthorityName().equals(authority.getAuthorityName()))
+                return;
+        authority.setAuthorityOwner(this);
+        authorityList.add(authority);
+    }
+
+    public void removeAuthority(Authority authority){
+        if (authorityList.contains(authority)){
+            authority.setAuthorityOwner(null);
+            authorityList.remove(authority);
+        }
+    }
 }

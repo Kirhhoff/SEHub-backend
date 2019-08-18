@@ -6,6 +6,7 @@ import com.scut.se.sehubbackend.domain.member.Department;
 import com.scut.se.sehubbackend.domain.member.Member;
 import com.scut.se.sehubbackend.dto.*;
 import com.scut.se.sehubbackend.enumeration.CheckStatusEnum;
+import com.scut.se.sehubbackend.enumeration.DepartmentNameEnum;
 import com.scut.se.sehubbackend.enumeration.PositionEnum;
 import org.hibernate.annotations.CreationTimestamp;
 import org.junit.Before;
@@ -32,17 +33,88 @@ public class DTOUtilTest {
      * <p>测试很简单，构造一个活动申请的数据库对象，再构造结果的DTO，verify实际结果与构造结果一致</p>
      */
     @Test
-    public void testToDTOForTotalActivityApplication() {
+    public void testToDTOForActivityApplication() {
         assertEquals(
                 expectedConvertedActivityApplicationDTO,
                 dtoUtil.toDTO(activityApplicationToConvert)
         );
     }
 
+    DepartmentDTO expectedDepartmentDTO;
+    Department departmentToConvert;
+
+    /**
+     * <p>测试Department转化来同时测试Member和Department的转化</p>
+     * <p>虽然逻辑简单，但后续出问题很麻烦，因此还是进行简单的测试</p>
+     */
+    @Test
+    public void testToDTOForDepartment() {
+        prepareDepartmentData();
+        assertEquals(
+                expectedDepartmentDTO,
+                dtoUtil.toDTO(departmentToConvert)
+        );
+    }
+
     @Before
-    public void before(){
+    public void prepareApplicationData(){
         prepareDO();
         prepareDTO();
+    }
+
+    private void prepareDepartmentData(){
+        //prepare DO
+        Member memberWithNoAuthority=initializer;
+
+        Member memberWithTwoAuthorities=lastModifier;
+        Authority authority1= Authority.builder().authorityName("Where am I???").build();
+        Authority authority2= Authority.builder().authorityName("Let me go!").build();
+        memberWithTwoAuthorities.addAuthority(authority1);
+        memberWithTwoAuthorities.addAuthority(authority2);
+
+        departmentToConvert= Department.builder()
+                .departmentName(DepartmentNameEnum.Research)
+                .memberList(new ArrayList<>())
+                .departmentDescription("Not bad!")
+                .build();
+
+        departmentToConvert.addMember(memberWithNoAuthority);
+        departmentToConvert.addMember(memberWithTwoAuthorities);
+
+
+        //prepare corresponding DTO
+        String authorityString1="Where am I???";
+        String authorityString2="Let me go!";
+        List<String> authorityStrings=new ArrayList<>();
+        authorityStrings.add(authorityString1);
+        authorityStrings.add(authorityString2);
+
+        MemberDTO memberWithNoAuthorityDTO= MemberDTO.builder()
+                .studentNumber(memberWithNoAuthority.getStudentNumber())
+                .name(memberWithNoAuthority.getName())
+                .position(memberWithNoAuthority.getPosition())
+                .phoneNumber(memberWithNoAuthority.getPhoneNumber())
+                .departmentName(departmentToConvert.getDepartmentName())
+                .authorityList(new ArrayList<>())
+                .build();
+
+        MemberDTO memberWithTwoAuthoritiesDTO= MemberDTO.builder()
+                .studentNumber(memberWithTwoAuthorities.getStudentNumber())
+                .name(memberWithTwoAuthorities.getName())
+                .position(memberWithTwoAuthorities.getPosition())
+                .phoneNumber(memberWithTwoAuthorities.getPhoneNumber())
+                .departmentName(departmentToConvert.getDepartmentName())
+                .authorityList(authorityStrings)
+                .build();
+        List<MemberDTO> memberDTOs=new ArrayList<>();
+        memberDTOs.add(memberWithNoAuthorityDTO);
+        memberDTOs.add(memberWithTwoAuthoritiesDTO);
+        expectedDepartmentDTO= DepartmentDTO.builder()
+                .id(departmentToConvert.getId())
+                .departmentName(departmentToConvert.getDepartmentName())
+                .memberList(memberDTOs)
+                .departmentDescription(departmentToConvert.getDepartmentDescription())
+                .build();
     }
 
     public void prepareDO(){
@@ -215,4 +287,5 @@ public class DTOUtilTest {
             .department(new Department())
             .authorityList(new ArrayList<>())
             .build();
+
 }
