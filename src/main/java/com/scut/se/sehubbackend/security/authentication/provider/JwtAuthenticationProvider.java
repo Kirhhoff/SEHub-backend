@@ -1,5 +1,7 @@
 package com.scut.se.sehubbackend.security.authentication.provider;
 
+import com.scut.se.sehubbackend.security.UserDetailsAdapter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -14,19 +16,22 @@ import org.springframework.stereotype.Component;
 public class JwtAuthenticationProvider implements AuthenticationProvider {
 
     final UserDetailsService userDetailsService;
+    final UserDetailsAdapter userDetailsAdapter;
 
-    public JwtAuthenticationProvider(UserDetailsService userDetailsService) {
+    public JwtAuthenticationProvider(UserDetailsService userDetailsService, UserDetailsAdapter userDetailsAdapter) {
         this.userDetailsService = userDetailsService;
+        this.userDetailsAdapter = userDetailsAdapter;
     }
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         String username= (String) authentication.getPrincipal();
         UserDetails userDetails=userDetailsService.loadUserByUsername(username);
+
         if(userDetails==null)
             new AuthenticationServiceException("Fail to find the user");
         return new UsernamePasswordAuthenticationToken(//成功验证并生成授权
-                userDetails.getUsername(),
+                userDetailsAdapter.from(userDetails),
                 null,
                 userDetails.getAuthorities()
         );

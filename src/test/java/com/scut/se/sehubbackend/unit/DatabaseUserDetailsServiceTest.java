@@ -1,13 +1,13 @@
 package com.scut.se.sehubbackend.unit;
 
 
+import com.scut.se.sehubbackend.dao.member.MemberRepository;
 import com.scut.se.sehubbackend.domain.member.Authority;
 import com.scut.se.sehubbackend.domain.member.Member;
-import com.scut.se.sehubbackend.dao.member.MemberRepository;
 import com.scut.se.sehubbackend.security.AuthorityUtil;
-import com.scut.se.sehubbackend.security.authentication.DatabaseUserDetailsService;
 import com.scut.se.sehubbackend.security.Role;
-import com.scut.se.sehubbackend.utils.Member2UserDetailsUtil;
+import com.scut.se.sehubbackend.security.authentication.DatabaseUserDetailsService;
+import com.scut.se.sehubbackend.utils.Member2UserDetailsAdapter;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -25,14 +25,13 @@ import java.util.List;
 
 import static java.util.Optional.ofNullable;
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class DatabaseUserDetailsServiceTest {
 
     DatabaseUserDetailsService databaseUserDetailsService;
-    Member2UserDetailsUtil mockUserDetailsUtil;
+    Member2UserDetailsAdapter mockUserDetailsUtil;
     @Mock MemberRepository mockMemberRepository;
     @Spy AuthorityUtil authorityUtil;
 
@@ -109,7 +108,7 @@ public class DatabaseUserDetailsServiceTest {
     }
 
     private void injectMockDependency(){
-        mockUserDetailsUtil=new Member2UserDetailsUtil(mockMemberRepository,authorityUtil);
+        mockUserDetailsUtil=new Member2UserDetailsAdapter(mockMemberRepository,authorityUtil);
         databaseUserDetailsService=new DatabaseUserDetailsService(mockUserDetailsUtil);
     }
 }

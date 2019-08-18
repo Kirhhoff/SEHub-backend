@@ -1,12 +1,15 @@
 package com.scut.se.sehubbackend.integration;
 
+import com.scut.se.sehubbackend.domain.member.Member;
 import com.scut.se.sehubbackend.security.jwt.JwtManager;
+import com.scut.se.sehubbackend.utils.Member2UserDetailsAdapter;
 import org.jose4j.lang.JoseException;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.mock.web.MockHttpServletResponse;
@@ -40,9 +43,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
  * </ul>
  */
 @RunWith(SpringRunner.class)
-@ContextConfiguration
-@WebAppConfiguration
 @SpringBootTest
+@AutoConfigureTestDatabase
 public class CookieLoginTest {
 
     @Autowired WebApplicationContext context;
@@ -58,11 +60,13 @@ public class CookieLoginTest {
      * 侧重于Cookie生成，而不是加密，加密将独立单元测试
      */
     @MockBean JwtManager mockJwtManager;
+    @MockBean Member2UserDetailsAdapter mockUserDetailsAdapter;
 
     @Mock UserDetails mockUserDetails;
     String mockUsername="201730683314";
     String mockPassword="123456789";
     List<GrantedAuthority> mockAuthorities= new ArrayList<>();
+    Member mockMember;
 
 
 
@@ -81,6 +85,8 @@ public class CookieLoginTest {
 
     @Before
     public void before() throws JoseException {
+        mockMember= Member.builder().studentNumber(Long.valueOf(mockUsername)).build();
+
         //Mock JwtManager
         when(mockJwtManager.encode(any(UserDetails.class))).thenReturn(mockUsername);
 
@@ -95,6 +101,10 @@ public class CookieLoginTest {
 
         //Mock UserDetailService
         when(mockUserDetailsService.loadUserByUsername(mockUsername)).thenReturn(mockUserDetails);
+
+        //Mock UserDetailsAdapter
+        when(mockUserDetailsAdapter.from(mockUserDetails)).thenReturn(mockMember);
+        when(mockUserDetailsAdapter.to(mockMember)).thenReturn(mockUserDetails);
 
         //配置MockMvc
         mockMvc= MockMvcBuilders.webAppContextSetup(context)

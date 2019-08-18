@@ -3,7 +3,7 @@ package com.scut.se.sehubbackend.utils;
 import com.scut.se.sehubbackend.dao.member.MemberRepository;
 import com.scut.se.sehubbackend.domain.member.Member;
 import com.scut.se.sehubbackend.security.AuthorityUtil;
-import com.scut.se.sehubbackend.security.UserDetailsUtil;
+import com.scut.se.sehubbackend.security.UserDetailsAdapter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
@@ -11,12 +11,13 @@ import org.springframework.stereotype.Component;
 import java.util.Collection;
 
 @Component
-public class Member2UserDetailsUtil implements UserDetailsUtil<Member> {
+public class Member2UserDetailsAdapter implements UserDetailsAdapter<Member> {
 
     final MemberRepository memberRepository;
     final AuthorityUtil authorityUtil;
+    private Member currentMember;
 
-    public Member2UserDetailsUtil(MemberRepository memberRepository, AuthorityUtil authorityUtil) {
+    public Member2UserDetailsAdapter(MemberRepository memberRepository, AuthorityUtil authorityUtil) {
         this.memberRepository = memberRepository;
         this.authorityUtil = authorityUtil;
     }

@@ -1,5 +1,6 @@
 package com.scut.se.sehubbackend.security.authentication.filter;
 
+import com.scut.se.sehubbackend.security.UserDetailsAdapter;
 import com.scut.se.sehubbackend.security.jwt.JwtManager;
 import org.jose4j.lang.JoseException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,20 +21,23 @@ import java.io.IOException;
 public class CustomUsernamePasswordAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
     final JwtManager jwtManager;
+    final UserDetailsAdapter userDetailsAdapter;
 
     @Autowired
-    public CustomUsernamePasswordAuthenticationFilter(JwtManager jwtManager, AuthenticationManager authenticationManager){
+    public CustomUsernamePasswordAuthenticationFilter(JwtManager jwtManager, AuthenticationManager authenticationManager, UserDetailsAdapter userDetailsAdapter){
         this.jwtManager = jwtManager;
         setAuthenticationManager(authenticationManager);
+        this.userDetailsAdapter = userDetailsAdapter;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     protected void successfulAuthentication(HttpServletRequest request,
                                             HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
         super.successfulAuthentication(request,response,chain,authResult);
         String token="";
         try {
-            token=jwtManager.encode((UserDetails)authResult.getPrincipal());
+            token=jwtManager.encode(userDetailsAdapter.to(authResult.getPrincipal()));
         } catch (JoseException e) {
             e.printStackTrace();
         }

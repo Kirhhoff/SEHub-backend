@@ -1,5 +1,7 @@
 package com.scut.se.sehubbackend.security.authentication.provider;
 
+import com.scut.se.sehubbackend.security.UserDetailsAdapter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -13,9 +15,11 @@ import org.springframework.stereotype.Component;
 public class UsernamePasswordAuthenticationProvider implements AuthenticationProvider {
 
     final UserDetailsService userDetailsService;
+    final UserDetailsAdapter userDetailsAdapter;
 
-    public UsernamePasswordAuthenticationProvider(UserDetailsService userDetailsService) {
+    public UsernamePasswordAuthenticationProvider(UserDetailsService userDetailsService, UserDetailsAdapter userDetailsAdapter) {
         this.userDetailsService = userDetailsService;
+        this.userDetailsAdapter = userDetailsAdapter;
     }
 
     @Override
@@ -26,7 +30,7 @@ public class UsernamePasswordAuthenticationProvider implements AuthenticationPro
 
         if (password.equals(userDetailsInDatabase.getPassword())){
             return new UsernamePasswordAuthenticationToken(
-                    userDetailsInDatabase,
+                    userDetailsAdapter.from(userDetailsInDatabase),
                     null,
                     userDetailsInDatabase.getAuthorities()
             );

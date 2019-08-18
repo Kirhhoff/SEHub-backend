@@ -1,9 +1,6 @@
 package com.scut.se.sehubbackend.security.authentication;
 
-import com.scut.se.sehubbackend.domain.member.Member;
-import com.scut.se.sehubbackend.dao.member.MemberRepository;
-import com.scut.se.sehubbackend.security.AuthorityUtil;
-import com.scut.se.sehubbackend.security.UserDetailsUtil;
+import com.scut.se.sehubbackend.security.UserDetailsAdapter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -12,7 +9,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
 import java.util.Collection;
-import java.util.Optional;
 
 /**
  * <p>功能：根据用户名从数据库中提取用户</p>
@@ -21,11 +17,11 @@ import java.util.Optional;
 @Component
 public class DatabaseUserDetailsService implements UserDetailsService {
 
-    final UserDetailsUtil userDetailsUtil;
+    final UserDetailsAdapter userDetailsAdapter;
 
     @Autowired
-    public DatabaseUserDetailsService(UserDetailsUtil userDetailsUtil) {
-        this.userDetailsUtil = userDetailsUtil;
+    public DatabaseUserDetailsService(UserDetailsAdapter userDetailsAdapter) {
+        this.userDetailsAdapter = userDetailsAdapter;
     }
 
     @SuppressWarnings("unchecked")
@@ -33,7 +29,7 @@ public class DatabaseUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
         UserDetails usernameOnlyUserDetails=toUserDetails(username);
-        UserDetails fullUserDetails=userDetailsUtil.to(userDetailsUtil.from(usernameOnlyUserDetails));
+        UserDetails fullUserDetails= userDetailsAdapter.to(userDetailsAdapter.from(usernameOnlyUserDetails));
 
         if (fullUserDetails!=null)
             return fullUserDetails;

@@ -1,12 +1,15 @@
 package com.scut.se.sehubbackend.integration;
 
+import com.scut.se.sehubbackend.domain.member.Member;
 import com.scut.se.sehubbackend.security.jwt.JwtManager;
+import com.scut.se.sehubbackend.utils.Member2UserDetailsAdapter;
 import org.jose4j.jwt.MalformedClaimException;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -28,16 +31,18 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
+@AutoConfigureTestDatabase
 public class CookieExtractionTest {
 
     @Autowired WebApplicationContext webApplicationContext;
     @MockBean JwtManager mockJwtManager;
     @MockBean UserDetailsService mockUserDetailsService;
+    @MockBean Member2UserDetailsAdapter mockUserDetailsAdapter;
     MockMvc mockMvc;
     @Mock UserDetails mockUserDetails;
 
 
-    String mockToken="Luminosity";
+    String mockToken="201730683314";
     Cookie mockCookie=new Cookie("token",mockToken);
     String existedApi="/api/test/empty";
 
@@ -70,6 +75,9 @@ public class CookieExtractionTest {
 
         //Mock UserDetailsService
         when(mockUserDetailsService.loadUserByUsername(mockToken)).thenReturn(mockUserDetails);
+
+        //Mock UserDetailsAdapter
+        when(mockUserDetailsAdapter.from(mockUserDetails)).thenReturn(new Member());
     }
 
 }

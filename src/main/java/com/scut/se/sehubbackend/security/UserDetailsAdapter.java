@@ -1,13 +1,12 @@
 package com.scut.se.sehubbackend.security;
 
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 
 /**
- * 自定义的用户类型与Spring内置的UserDetails接口间的适配器
+ * <p>自定义的用户类型与Spring内置的UserDetails接口间的适配器</p>
  * @param <T> 自定义的用户类型
  */
-public interface UserDetailsUtil<T> {
+public interface UserDetailsAdapter<T> {
 
     /**
      * 将UserDetails转化为自定义的用户类型
@@ -17,7 +16,7 @@ public interface UserDetailsUtil<T> {
     T from(UserDetails userDetails);
 
     /**
-     * 与{@link UserDetailsUtil#from(UserDetails)}相反
+     * 与{@link UserDetailsAdapter#from(UserDetails)}相反
      */
     UserDetails to(T t);
 
