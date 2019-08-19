@@ -8,31 +8,22 @@ import com.scut.se.sehubbackend.domain.member.Member;
 import com.scut.se.sehubbackend.dto.ActivityApplicationDTO;
 import com.scut.se.sehubbackend.enumeration.CheckStatusEnum;
 import com.scut.se.sehubbackend.utils.DTOUtil;
+import com.scut.se.sehubbackend.utils.MemberContextHelper;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.test.context.support.TestExecutionEvent;
-import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import javax.annotation.PostConstruct;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import static java.util.Optional.ofNullable;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.when;
 
 /**
@@ -47,6 +38,7 @@ public class ActivityApplicationServiceTest {
     @MockBean MemberRepository memberRepository;
     @MockBean ActivityApplicationRepository activityApplicationRepository;
     @MockBean DTOUtil dtoUtil;
+    @MockBean MemberContextHelper mockContextHelper;
 
 
     /**
@@ -62,54 +54,21 @@ public class ActivityApplicationServiceTest {
 
     @Before
     public void before(){
-        setSecurityContext();
         prepareData();
 
+        //mock用户的数据库数据
         when(memberRepository.findById(currentUserId)).thenReturn(ofNullable(mockMember));
+
+        //mock活动的数据库数据
         when(activityApplicationRepository.findAllByDepartment(mockDepartment)).thenReturn(mockActivityApplications);
+
+        //mock DO 到 DTO的转化
         when(dtoUtil.toDTO(mockActivityApplications)).thenReturn(expectedActivityApplicationDTOs);
+
+        //mock 当前用户
+        doReturn(mockMember).when(mockContextHelper).getCurrentPrincipal();
     }
 
-    private void setSecurityContext(){
-        SecurityContextHolder.getContext().setAuthentication(
-                new Authentication() {
-                    @Override
-                    public Collection<? extends GrantedAuthority> getAuthorities() {
-                        return null;
-                    }
-
-                    @Override
-                    public Object getCredentials() {
-                        return null;
-                    }
-
-                    @Override
-                    public Object getDetails() {
-                        return null;
-                    }
-
-                    @Override
-                    public Object getPrincipal() {
-                        return String.valueOf(currentUserId);
-                    }
-
-                    @Override
-                    public boolean isAuthenticated() {
-                        return false;
-                    }
-
-                    @Override
-                    public void setAuthenticated(boolean isAuthenticated) throws IllegalArgumentException {
-
-                    }
-
-                    @Override
-                    public String getName() {
-                        return null;
-                    }
-                }
-        );
-    }
     private void prepareData(){
         mockDepartment= Department.builder().build();
         mockMember= Member.builder()
@@ -142,5 +101,4 @@ public class ActivityApplicationServiceTest {
     private Member mockMember;
     private List<ActivityApplication> mockActivityApplications=new ArrayList<>();
     private List<ActivityApplicationDTO> expectedActivityApplicationDTOs=new ArrayList<>();
-
 }

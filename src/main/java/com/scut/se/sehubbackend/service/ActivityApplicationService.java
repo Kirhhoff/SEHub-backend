@@ -2,33 +2,26 @@ package com.scut.se.sehubbackend.service;
 
 import com.scut.se.sehubbackend.dao.activity.ActivityApplicationRepository;
 import com.scut.se.sehubbackend.domain.activity.ActivityApplication;
+import com.scut.se.sehubbackend.domain.member.Department;
 import com.scut.se.sehubbackend.domain.member.Member;
 import com.scut.se.sehubbackend.dto.ActivityApplicationDTO;
-import com.scut.se.sehubbackend.security.UserDetailsUtil;
+import com.scut.se.sehubbackend.security.ContextHelper;
 import com.scut.se.sehubbackend.utils.DTOUtil;
-import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class ActivityApplicationService {
 
-    final UserDetailsService userDetailsService;
-    final UserDetailsUtil<Member> userDetailsUtil;
     final ActivityApplicationRepository activityApplicationRepository;
     final DTOUtil dtoUtil;
+    final ContextHelper<Member> contextHelper;
 
-    public ActivityApplicationService(UserDetailsService userDetailsService, UserDetailsUtil<Member> userDetailsUtil, ActivityApplicationRepository activityApplicationRepository, DTOUtil dtoUtil) {
-        this.userDetailsService = userDetailsService;
-        this.userDetailsUtil = userDetailsUtil;
+    public ActivityApplicationService(ActivityApplicationRepository activityApplicationRepository, DTOUtil dtoUtil, ContextHelper<Member> contextHelper) {
         this.activityApplicationRepository = activityApplicationRepository;
         this.dtoUtil = dtoUtil;
+        this.contextHelper = contextHelper;
     }
 
     //
@@ -62,13 +55,10 @@ public class ActivityApplicationService {
 //    }
 //
     public List<ActivityApplicationDTO> getAllActivityApplicationOfCurrentDepartment() {
-        String currentUsername= (String)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        UserDetails currentUserDetails=userDetailsService.loadUserByUsername(currentUsername);
-        Member currentMember=userDetailsUtil.from(currentUserDetails);
-
-        return dtoUtil.toDTO(
-                activityApplicationRepository.findAllByDepartment(currentMember.getDepartment())
-        );
+        Member currentMember= contextHelper.getCurrentPrincipal();
+        Department departmentOfCurrentMember=currentMember.getDepartment();
+        List<ActivityApplication> activityApplications=activityApplicationRepository.findAllByDepartment(departmentOfCurrentMember);
+        return dtoUtil.toDTO(activityApplications);
     }
 //
 //    public ActivityApplicationDTO findById(Long id) {
