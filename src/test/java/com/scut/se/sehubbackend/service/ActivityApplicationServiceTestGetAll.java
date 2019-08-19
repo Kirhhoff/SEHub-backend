@@ -2,12 +2,10 @@ package com.scut.se.sehubbackend.service;
 
 import com.scut.se.sehubbackend.dao.activity.ActivityApplicationRepository;
 import com.scut.se.sehubbackend.dao.member.MemberRepository;
-import com.scut.se.sehubbackend.domain.activity.ActivityApplication;
-import com.scut.se.sehubbackend.domain.activity.CheckInfo;
+import com.scut.se.sehubbackend.domain.activity.*;
 import com.scut.se.sehubbackend.domain.member.Department;
 import com.scut.se.sehubbackend.domain.member.Member;
-import com.scut.se.sehubbackend.dto.ActivityApplicationDTO;
-import com.scut.se.sehubbackend.dto.CheckInfoDTO;
+import com.scut.se.sehubbackend.dto.*;
 import com.scut.se.sehubbackend.enumeration.CheckStatusEnum;
 import com.scut.se.sehubbackend.utils.DTOUtil;
 import com.scut.se.sehubbackend.utils.MemberContextHelper;
@@ -29,12 +27,12 @@ import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.when;
 
 /**
- * <p>对{@link ActivityApplicationService}的集成测试</p>
+ * <p>对{@link ActivityApplicationService#getAllActivityApplicationOfCurrentDepartment()}的测试</p>
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @AutoConfigureTestDatabase
-public class ActivityApplicationServiceTest {
+public class ActivityApplicationServiceTestGetAll {
 
     @Autowired ActivityApplicationService activityApplicationService;
     @MockBean MemberRepository memberRepository;

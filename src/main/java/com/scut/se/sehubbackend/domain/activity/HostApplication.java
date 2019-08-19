@@ -1,9 +1,6 @@
 package com.scut.se.sehubbackend.domain.activity;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 
@@ -33,8 +30,12 @@ public class HostApplication {
     @Column(columnDefinition = "text")
     String descOfJob;//主持人工作描述
 
+    @ToString.Exclude
     @OneToOne(
-            cascade = CascadeType.REMOVE,
+            cascade = {
+                    CascadeType.PERSIST,
+                    CascadeType.REFRESH
+            },
             fetch = FetchType.LAZY
     )
     ActivityApplication activityThisBelongsTo;//该申请表所属于的活动（也可为空，说明这张申请表是独立的）

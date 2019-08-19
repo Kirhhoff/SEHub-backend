@@ -27,7 +27,10 @@ public class Department {
     @Enumerated(value = EnumType.STRING)
     DepartmentNameEnum departmentName;//部门名称
 
-    @OneToMany(mappedBy = "department")
+    @OneToMany(
+            mappedBy = "department",
+            cascade = CascadeType.ALL
+    )
     List<Member> memberList;//部门成员列表
 
     @Lob
