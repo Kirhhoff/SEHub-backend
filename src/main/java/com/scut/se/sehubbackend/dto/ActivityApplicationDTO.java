@@ -4,9 +4,6 @@ import com.scut.se.sehubbackend.domain.activity.ActivityBasicInfo;
 import com.scut.se.sehubbackend.domain.activity.ActivitySupplementaryInfo;
 import lombok.Builder;
 import lombok.Data;
-import lombok.Singular;
-
-import java.util.List;
 
 @Data
 @Builder
@@ -20,6 +17,11 @@ public class ActivityApplicationDTO {
 
     CheckInfoDTO checkInfoDTO;//审核、发起者相关信息
 
-    @Singular
-    List<Object> subApplications;//相关的子申请表（礼仪、主持人..）
+    EtiquetteApplicationDTO etiquetteApplication;//DTO形式的礼仪申请
+
+    HostApplicationDTO hostApplication;//DTO形式的主持人申请
+
+    LectureTicketApplicationDTO lectureTicketApplication;//DTO形式的讲座票申请
+
+    PosterApplicationDTO posterApplication;//DTO形式的海报申请
 }

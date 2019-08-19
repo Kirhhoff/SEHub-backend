@@ -32,10 +32,10 @@ public class DTOUtil {
                     .id(activityApplication.getId())
                     .activityBasicInfo(activityApplication.getActivityBasicInfo())
                     .activitySupplementaryInfo(activityApplication.getActivitySupplementaryInfo())
-                        .subApplication(toDTO(activityApplication.getEtiquetteApplication()))
-                        .subApplication(toDTO(activityApplication.getHostApplication()))
-                        .subApplication(toDTO(activityApplication.getLectureTicketApplication()))
-                        .subApplication(toDTO(activityApplication.getPosterApplication()))
+                    .etiquetteApplication(toDTO(activityApplication.getEtiquetteApplication()))
+                    .hostApplication(toDTO(activityApplication.getHostApplication()))
+                    .lectureTicketApplication(toDTO(activityApplication.getLectureTicketApplication()))
+                    .posterApplication(toDTO(activityApplication.getPosterApplication()))
                     .checkInfoDTO(toDTO(activityApplication.getCheckInfo()))
                     .build();
     }
@@ -44,13 +44,13 @@ public class DTOUtil {
         return checkInfo==null
                 ?null
                 : CheckInfoDTO.builder()
-                .checkStatus(checkInfo.getCheckStatus())
-                .checkFeedback(checkInfo.getCheckFeedback())
-                .submissionDate(checkInfo.getSubmissionDate())
-                .checkDate(checkInfo.getCheckDate())
-                .initializer(toDTO(checkInfo.getInitializer()))
-                .lastModifier(toDTO(checkInfo.getLastModifier()))
-                .build();
+                    .checkStatus(checkInfo.getCheckStatus())
+                    .checkFeedback(checkInfo.getCheckFeedback())
+                    .submissionDate(checkInfo.getSubmissionDate())
+                    .checkDate(checkInfo.getCheckDate())
+                    .initializer(toDTO(checkInfo.getInitializer()))
+                    .lastModifier(toDTO(checkInfo.getLastModifier()))
+                    .build();
     }
 
     public EtiquetteApplicationDTO toDTO(EtiquetteApplication etiquetteApplication){
