@@ -10,15 +10,15 @@ import java.util.Date;
 
 
 /**
- * <p>各申请表都必须有的信息</p>
- * <p>包括活动名称、地点、开始时间等等</p>
+ * <p>活动基本信息，包括活动名称、地点、开始时间等等</p>
+ * <p>单独申请时，申请表必须具有这个信息</p>
  */
 @Embeddable
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ActivityMainInfo {
+public class ActivityBasicInfo {
 
     String name;//活动名称
 

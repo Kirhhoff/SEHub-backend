@@ -3,9 +3,11 @@ package com.scut.se.sehubbackend.service;
 import com.scut.se.sehubbackend.dao.activity.ActivityApplicationRepository;
 import com.scut.se.sehubbackend.dao.member.MemberRepository;
 import com.scut.se.sehubbackend.domain.activity.ActivityApplication;
+import com.scut.se.sehubbackend.domain.activity.CheckInfo;
 import com.scut.se.sehubbackend.domain.member.Department;
 import com.scut.se.sehubbackend.domain.member.Member;
 import com.scut.se.sehubbackend.dto.ActivityApplicationDTO;
+import com.scut.se.sehubbackend.dto.CheckInfoDTO;
 import com.scut.se.sehubbackend.enumeration.CheckStatusEnum;
 import com.scut.se.sehubbackend.utils.DTOUtil;
 import com.scut.se.sehubbackend.utils.MemberContextHelper;
@@ -77,19 +79,19 @@ public class ActivityApplicationServiceTest {
                 .build();
 
         ActivityApplication activityApplication1=ActivityApplication.builder()
-                .checkStatus(CheckStatusEnum.WAIT)
+                .checkInfo(CheckInfo.builder().checkStatus(CheckStatusEnum.WAIT).build())
                 .build();
         ActivityApplication activityApplication2=ActivityApplication.builder()
-                .checkStatus(CheckStatusEnum.PASS)
+                .checkInfo(CheckInfo.builder().checkStatus(CheckStatusEnum.PASS).build())
                 .build();
         mockActivityApplications.add(activityApplication1);
         mockActivityApplications.add(activityApplication2);
 
         ActivityApplicationDTO activityApplicationDTO1=ActivityApplicationDTO.builder()
-                .checkFeedback("稍等")
+                .checkInfoDTO(CheckInfoDTO.builder().checkFeedback("稍等").build())
                 .build();
         ActivityApplicationDTO activityApplicationDTO2=ActivityApplicationDTO.builder()
-                .checkFeedback("带我一个")
+                .checkInfoDTO(CheckInfoDTO.builder().checkFeedback("带我一个").build())
                 .build();
 
         expectedActivityApplicationDTOs.add(activityApplicationDTO1);

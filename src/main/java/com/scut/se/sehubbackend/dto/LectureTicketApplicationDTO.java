@@ -1,6 +1,6 @@
 package com.scut.se.sehubbackend.dto;
 
-import com.scut.se.sehubbackend.domain.activity.ActivityMainInfo;
+import com.scut.se.sehubbackend.domain.activity.ActivityBasicInfo;
 import lombok.Builder;
 import lombok.Data;
 
@@ -8,15 +8,13 @@ import lombok.Data;
 @Builder
 public class LectureTicketApplicationDTO {
 
-    public static final String TYPE= PosterApplicationDTO.class.getTypeName();
-
     Long id;
 
-    ActivityMainInfo activityMainInfo;//申请表的公有信息，包括{名称，地点，开始时间，结束时间}等等
+    ActivityBasicInfo activityBasicInfo;//申请表的公有信息，包括{名称，地点，开始时间，结束时间}等等
+
+    CheckInfoDTO checkInfoDTO;//审核、发起者相关信息
 
     Integer numOfTicket;//讲座票数量
-
-    String type;//申请表类别（礼仪、主持人..）
 
     Boolean hasRelatedActivityApplication;//是否有相关的活动申请表
 }

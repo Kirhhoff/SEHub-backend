@@ -22,7 +22,10 @@ public class PosterApplication {
     Long id;
 
     @Embedded
-    ActivityMainInfo activityMainInfo;//申请表的公有信息，包括{名称，地点，开始时间，结束时间}等等
+    ActivityBasicInfo activityBasicInfo;//申请表的公有信息，包括{名称，地点，开始时间，结束时间}等等
+
+    @Embedded
+    CheckInfo checkInfo;////审核、发起者相关信息
 
     @Temporal(TemporalType.TIMESTAMP)
     Date deadline;//海报制作截止时间

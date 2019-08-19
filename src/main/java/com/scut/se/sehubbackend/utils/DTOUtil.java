@@ -30,19 +30,27 @@ public class DTOUtil {
                 ?null
                 : ActivityApplicationDTO.builder()
                     .id(activityApplication.getId())
-                    .activityMainInfo(activityApplication.getActivityMainInfo())
+                    .activityBasicInfo(activityApplication.getActivityBasicInfo())
                     .activitySupplementaryInfo(activityApplication.getActivitySupplementaryInfo())
                         .subApplication(toDTO(activityApplication.getEtiquetteApplication()))
                         .subApplication(toDTO(activityApplication.getHostApplication()))
                         .subApplication(toDTO(activityApplication.getLectureTicketApplication()))
                         .subApplication(toDTO(activityApplication.getPosterApplication()))
-                    .checkStatus(activityApplication.getCheckStatus())
-                    .checkFeedback(activityApplication.getCheckFeedback())
-                    .submissionDate(activityApplication.getSubmissionDate())
-                    .checkDate(activityApplication.getCheckDate())
-                    .initializer(activityApplication.getInitializer())
-                    .lastModifier(activityApplication.getLastModifier())
+                    .checkInfoDTO(toDTO(activityApplication.getCheckInfo()))
                     .build();
+    }
+
+    public CheckInfoDTO toDTO(CheckInfo checkInfo){
+        return checkInfo==null
+                ?null
+                : CheckInfoDTO.builder()
+                .checkStatus(checkInfo.getCheckStatus())
+                .checkFeedback(checkInfo.getCheckFeedback())
+                .submissionDate(checkInfo.getSubmissionDate())
+                .checkDate(checkInfo.getCheckDate())
+                .initializer(toDTO(checkInfo.getInitializer()))
+                .lastModifier(toDTO(checkInfo.getLastModifier()))
+                .build();
     }
 
     public EtiquetteApplicationDTO toDTO(EtiquetteApplication etiquetteApplication){
@@ -50,12 +58,11 @@ public class DTOUtil {
                 ?null
                 : EtiquetteApplicationDTO.builder()
                     .id(etiquetteApplication.getId())
-                    .activityMainInfo(etiquetteApplication.getActivityMainInfo())
+                    .activityBasicInfo(etiquetteApplication.getActivityBasicInfo())
                     .numOfEtiquette(etiquetteApplication.getNumOfEtiquette())
                     .rehearsalTime(etiquetteApplication.getRehearsalTime())
                     .rehearsalSite(etiquetteApplication.getRehearsalSite())
                     .descOfJob(etiquetteApplication.getDescOfJob())
-                    .type(EtiquetteApplicationDTO.TYPE)
                     .hasRelatedActivityApplication(etiquetteApplication.getActivityThisBelongsTo() != null)
                     .build();
     }
@@ -65,10 +72,9 @@ public class DTOUtil {
                 ?null
                 : HostApplicationDTO.builder()
                     .id(hostApplication.getId())
-                    .activityMainInfo(hostApplication.getActivityMainInfo())
+                    .activityBasicInfo(hostApplication.getActivityBasicInfo())
                     .numOfHost(hostApplication.getNumOfHost())
                     .descOfJob(hostApplication.getDescOfJob())
-                    .type(HostApplicationDTO.TYPE)
                     .hasRelatedActivityApplication(hostApplication.getActivityThisBelongsTo() != null)
                     .build();
     }
@@ -78,9 +84,8 @@ public class DTOUtil {
                 ?null
                 : LectureTicketApplicationDTO.builder()
                     .id(lectureTicketApplication.getId())
-                    .activityMainInfo(lectureTicketApplication.getActivityMainInfo())
+                    .activityBasicInfo(lectureTicketApplication.getActivityBasicInfo())
                     .numOfTicket(lectureTicketApplication.getNumOfTicket())
-                    .type(LectureTicketApplicationDTO.TYPE)
                     .hasRelatedActivityApplication(lectureTicketApplication.getActivityThisBelongsTo() != null)
                     .build();
     }
@@ -90,11 +95,10 @@ public class DTOUtil {
                 ?null
                 : PosterApplicationDTO.builder()
                     .id(posterApplication.getId())
-                    .activityMainInfo(posterApplication.getActivityMainInfo())
+                    .activityBasicInfo(posterApplication.getActivityBasicInfo())
                     .deadline(posterApplication.getDeadline())
                     .propagandaTextRequirement(posterApplication.getPropagandaTextRequirement())
                     .posterSize(posterApplication.getPosterSize())
-                    .type(PosterApplicationDTO.TYPE)
                     .hasRelatedActivityApplication(posterApplication.getActivityThisBelongsTo() != null)
                     .build();
     }
@@ -138,4 +142,6 @@ public class DTOUtil {
                     .build();
         }
     }
+
+
 }

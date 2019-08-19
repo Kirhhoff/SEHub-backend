@@ -4,8 +4,9 @@ import com.scut.se.sehubbackend.dao.activity.ActivityApplicationRepository;
 import com.scut.se.sehubbackend.dao.member.DepartmentRepository;
 import com.scut.se.sehubbackend.dao.member.MemberRepository;
 import com.scut.se.sehubbackend.domain.activity.ActivityApplication;
-import com.scut.se.sehubbackend.domain.activity.ActivityMainInfo;
+import com.scut.se.sehubbackend.domain.activity.ActivityBasicInfo;
 import com.scut.se.sehubbackend.domain.activity.ActivitySupplementaryInfo;
+import com.scut.se.sehubbackend.domain.activity.CheckInfo;
 import com.scut.se.sehubbackend.domain.member.Department;
 import com.scut.se.sehubbackend.domain.member.Member;
 import com.scut.se.sehubbackend.enumeration.CheckStatusEnum;
@@ -100,34 +101,46 @@ public class ActivityApplicationRepositoryTest {
 
     private void createAnActivityApplicationForEachMember(){
         researchApplication1 =ActivityApplication.builder()
-                .activityMainInfo(new ActivityMainInfo())
+                .activityBasicInfo(new ActivityBasicInfo())
                 .activitySupplementaryInfo(new ActivitySupplementaryInfo())
-                .initializer(luminosity)
-                .checkDate(null)
-                .checkFeedback(null)
-                .checkStatus(CheckStatusEnum.WAIT)
-                .submissionDate(new Date())
-                .lastModifier(luminosity)
+                .checkInfo(
+                        CheckInfo.builder()
+                                .initializer(luminosity)
+                                .checkDate(null)
+                                .checkFeedback(null)
+                                .checkStatus(CheckStatusEnum.WAIT)
+                                .submissionDate(new Date())
+                                .lastModifier(luminosity)
+                                .build()
+                )
                 .build();
         researchApplication2 =ActivityApplication.builder()
-                .activityMainInfo(new ActivityMainInfo())
+                .activityBasicInfo(new ActivityBasicInfo())
                 .activitySupplementaryInfo(new ActivitySupplementaryInfo())
-                .initializer(xingo)
-                .submissionDate(new Date())
-                .checkDate(new Date())
-                .checkFeedback("炒鸡棒！")
-                .checkStatus(CheckStatusEnum.PASS)
-                .lastModifier(luminosity)
+                .checkInfo(
+                        CheckInfo.builder()
+                                .initializer(xingo)
+                                .checkDate(new Date())
+                                .checkFeedback("炒鸡棒！")
+                                .checkStatus(CheckStatusEnum.PASS)
+                                .submissionDate(new Date())
+                                .lastModifier(luminosity)
+                                .build()
+                )
                 .build();
         secretaryApplication=ActivityApplication.builder()
-                .activityMainInfo(new ActivityMainInfo())
+                .activityBasicInfo(new ActivityBasicInfo())
                 .activitySupplementaryInfo(new ActivitySupplementaryInfo())
-                .initializer(haoGe)
-                .submissionDate(new Date())
-                .checkDate(new Date())
-                .checkFeedback("胡扯蛋！")
-                .checkStatus(CheckStatusEnum.NOPASS)
-                .lastModifier(haoGe)
+                .checkInfo(
+                        CheckInfo.builder()
+                                .initializer(haoGe)
+                                .checkDate(new Date())
+                                .checkFeedback("有点蛋疼啊兄弟")
+                                .checkStatus(CheckStatusEnum.NOPASS)
+                                .submissionDate(new Date())
+                                .lastModifier(haoGe)
+                                .build()
+                )
                 .build();
     }
 

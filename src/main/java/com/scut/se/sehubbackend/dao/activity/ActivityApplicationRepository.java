@@ -16,7 +16,7 @@ public interface ActivityApplicationRepository extends JpaRepository<ActivityApp
      * @return 这个部门发起过的所有<b>活动</b>申请表
      */
     @Query("select activity " +
-            "from ActivityApplication activity join activity.initializer initializer " +
+            "from ActivityApplication activity join activity.checkInfo.initializer initializer " +
             "where initializer.department=:department")
     List<ActivityApplication> findAllByDepartment(@Param("department") Department department);
 

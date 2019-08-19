@@ -8,13 +8,11 @@ import com.scut.se.sehubbackend.dto.*;
 import com.scut.se.sehubbackend.enumeration.CheckStatusEnum;
 import com.scut.se.sehubbackend.enumeration.DepartmentNameEnum;
 import com.scut.se.sehubbackend.enumeration.PositionEnum;
-import org.hibernate.annotations.CreationTimestamp;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.powermock.modules.junit4.PowerMockRunner;
 
-import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -118,14 +116,14 @@ public class DTOUtilTest {
     }
 
     public void prepareDO(){
-        etiquetteActivityMainInfo=activityMainInfo;
-        hostActivityMainInfo=activityMainInfo;
-        lectureTicketActivityMainInfo=activityMainInfo;
-        posterActivityMainInfo=activityMainInfo;
+        etiquetteActivityBasicInfo = activityBasicInfo;
+        hostActivityBasicInfo = activityBasicInfo;
+        lectureTicketActivityBasicInfo = activityBasicInfo;
+        posterActivityBasicInfo = activityBasicInfo;
 
         EtiquetteApplication etiquetteApplication=EtiquetteApplication.builder()
                 .id(etiquetteId)
-                .activityMainInfo(etiquetteActivityMainInfo)
+                .activityBasicInfo(etiquetteActivityBasicInfo)
                 .numOfEtiquette(numOfEtiquette)
                 .rehearsalTime(etiquetteRehearsalTime)
                 .rehearsalSite(etiquetteRehearsalSite)
@@ -134,21 +132,21 @@ public class DTOUtilTest {
 
         HostApplication hostApplication=HostApplication.builder()
                 .id(hostId)
-                .activityMainInfo(hostActivityMainInfo)
+                .activityBasicInfo(hostActivityBasicInfo)
                 .numOfHost(numOfHost)
                 .descOfJob(descOfHostJob)
                 .build();
 
         LectureTicketApplication lectureTicketApplication=LectureTicketApplication.builder()
                 .id(lectureTicketId)
-                .activityMainInfo(lectureTicketActivityMainInfo)
+                .activityBasicInfo(lectureTicketActivityBasicInfo)
                 .numOfTicket(numOfTicket)
                 .build();
 
 
         PosterApplication posterApplication=PosterApplication.builder()
                 .id(posterId)
-                .activityMainInfo(posterActivityMainInfo)
+                .activityBasicInfo(posterActivityBasicInfo)
                 .deadline(posterDeadline)
                 .propagandaTextRequirement(propagandaTextRequirement)
                 .posterSize(posterSize)
@@ -156,14 +154,18 @@ public class DTOUtilTest {
 
         activityApplicationToConvert =ActivityApplication.builder()
                 .id(activityId)
-                .activityMainInfo(activityMainInfo)
+                .activityBasicInfo(activityBasicInfo)
                 .activitySupplementaryInfo(activitySupplementaryInfo)
-                .checkStatus(checkStatus)
-                .checkFeedback(checkFeedback)
-                .submissionDate(submissionDate)
-                .checkDate(checkDate)
-                .initializer(initializer)
-                .lastModifier(lastModifier)
+                .checkInfo(
+                        CheckInfo.builder()
+                                .checkStatus(checkStatus)
+                                .checkFeedback(checkFeedback)
+                                .submissionDate(submissionDate)
+                                .checkDate(checkDate)
+                                .initializer(initializer)
+                                .lastModifier(lastModifier)
+                                .build()
+                )
                 .build();
 
         activityApplicationToConvert.setEtiquetteApplication(etiquetteApplication);
@@ -174,83 +176,83 @@ public class DTOUtilTest {
     public void prepareDTO(){
         EtiquetteApplicationDTO etiquetteApplicationDTO=EtiquetteApplicationDTO.builder()
                 .id(etiquetteId)
-                .activityMainInfo(etiquetteActivityMainInfo)
+                .activityBasicInfo(etiquetteActivityBasicInfo)
                 .numOfEtiquette(numOfEtiquette)
                 .rehearsalTime(etiquetteRehearsalTime)
                 .rehearsalSite(etiquetteRehearsalSite)
                 .descOfJob(descOfEtiquetteJob)
-                .type(EtiquetteApplicationDTO.TYPE)
                 .hasRelatedActivityApplication(true)
                 .build();
 
         HostApplicationDTO hostApplicationDTO=HostApplicationDTO.builder()
                 .id(hostId)
-                .activityMainInfo(hostActivityMainInfo)
+                .activityBasicInfo(hostActivityBasicInfo)
                 .numOfHost(numOfHost)
                 .descOfJob(descOfHostJob)
-                .type(HostApplicationDTO.TYPE)
                 .hasRelatedActivityApplication(true)
                 .build();
 
         LectureTicketApplicationDTO lectureTicketApplicationDTO= LectureTicketApplicationDTO.builder()
                 .id(lectureTicketId)
-                .activityMainInfo(lectureTicketActivityMainInfo)
+                .activityBasicInfo(lectureTicketActivityBasicInfo)
                 .numOfTicket(numOfTicket)
-                .type(LectureTicketApplicationDTO.TYPE)
                 .hasRelatedActivityApplication(true)
                 .build();
 
         PosterApplicationDTO posterApplicationDTO= PosterApplicationDTO.builder()
                 .id(posterId)
-                .activityMainInfo(posterActivityMainInfo)
+                .activityBasicInfo(posterActivityBasicInfo)
                 .deadline(posterDeadline)
                 .propagandaTextRequirement(propagandaTextRequirement)
                 .posterSize(posterSize)
-                .type(PosterApplicationDTO.TYPE)
                 .hasRelatedActivityApplication(true)
                 .build();
 
         expectedConvertedActivityApplicationDTO= ActivityApplicationDTO.builder()
                 .id(activityId)
-                .activityMainInfo(activityMainInfo)
+                .activityBasicInfo(activityBasicInfo)
                 .activitySupplementaryInfo(activitySupplementaryInfo)
                     .subApplication(etiquetteApplicationDTO)
                     .subApplication(hostApplicationDTO)
                     .subApplication(lectureTicketApplicationDTO)
                     .subApplication(posterApplicationDTO)
-                .checkStatus(checkStatus)
-                .checkFeedback(checkFeedback)
-                .submissionDate(submissionDate)
-                .checkDate(checkDate)
-                .initializer(initializer)
-                .lastModifier(lastModifier)
+                .checkInfoDTO(
+                        CheckInfoDTO.builder()
+                                .checkStatus(checkStatus)
+                                .checkFeedback(checkFeedback)
+                                .submissionDate(submissionDate)
+                                .checkDate(checkDate)
+                                .initializer(initializerDTO)
+                                .lastModifier(lastModifierDTO)
+                                .build()
+                )
                 .build();
     }
 
     private Long etiquetteId=991025L;
-    private ActivityMainInfo etiquetteActivityMainInfo;
+    private ActivityBasicInfo etiquetteActivityBasicInfo;
     private Integer numOfEtiquette=6;
     private Date etiquetteRehearsalTime=new Date();
     private String etiquetteRehearsalSite="山达尔星";
     private String descOfEtiquetteJob="";
 
     private Long hostId=990226L;
-    private ActivityMainInfo hostActivityMainInfo;
+    private ActivityBasicInfo hostActivityBasicInfo;
     private Integer numOfHost=1;
     private String descOfHostJob="客观地描述,what you have seen，用你的大鼻音";
 
     private Long lectureTicketId=991116L;
-    private ActivityMainInfo lectureTicketActivityMainInfo;
+    private ActivityBasicInfo lectureTicketActivityBasicInfo;
     private Integer numOfTicket=300;
 
     private Long posterId=991874L;
-    private ActivityMainInfo posterActivityMainInfo;
+    private ActivityBasicInfo posterActivityBasicInfo;
     private Date posterDeadline=new Date();
     private String propagandaTextRequirement="字要大，要能够彰显软件学院的雄厚财力";
     private String posterSize="3A0";
 
     private Long activityId=991026L;
-    private ActivityMainInfo activityMainInfo= ActivityMainInfo.builder()
+    private ActivityBasicInfo activityBasicInfo = ActivityBasicInfo.builder()
             .name("为了忘却的纪念")
             .location("纽约新复联总部")
             .startTime(new Date())
@@ -287,5 +289,20 @@ public class DTOUtilTest {
             .department(new Department())
             .authorityList(new ArrayList<>())
             .build();
-
+    private MemberDTO initializerDTO= MemberDTO.builder()
+            .studentNumber(201730683314L)
+            .name("光度")
+            .position(PositionEnum.Minister)
+            .phoneNumber("15564278737")
+            .departmentName(null)
+            .authorityList(new ArrayList<>())
+            .build();
+    private MemberDTO lastModifierDTO= MemberDTO.builder()
+            .studentNumber(201830662011L)
+            .name("彭天祥")
+            .position(PositionEnum.Staff)
+            .phoneNumber("15521093401")
+            .departmentName(null)
+            .authorityList(new ArrayList<>())
+            .build();
 }
