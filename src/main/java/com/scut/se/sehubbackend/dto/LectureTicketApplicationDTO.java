@@ -16,5 +16,5 @@ public class LectureTicketApplicationDTO {
 
     Integer numOfTicket;//讲座票数量
 
-    Boolean hasRelatedActivityApplication;//是否有相关的活动申请表
+    Long relatedActivity;//相关活动的id
 }

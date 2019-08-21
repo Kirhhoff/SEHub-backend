@@ -63,7 +63,10 @@ public class DTOUtil {
                     .rehearsalTime(etiquetteApplication.getRehearsalTime())
                     .rehearsalSite(etiquetteApplication.getRehearsalSite())
                     .descOfJob(etiquetteApplication.getDescOfJob())
-                    .hasRelatedActivityApplication(etiquetteApplication.getActivityThisBelongsTo() != null)
+                    .relatedActivity(
+                            etiquetteApplication.getActivityThisBelongsTo()==null
+                                    ?null
+                                    :etiquetteApplication.getActivityThisBelongsTo().getId())
                     .build();
     }
 
@@ -75,7 +78,10 @@ public class DTOUtil {
                     .activityBasicInfo(hostApplication.getActivityBasicInfo())
                     .numOfHost(hostApplication.getNumOfHost())
                     .descOfJob(hostApplication.getDescOfJob())
-                    .hasRelatedActivityApplication(hostApplication.getActivityThisBelongsTo() != null)
+                    .relatedActivity(
+                        hostApplication.getActivityThisBelongsTo()==null
+                                ?null
+                                :hostApplication.getActivityThisBelongsTo().getId())
                     .build();
     }
 
@@ -86,7 +92,10 @@ public class DTOUtil {
                     .id(lectureTicketApplication.getId())
                     .activityBasicInfo(lectureTicketApplication.getActivityBasicInfo())
                     .numOfTicket(lectureTicketApplication.getNumOfTicket())
-                    .hasRelatedActivityApplication(lectureTicketApplication.getActivityThisBelongsTo() != null)
+                    .relatedActivity(
+                        lectureTicketApplication.getActivityThisBelongsTo()==null
+                                ?null
+                                :lectureTicketApplication.getActivityThisBelongsTo().getId())
                     .build();
     }
 
@@ -99,7 +108,10 @@ public class DTOUtil {
                     .deadline(posterApplication.getDeadline())
                     .propagandaTextRequirement(posterApplication.getPropagandaTextRequirement())
                     .posterSize(posterApplication.getPosterSize())
-                    .hasRelatedActivityApplication(posterApplication.getActivityThisBelongsTo() != null)
+                    .relatedActivity(
+                        posterApplication.getActivityThisBelongsTo()==null
+                                ?null
+                                :posterApplication.getActivityThisBelongsTo().getId())
                     .build();
     }
 

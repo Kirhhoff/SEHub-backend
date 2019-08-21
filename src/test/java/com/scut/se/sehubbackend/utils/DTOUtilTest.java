@@ -181,7 +181,7 @@ public class DTOUtilTest {
                 .rehearsalTime(etiquetteRehearsalTime)
                 .rehearsalSite(etiquetteRehearsalSite)
                 .descOfJob(descOfEtiquetteJob)
-                .hasRelatedActivityApplication(true)
+                .relatedActivity(activityId)
                 .build();
 
         HostApplicationDTO hostApplicationDTO=HostApplicationDTO.builder()
@@ -189,14 +189,14 @@ public class DTOUtilTest {
                 .activityBasicInfo(hostActivityBasicInfo)
                 .numOfHost(numOfHost)
                 .descOfJob(descOfHostJob)
-                .hasRelatedActivityApplication(true)
+                .relatedActivity(activityId)
                 .build();
 
         LectureTicketApplicationDTO lectureTicketApplicationDTO= LectureTicketApplicationDTO.builder()
                 .id(lectureTicketId)
                 .activityBasicInfo(lectureTicketActivityBasicInfo)
                 .numOfTicket(numOfTicket)
-                .hasRelatedActivityApplication(true)
+                .relatedActivity(activityId)
                 .build();
 
         PosterApplicationDTO posterApplicationDTO= PosterApplicationDTO.builder()
@@ -205,7 +205,7 @@ public class DTOUtilTest {
                 .deadline(posterDeadline)
                 .propagandaTextRequirement(propagandaTextRequirement)
                 .posterSize(posterSize)
-                .hasRelatedActivityApplication(true)
+                .relatedActivity(activityId)
                 .build();
 
         expectedConvertedActivityApplicationDTO= ActivityApplicationDTO.builder()

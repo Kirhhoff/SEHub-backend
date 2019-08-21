@@ -22,5 +22,5 @@ public class PosterApplicationDTO {
 
     String posterSize;//海报大小
 
-    Boolean hasRelatedActivityApplication;//是否有相关的活动申请表
+    Long relatedActivity;//相关活动的id
 }
