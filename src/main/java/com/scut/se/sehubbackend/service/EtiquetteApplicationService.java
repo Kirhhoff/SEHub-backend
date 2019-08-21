@@ -4,6 +4,7 @@ import com.scut.se.sehubbackend.dao.activity.EtiquetteApplicationRepository;
 import com.scut.se.sehubbackend.domain.activity.ActivityApplication;
 import com.scut.se.sehubbackend.domain.activity.EtiquetteApplication;
 import com.scut.se.sehubbackend.dto.EtiquetteApplicationDTO;
+import com.scut.se.sehubbackend.exception.InvalidIdException;
 import com.scut.se.sehubbackend.utils.CheckInfoUtil;
 import org.springframework.stereotype.Service;
 
@@ -18,14 +19,6 @@ public class EtiquetteApplicationService {
     public EtiquetteApplicationService(EtiquetteApplicationRepository etiquetteApplicationRepository, CheckInfoUtil checkInfoUtil) {
         this.etiquetteApplicationRepository = etiquetteApplicationRepository;
         this.checkInfoUtil = checkInfoUtil;
-    }
-
-    public List<EtiquetteApplication> findAll() {
-        return etiquetteApplicationRepository.findAll();
-    }
-
-    public EtiquetteApplication findById(Long id) {
-        return etiquetteApplicationRepository.findById(id).orElse(null);
     }
 
     /**
@@ -59,4 +52,11 @@ public class EtiquetteApplicationService {
                 .activityThisBelongsTo(parentActivityApplication)
                 .build();
     }
+
+    public List<EtiquetteApplication> findAll() {
+        return etiquetteApplicationRepository.findAll();
+    }
+    public EtiquetteApplication findById(Long id) throws InvalidIdException { return etiquetteApplicationRepository.findById(id).orElseThrow(InvalidIdException::new); }
+    public void save(EtiquetteApplication etiquetteApplication){etiquetteApplicationRepository.saveAndFlush(etiquetteApplication);}
+
 }

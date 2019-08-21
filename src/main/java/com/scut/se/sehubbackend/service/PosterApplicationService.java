@@ -5,6 +5,7 @@ import com.scut.se.sehubbackend.domain.activity.ActivityApplication;
 import com.scut.se.sehubbackend.domain.activity.PosterApplication;
 import com.scut.se.sehubbackend.dto.EtiquetteApplicationDTO;
 import com.scut.se.sehubbackend.dto.PosterApplicationDTO;
+import com.scut.se.sehubbackend.exception.InvalidIdException;
 import com.scut.se.sehubbackend.utils.CheckInfoUtil;
 import org.springframework.stereotype.Service;
 
@@ -21,14 +22,6 @@ public class PosterApplicationService {
         this.checkInfoUtil = checkInfoUtil;
     }
 
-    public List<PosterApplication> findAll() {
-        return posterApplicationRepository.findAll();
-    }
-
-    public PosterApplication findById(Long id) {
-        return posterApplicationRepository.findById(id).orElse(null);
-    }
-
     /**
      * 参考{@link EtiquetteApplicationService#create(EtiquetteApplicationDTO)}
      */
@@ -41,7 +34,7 @@ public class PosterApplicationService {
      * 参考{@link EtiquetteApplicationService#toDO(EtiquetteApplicationDTO, ActivityApplication)}
      */
     public PosterApplication toDO(PosterApplicationDTO posterApplicationDTO,
-                       ActivityApplication parentActivityApplication){
+                       ActivityApplication parentActivityApplication) {
         return PosterApplication.builder()
                 .activityBasicInfo(posterApplicationDTO.getActivityBasicInfo())
                 .checkInfo(checkInfoUtil.initialCheckInfo())
@@ -51,4 +44,8 @@ public class PosterApplicationService {
                 .activityThisBelongsTo(parentActivityApplication)
                 .build();
     }
+
+    public List<PosterApplication> findAll() { return posterApplicationRepository.findAll(); }
+    public PosterApplication findById(Long id) throws InvalidIdException { return posterApplicationRepository.findById(id).orElseThrow(InvalidIdException::new); }
+    public void save(PosterApplication posterApplication){posterApplicationRepository.saveAndFlush(posterApplication);}
 }

@@ -5,6 +5,7 @@ import com.scut.se.sehubbackend.domain.activity.ActivityApplication;
 import com.scut.se.sehubbackend.domain.member.Department;
 import com.scut.se.sehubbackend.domain.member.Member;
 import com.scut.se.sehubbackend.dto.ActivityApplicationDTO;
+import com.scut.se.sehubbackend.exception.InvalidIdException;
 import com.scut.se.sehubbackend.security.ContextHelper;
 import com.scut.se.sehubbackend.utils.CheckInfoUtil;
 import com.scut.se.sehubbackend.utils.DTOUtil;
@@ -52,18 +53,7 @@ public class ActivityApplicationService {
 //    private PosterApplicationService posterApplicationService;
 //
 //    // DTO的目的是没有必要返回给前端礼仪申请等各种辅助信息，辅助信息可选展示即点击按钮再展示
-//    @Transactional
-//    public ActivityApplicationDTO save(ActivityApplicationDTO activityApplicationDTO) {
-//        Long id = KeyUtil.genUniqueKey();
-//
-//        ActivityApplication activityApplication = new ActivityApplication();
-//
-//        activityApplication.setId(id);
-//        BeanUtils.copyProperties(activityApplicationDTO, activityApplication);
-//
-//
-//        return activityApplicationDTO;
-//    }
+    public void save(ActivityApplication activityApplication) { activityApplicationRepository.saveAndFlush(activityApplication); }
 //
 
     /**
@@ -118,16 +108,9 @@ public class ActivityApplicationService {
         activityApplicationRepository.saveAndFlush(activityApplication);
     }
 
-//
-//    public ActivityApplicationDTO findById(Long id) {
-//        ActivityApplication activityApplication = activityApplicationRepository.findById(id).orElse(null);
-//
-//        ActivityApplicationDTO activityApplicationDTO = new ActivityApplicationDTO();
-//
-//        BeanUtils.copyProperties(activityApplicationDTO, activityApplication);
-//
-//        return activityApplicationDTO;
-//    }
+    public ActivityApplication findById(Long id) throws InvalidIdException {
+        return activityApplicationRepository.findById(id).orElseThrow(InvalidIdException::new);
+    }
 //
 //    public EtiquetteApplication findEtiquetteApplicationById(Long id) {
 //        return etiquetteApplicationService.findById(id);

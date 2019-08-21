@@ -1,5 +1,6 @@
 package com.scut.se.sehubbackend.domain.activity;
 
+import com.scut.se.sehubbackend.domain.Application;
 import lombok.*;
 
 import javax.persistence.*;
@@ -12,7 +13,7 @@ import javax.persistence.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class HostApplication {
+public class HostApplication implements Application {
 
     @Id@GeneratedValue
     Long id;

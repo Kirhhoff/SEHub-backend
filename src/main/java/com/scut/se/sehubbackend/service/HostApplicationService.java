@@ -5,6 +5,7 @@ import com.scut.se.sehubbackend.domain.activity.ActivityApplication;
 import com.scut.se.sehubbackend.domain.activity.HostApplication;
 import com.scut.se.sehubbackend.dto.EtiquetteApplicationDTO;
 import com.scut.se.sehubbackend.dto.HostApplicationDTO;
+import com.scut.se.sehubbackend.exception.InvalidIdException;
 import com.scut.se.sehubbackend.utils.CheckInfoUtil;
 import org.springframework.stereotype.Service;
 
@@ -21,13 +22,6 @@ public class HostApplicationService {
         this.checkInfoUtil = checkInfoUtil;
     }
 
-    public List<HostApplication> findAll() {
-        return hostApplicationRepository.findAll();
-    }
-
-    public HostApplication findById(Long id) {
-        return hostApplicationRepository.findById(id).orElse(null);
-    }
 
     /**
      * 参考{@link EtiquetteApplicationService#create(EtiquetteApplicationDTO)}
@@ -50,4 +44,10 @@ public class HostApplicationService {
                 .activityThisBelongsTo(parentActivityApplication)
                 .build();
     }
+
+    public List<HostApplication> findAll() {
+        return hostApplicationRepository.findAll();
+    }
+    public HostApplication findById(Long id) throws InvalidIdException { return hostApplicationRepository.findById(id).orElseThrow(InvalidIdException::new); }
+    public void save(HostApplication hostApplication){hostApplicationRepository.saveAndFlush(hostApplication);}
 }

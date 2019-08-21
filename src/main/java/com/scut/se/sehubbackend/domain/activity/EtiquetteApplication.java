@@ -1,5 +1,6 @@
 package com.scut.se.sehubbackend.domain.activity;
 
+import com.scut.se.sehubbackend.domain.Application;
 import lombok.*;
 
 import javax.persistence.*;
@@ -14,7 +15,7 @@ import java.util.Date;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class EtiquetteApplication {
+public class EtiquetteApplication implements Application {
 
     @Id@GeneratedValue
     Long id;

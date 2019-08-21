@@ -5,6 +5,7 @@ import com.scut.se.sehubbackend.domain.activity.ActivityApplication;
 import com.scut.se.sehubbackend.domain.activity.LectureTicketApplication;
 import com.scut.se.sehubbackend.dto.EtiquetteApplicationDTO;
 import com.scut.se.sehubbackend.dto.LectureTicketApplicationDTO;
+import com.scut.se.sehubbackend.exception.InvalidIdException;
 import com.scut.se.sehubbackend.utils.CheckInfoUtil;
 import org.springframework.stereotype.Service;
 
@@ -19,14 +20,6 @@ public class LectureTicketApplicationService {
     public LectureTicketApplicationService(LectureTicketApplicationRepository lectureTicketApplicationRepository, CheckInfoUtil checkInfoUtil) {
         this.lectureTicketApplicationRepository = lectureTicketApplicationRepository;
         this.checkInfoUtil = checkInfoUtil;
-    }
-
-    public List<LectureTicketApplication> findAll() {
-        return lectureTicketApplicationRepository.findAll();
-    }
-
-    public LectureTicketApplication findById(Long id) {
-        return lectureTicketApplicationRepository.findById(id).orElse(null);
     }
 
     /**
@@ -49,4 +42,10 @@ public class LectureTicketApplicationService {
                 .activityThisBelongsTo(parentActivityApplication)
                 .build();
     }
+
+    public List<LectureTicketApplication> findAll() {
+        return lectureTicketApplicationRepository.findAll();
+    }
+    public LectureTicketApplication findById(Long id) throws InvalidIdException { return lectureTicketApplicationRepository.findById(id).orElseThrow(InvalidIdException::new); }
+    public void save(LectureTicketApplication lectureTicketApplication){lectureTicketApplicationRepository.saveAndFlush(lectureTicketApplication);}
 }
