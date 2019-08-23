@@ -21,14 +21,14 @@ public class EtiquetteApplicationRepositoryTest {
 //        activityMainInfo.setEndTime(new Date());
 //        activityMainInfo.setDescription("大佬激情互殴");
 //
-//        EtiquetteApplication etiquetteApplication = new EtiquetteApplication();
+//        EtiquetteApplicationController etiquetteApplication = new EtiquetteApplicationController();
 //        etiquetteApplication.setActivityMainInfo(activityMainInfo);
 //        etiquetteApplication.setId(activityMainInfo.getActivityId());
 //        etiquetteApplication.setDescOfJob("女装大佬为巨佬跳舞");
 //        etiquetteApplication.setNumOfEtiquette(3);
 //        etiquetteApplication.setRehearsalTime(new Date());
 //
-//        EtiquetteApplication result = etiquetteApplicationRepository.save(etiquetteApplication);
+//        EtiquetteApplicationController result = etiquetteApplicationRepository.save(etiquetteApplication);
 //        Assert.assertNotNull(result);
 //    }
 }

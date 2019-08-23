@@ -112,7 +112,7 @@ public class ActivityApplicationService {
         return activityApplicationRepository.findById(id).orElseThrow(InvalidIdException::new);
     }
 //
-//    public EtiquetteApplication findEtiquetteApplicationById(Long id) {
+//    public EtiquetteApplicationController findEtiquetteApplicationById(Long id) {
 //        return etiquetteApplicationService.findById(id);
 //    }
 //

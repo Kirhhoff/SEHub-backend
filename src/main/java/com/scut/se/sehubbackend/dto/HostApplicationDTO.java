@@ -4,6 +4,8 @@ import com.scut.se.sehubbackend.domain.activity.ActivityBasicInfo;
 import lombok.Builder;
 import lombok.Data;
 
+import javax.validation.constraints.NotNull;
+
 @Data
 @Builder
 public class HostApplicationDTO {

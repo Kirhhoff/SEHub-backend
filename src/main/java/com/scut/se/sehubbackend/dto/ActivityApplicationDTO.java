@@ -1,9 +1,12 @@
 package com.scut.se.sehubbackend.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.scut.se.sehubbackend.domain.activity.ActivityBasicInfo;
 import com.scut.se.sehubbackend.domain.activity.ActivitySupplementaryInfo;
 import lombok.Builder;
 import lombok.Data;
+
+import javax.validation.constraints.NotNull;
 
 @Data
 @Builder
@@ -23,5 +26,6 @@ public class ActivityApplicationDTO {
 
     LectureTicketApplicationDTO lectureTicketApplication;//DTO形式的讲座票申请
 
+    @JsonProperty("poster")
     PosterApplicationDTO posterApplication;//DTO形式的海报申请
 }

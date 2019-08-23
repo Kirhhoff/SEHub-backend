@@ -4,6 +4,7 @@ import com.scut.se.sehubbackend.domain.activity.ActivityBasicInfo;
 import lombok.Builder;
 import lombok.Data;
 
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 @Data

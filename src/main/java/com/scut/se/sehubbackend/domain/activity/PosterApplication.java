@@ -4,6 +4,7 @@ import com.scut.se.sehubbackend.domain.Application;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 /**
@@ -19,20 +20,23 @@ public class PosterApplication implements Application {
     @Id@GeneratedValue
     Long id;
 
-    @Embedded
+    // 新增@
+    @Embedded @NotNull
     ActivityBasicInfo activityBasicInfo;//申请表的公有信息，包括{名称，地点，开始时间，结束时间}等等
 
     @Embedded
     CheckInfo checkInfo;////审核、发起者相关信息
 
-    @Temporal(TemporalType.TIMESTAMP)
+    @Temporal(TemporalType.TIMESTAMP) @NotNull
     Date deadline;//海报制作截止时间
 
     @Lob
     @Basic(fetch = FetchType.LAZY)
     @Column(columnDefinition = "text")
+    @NotNull
     String propagandaTextRequirement;//宣传文字要求
 
+    @NotNull
     String posterSize;//海报大小
 
     @ToString.Exclude
