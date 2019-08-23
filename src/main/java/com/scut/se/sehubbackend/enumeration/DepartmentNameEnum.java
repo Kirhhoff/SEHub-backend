@@ -12,5 +12,6 @@ public enum DepartmentNameEnum {
     Quality,//素拓
     Academic,//学术
     Organization,//组织
-    Relation;//外联部
+    Relation,//外联部
+    StandingCommittee;
 }

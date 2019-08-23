@@ -53,7 +53,6 @@ public class ActivityApplicationService {
 //    private PosterApplicationService posterApplicationService;
 //
 //    // DTO的目的是没有必要返回给前端礼仪申请等各种辅助信息，辅助信息可选展示即点击按钮再展示
-    public void save(ActivityApplication activityApplication) { activityApplicationRepository.saveAndFlush(activityApplication); }
 //
 
     /**
@@ -108,67 +107,8 @@ public class ActivityApplicationService {
         activityApplicationRepository.saveAndFlush(activityApplication);
     }
 
-    public ActivityApplication findById(Long id) throws InvalidIdException {
-        return activityApplicationRepository.findById(id).orElseThrow(InvalidIdException::new);
-    }
-//
-//    public EtiquetteApplication findEtiquetteApplicationById(Long id) {
-//        return etiquetteApplicationService.findById(id);
-//    }
-//
-//    public HostApplication findHostApplicationById(Long id) {
-//        return hostApplicationService.findById(id);
-//    }
-//
-//    public LectureTicketApplication findLectureTicketApplicationById(Long id) {
-//        return lectureTicketApplicationService.findById(id);
-//    }
-//
-//    public PosterApplication findPosterApplicationById(Long id) {
-//        return posterApplicationService.findById(id);
-//    }
-//
-//    @Transactional
-//    public ActivityApplicationDTO pass(ActivityApplicationDTO activityApplicationDTO) {
-//        ActivityApplication activityApplication = new ActivityApplication();
-//
-//        //判断审核状态
-//        if (!activityApplicationDTO.getCheckStatus().equals(CheckStatusEnum.WAIT.getCode())) {
-//            log.error("【审核通过】活动申请状态不正确, activityId={}, activityCheckStatus={}", activityApplicationDTO.getId(), activityApplicationDTO.getCheckStatus());
-//            throw new ActivityApplicationException(ResultEnum.ACTIVITY_APPLICATION_STATUS_ERROR);
-//        }
-//
-//        //修改审核状态
-//        activityApplicationDTO.setCheckStatus(CheckStatusEnum.PASS.getCode());
-//        BeanUtils.copyProperties(activityApplicationDTO, activityApplication);
-//        ActivityApplication updateResult = activityApplicationRepository.save(activityApplication);
-//        if (updateResult == null) {
-//            log.error("【审核通过】更新失败, activityApplication={}", activityApplication);
-//            throw new ActivityApplicationException(ResultEnum.ACTIVITY_APPLICATION_UPDATE_FAILED);
-//        }
-//
-//        return activityApplicationDTO;
-//    }
-//
-//    @Transactional
-//    public ActivityApplicationDTO nopass(ActivityApplicationDTO activityApplicationDTO) {
-//        ActivityApplication activityApplication = new ActivityApplication();
-//
-//        //判断审核状态
-//        if (!activityApplicationDTO.getCheckStatus().equals(CheckStatusEnum.WAIT.getCode())) {
-//            log.error("【审核不通过】活动申请状态不正确, activityId={}, activityCheckStatus={}", activityApplicationDTO.getId(), activityApplicationDTO.getCheckStatus());
-//            throw new ActivityApplicationException(ResultEnum.ACTIVITY_APPLICATION_STATUS_ERROR);
-//        }
-//
-//        //修改审核状态
-//        activityApplicationDTO.setCheckStatus(CheckStatusEnum.NOPASS.getCode());
-//        BeanUtils.copyProperties(activityApplicationDTO, activityApplication);
-//        ActivityApplication updateResult = activityApplicationRepository.save(activityApplication);
-//        if (updateResult == null) {
-//            log.error("【审核不通过】更新失败, activityApplication={}", activityApplication);
-//            throw new ActivityApplicationException(ResultEnum.ACTIVITY_APPLICATION_UPDATE_FAILED);
-//        }
-//
-//        return activityApplicationDTO;
-//    }
+    public List<ActivityApplication> findAll(){return activityApplicationRepository.findAll();}
+    public ActivityApplication findById(Long id) throws InvalidIdException { return activityApplicationRepository.findById(id).orElseThrow(InvalidIdException::new); }
+    public void save(ActivityApplication activityApplication) { activityApplicationRepository.saveAndFlush(activityApplication); }
+
 }

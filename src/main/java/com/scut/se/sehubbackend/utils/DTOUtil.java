@@ -1,5 +1,6 @@
 package com.scut.se.sehubbackend.utils;
 
+import com.scut.se.sehubbackend.domain.Application;
 import com.scut.se.sehubbackend.domain.activity.*;
 import com.scut.se.sehubbackend.domain.member.Authority;
 import com.scut.se.sehubbackend.domain.member.Department;
@@ -156,4 +157,43 @@ public class DTOUtil {
     }
 
 
+    public List<ApplicationNotice> toApplicationNotice(List<? extends Application> applications){
+        if (applications==null)
+            return null;
+        else {
+            List<ApplicationNotice> applicationNotices=new ArrayList<>();
+            for (Application application:applications)
+                applicationNotices.add(toApplicationNotice(application));
+            return applicationNotices;
+        }
+    }
+
+    public ApplicationNotice toApplicationNotice(Application application ){
+        return application==null
+                ?null
+                :ApplicationNotice.builder()
+                .id(application.getId())
+                .type(toType(application))
+                .activityBasicInfo(application.getActivityBasicInfo())
+                .checkInfoDTO(toDTO(application.getCheckInfo()))
+                .build();
+    }
+
+    /**
+     * <p>将申请表的类名转化为type字段</p>
+     * <p>主要是去掉Application后缀同时首字母小写，如：</p>
+     * <ul>
+     *     <li>"EtiquetteApplication" => "etiquette"</li>
+     *     <li>"LectureTicketApplication" => "lectureTicket"</li>
+     * @param application 申请表
+     * @return 转化后的type字段
+     */
+    private String toType(Application application){
+        //获取不带包的类名
+        String typeName=application.getClass().getSimpleName();
+        //去掉Application后缀
+        String eliminateApplication=typeName.replace("Application","");
+        //首字母小写并返回
+        return eliminateApplication.substring(0,1).toLowerCase()+eliminateApplication.substring(1);
+    }
 }
