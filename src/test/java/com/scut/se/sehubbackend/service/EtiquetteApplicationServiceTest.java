@@ -1,5 +1,6 @@
 package com.scut.se.sehubbackend.service;
 
+import com.scut.se.sehubbackend.dao.activity.EtiquetteApplicationRepository;
 import com.scut.se.sehubbackend.dao.member.MemberRepository;
 import com.scut.se.sehubbackend.domain.activity.ActivityBasicInfo;
 import com.scut.se.sehubbackend.domain.activity.CheckInfo;
@@ -33,6 +34,7 @@ public class EtiquetteApplicationServiceTest {
 
     @MockBean MemberContextHelper mockContextHelper;
     @Autowired EtiquetteApplicationService etiquetteApplicationService;
+    @Autowired EtiquetteApplicationRepository etiquetteApplicationRepository;
     @Autowired MemberRepository memberRepository;
 
     /**
@@ -86,7 +88,7 @@ public class EtiquetteApplicationServiceTest {
     }
 
     private void verifyDataCreation(){
-        List<EtiquetteApplication> allData=etiquetteApplicationService.findAll();
+        List<EtiquetteApplication> allData=etiquetteApplicationRepository.findAll();
         assertEquals(allData.size(),1);
 
         EtiquetteApplication expectedApplication=allData.get(0);

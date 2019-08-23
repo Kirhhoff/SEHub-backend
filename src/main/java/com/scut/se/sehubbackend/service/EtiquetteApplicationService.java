@@ -6,6 +6,7 @@ import com.scut.se.sehubbackend.domain.activity.EtiquetteApplication;
 import com.scut.se.sehubbackend.dto.EtiquetteApplicationDTO;
 import com.scut.se.sehubbackend.exception.InvalidIdException;
 import com.scut.se.sehubbackend.utils.CheckInfoUtil;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -53,9 +54,11 @@ public class EtiquetteApplicationService {
                 .build();
     }
 
+    @PreAuthorize("hasRole('Relation') and hasAuthority('Etiquette')")
     public List<EtiquetteApplication> findAll() {
         return etiquetteApplicationRepository.findAll();
     }
+    @PreAuthorize("hasRole('Relation') and hasAuthority('Etiquette')")
     public EtiquetteApplication findById(Long id) throws InvalidIdException { return etiquetteApplicationRepository.findById(id).orElseThrow(InvalidIdException::new); }
     public void save(EtiquetteApplication etiquetteApplication){etiquetteApplicationRepository.saveAndFlush(etiquetteApplication);}
 

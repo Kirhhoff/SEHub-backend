@@ -7,6 +7,7 @@ import com.scut.se.sehubbackend.dto.EtiquetteApplicationDTO;
 import com.scut.se.sehubbackend.dto.PosterApplicationDTO;
 import com.scut.se.sehubbackend.exception.InvalidIdException;
 import com.scut.se.sehubbackend.utils.CheckInfoUtil;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -45,7 +46,9 @@ public class PosterApplicationService {
                 .build();
     }
 
+    @PreAuthorize("hasRole('Propaganda') and hasAuthority('Poster')")
     public List<PosterApplication> findAll() { return posterApplicationRepository.findAll(); }
+    @PreAuthorize("hasRole('Propaganda') and hasAuthority('Poster')")
     public PosterApplication findById(Long id) throws InvalidIdException { return posterApplicationRepository.findById(id).orElseThrow(InvalidIdException::new); }
     public void save(PosterApplication posterApplication){posterApplicationRepository.saveAndFlush(posterApplication);}
 }

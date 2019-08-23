@@ -13,5 +13,5 @@ public enum DepartmentNameEnum {
     Academic,//学术
     Organization,//组织
     Relation,//外联部
-    StandingCommittee;
+    StandingCommittee;//常委
 }

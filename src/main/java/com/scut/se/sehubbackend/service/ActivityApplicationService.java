@@ -9,6 +9,7 @@ import com.scut.se.sehubbackend.exception.InvalidIdException;
 import com.scut.se.sehubbackend.security.ContextHelper;
 import com.scut.se.sehubbackend.utils.CheckInfoUtil;
 import com.scut.se.sehubbackend.utils.DTOUtil;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -107,7 +108,9 @@ public class ActivityApplicationService {
         activityApplicationRepository.saveAndFlush(activityApplication);
     }
 
+    @PreAuthorize("hasRole('StandingCommittee')")
     public List<ActivityApplication> findAll(){return activityApplicationRepository.findAll();}
+    @PreAuthorize("hasRole('StandingCommittee')")
     public ActivityApplication findById(Long id) throws InvalidIdException { return activityApplicationRepository.findById(id).orElseThrow(InvalidIdException::new); }
     public void save(ActivityApplication activityApplication) { activityApplicationRepository.saveAndFlush(activityApplication); }
 

@@ -7,6 +7,7 @@ import com.scut.se.sehubbackend.dto.EtiquetteApplicationDTO;
 import com.scut.se.sehubbackend.dto.HostApplicationDTO;
 import com.scut.se.sehubbackend.exception.InvalidIdException;
 import com.scut.se.sehubbackend.utils.CheckInfoUtil;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -44,10 +45,11 @@ public class HostApplicationService {
                 .activityThisBelongsTo(parentActivityApplication)
                 .build();
     }
-
+    @PreAuthorize("hasRole('Secretary') and hasAuthority('Host')")
     public List<HostApplication> findAll() {
         return hostApplicationRepository.findAll();
     }
+    @PreAuthorize("hasRole('Secretary') and hasAuthority('Host')")
     public HostApplication findById(Long id) throws InvalidIdException { return hostApplicationRepository.findById(id).orElseThrow(InvalidIdException::new); }
     public void save(HostApplication hostApplication){hostApplicationRepository.saveAndFlush(hostApplication);}
 }

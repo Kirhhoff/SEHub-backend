@@ -7,6 +7,7 @@ import com.scut.se.sehubbackend.dto.EtiquetteApplicationDTO;
 import com.scut.se.sehubbackend.dto.LectureTicketApplicationDTO;
 import com.scut.se.sehubbackend.exception.InvalidIdException;
 import com.scut.se.sehubbackend.utils.CheckInfoUtil;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -43,9 +44,11 @@ public class LectureTicketApplicationService {
                 .build();
     }
 
+    @PreAuthorize("hasRole('Research') and hasAuthority('LectureTicket')")
     public List<LectureTicketApplication> findAll() {
         return lectureTicketApplicationRepository.findAll();
     }
+    @PreAuthorize("hasRole('Research') and hasAuthority('LectureTicket')")
     public LectureTicketApplication findById(Long id) throws InvalidIdException { return lectureTicketApplicationRepository.findById(id).orElseThrow(InvalidIdException::new); }
     public void save(LectureTicketApplication lectureTicketApplication){lectureTicketApplicationRepository.saveAndFlush(lectureTicketApplication);}
 }
