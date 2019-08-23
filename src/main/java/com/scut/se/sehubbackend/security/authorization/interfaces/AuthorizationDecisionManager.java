@@ -1,21 +1,19 @@
 package com.scut.se.sehubbackend.security.authorization.interfaces;
 
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
+import com.scut.se.sehubbackend.domain.member.Member;
+import com.scut.se.sehubbackend.enumeration.AuthorityEnum;
 
 /**
  * 提供权限变更是否有权进行的决策服务<br/>
- * 决定{@code operator}对{@code user}的权限是否有权变更<br/>
  */
 public interface AuthorizationDecisionManager {
 
     /**
-     * 决定{@code operator}对{@code user}的{@code dynamicAuthority}权限是否有权变更
-     * @param operator 变更行为的发起者
-     * @param user 变更行为的承受者
-     * @param dynamicAuthority 要变更的权限
+     * 决定当前用户对target的权限是否有权变更
+     * @param target 变更的对象
+     * @param authority 要变更的权限
      * @return 是否有权变更
      */
-    /*public*/ Boolean decide(UserDetails operator,UserDetails user, GrantedAuthority dynamicAuthority);
+    Boolean decide(Member target, AuthorityEnum authority);
 
 }

@@ -35,7 +35,10 @@ public class Member {
     @JoinColumn(name = "department_name")
     Department department;//所属部门
 
-    @OneToMany(mappedBy = "authorityOwner")
+    @OneToMany(
+            mappedBy = "authorityOwner"
+            ,cascade = CascadeType.ALL
+    )
     List<Authority> authorityList;//该成员具备的所有权限
 
     public void addAuthority(Authority authority){
@@ -47,9 +50,13 @@ public class Member {
     }
 
     public void removeAuthority(Authority authority){
-        if (authorityList.contains(authority)){
-            authority.setAuthorityOwner(null);
-            authorityList.remove(authority);
+        int size=authorityList.size();
+        for(int index=0;index<size;index++){
+            Authority _authority=authorityList.get(index);
+            if (_authority.authorityName.equals(authority.authorityName)){
+                _authority.setAuthorityOwner(null);
+                authorityList.remove(_authority);
+            }
         }
     }
 }

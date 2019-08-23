@@ -1,9 +1,6 @@
 package com.scut.se.sehubbackend.domain.member;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 
@@ -21,7 +18,7 @@ public class Authority {
     Long id;
 
     @ManyToOne
-    @JoinColumn(name = "student_number")
+    @ToString.Exclude
     Member authorityOwner;//权限所属的成员
 
     String authorityName;//权限名称
