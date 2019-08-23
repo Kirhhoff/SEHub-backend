@@ -77,12 +77,18 @@ public class ActivityApplicationServiceTestCreate {
         mockEtiquetteDTO=null;
         mockHostDTO= HostApplicationDTO.builder()
                 .activityBasicInfo(activityBasicInfo)
+                .numOfHost(2)
+                .descOfJob("")
                 .build();
         mockLectureTicketDTO=LectureTicketApplicationDTO.builder()
                 .activityBasicInfo(activityBasicInfo)
+                .numOfTicket(200)
                 .build();
         mockPosterDTO=PosterApplicationDTO.builder()
                 .activityBasicInfo(activityBasicInfo)
+                .posterSize("3A0")
+                .deadline(new Date())
+                .propagandaTextRequirement("要大")
                 .build();
         mockRequestActivityDTO=ActivityApplicationDTO.builder()
                 .activityBasicInfo(activityBasicInfo)

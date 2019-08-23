@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 /**
  * 活动申请表
@@ -21,10 +22,11 @@ public class ActivityApplication implements Application {
     @Id@GeneratedValue
     Long id;
 
-    @Embedded
+    // 这里原本没有@NotNull
+    @Embedded @NotNull
     ActivityBasicInfo activityBasicInfo;//申请表的公有信息，包括{名称，地点，开始时间，结束时间}等等
 
-    @Embedded
+    @Embedded @NotNull
     ActivitySupplementaryInfo activitySupplementaryInfo;//活动申请表的补充信息，包括{背景，受众，主办方}等等
 
     @Embedded

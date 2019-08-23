@@ -4,6 +4,7 @@ import com.scut.se.sehubbackend.domain.Application;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 /**
  * 讲座篇申请表
@@ -24,6 +25,7 @@ public class LectureTicketApplication implements Application {
     @Embedded
     CheckInfo checkInfo;////审核、发起者相关信息
 
+    @NotNull
     Integer numOfTicket;//讲座票数量
 
     @ToString.Exclude

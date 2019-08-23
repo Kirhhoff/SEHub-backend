@@ -113,5 +113,4 @@ public class ActivityApplicationService {
     @PreAuthorize("hasRole('StandingCommittee')")
     public ActivityApplication findById(Long id) throws InvalidIdException { return activityApplicationRepository.findById(id).orElseThrow(InvalidIdException::new); }
     public void save(ActivityApplication activityApplication) { activityApplicationRepository.saveAndFlush(activityApplication); }
-
 }
