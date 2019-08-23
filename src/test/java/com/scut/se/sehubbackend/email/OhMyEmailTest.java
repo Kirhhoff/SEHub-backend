@@ -46,10 +46,10 @@ public class OhMyEmailTest {
 
     @Test
     public void testSendText() throws SendMailException {
-        OhMyEmail.subject("团委学生会通知")
-                .from("华南理工大学软件学院")
-                .to(TO_EMAIL)
-                .text("这是一封测试TEXT邮件")
+        OhMyEmail.subject("团委学生会通知") // 邮件标题
+                .from("华南理工大学软件学院") // 发件人昵称
+                .to(TO_EMAIL) // 收件邮箱地址
+                .text("这是一封测试TEXT邮件") // 邮件正文内容
                 .send();
         Assert.assertTrue(true);
     }
