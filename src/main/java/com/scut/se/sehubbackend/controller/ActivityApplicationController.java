@@ -29,11 +29,10 @@ public class ActivityApplicationController {
         activityApplicationService.create(activityApplicationDTO);
     }
 
-    /* 以当前用户的身份修改一张活动申请表 */
-    @PutMapping("/application/activity")
-    public void modify(@Valid ActivityApplicationDTO activityApplicationDTO) throws InvalidIdException {
-        activityApplicationService.findById(activityApplicationDTO.getId()); // Id不存在抛出异常
-        activityApplicationService.create(activityApplicationDTO); // saveAndFlush：增量修改
-    }
-
+//    /* 以当前用户的身份修改一张活动申请表 */
+//    @PutMapping("/application/activity")
+//    public void modify(@Valid ActivityApplicationDTO activityApplicationDTO) throws InvalidIdException {
+//        activityApplicationService.findById(activityApplicationDTO.getId()); // Id不存在抛出异常
+//        activityApplicationService.create(activityApplicationDTO); // saveAndFlush：增量修改
+//    }
 }
