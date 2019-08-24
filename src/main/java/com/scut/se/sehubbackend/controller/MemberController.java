@@ -14,6 +14,6 @@ public class MemberController {
 
     @PutMapping("/member")
     public void update(MemberDTO memberDTO) {
-
+        memberService.update(memberDTO);
     }
 }

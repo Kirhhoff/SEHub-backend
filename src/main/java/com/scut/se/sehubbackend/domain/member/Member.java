@@ -1,10 +1,7 @@
 package com.scut.se.sehubbackend.domain.member;
 
 import com.scut.se.sehubbackend.enumeration.PositionEnum;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.List;
@@ -34,6 +31,8 @@ public class Member {
 
     String email;//邮箱
 
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
     @ManyToOne
     @JoinColumn(name = "department_name")
     Department department;//所属部门
