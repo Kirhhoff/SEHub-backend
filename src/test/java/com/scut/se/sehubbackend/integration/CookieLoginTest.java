@@ -3,12 +3,15 @@ package com.scut.se.sehubbackend.integration;
 import com.scut.se.sehubbackend.domain.member.Member;
 import com.scut.se.sehubbackend.security.jwt.JwtManager;
 import com.scut.se.sehubbackend.utils.Member2UserDetailsAdapter;
+import com.scut.se.sehubbackend.utils.MemberContextHelper;
 import org.jose4j.lang.JoseException;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.json.JacksonJsonParser;
+import org.springframework.boot.json.JsonParser;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -16,14 +19,13 @@ import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,7 +40,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
  * 对Cookie登陆的集成测试<br/>
  * 测试是：模拟一个用户的登陆，结果包括<br/>
  * <ul>
- *     <li>登陆后将被重定向</li>
+ *     <li>登陆后返回个人信息</li>
  *     <li>响应中带有一个Cookie用于维持会话</li>
  * </ul>
  */
@@ -61,7 +63,7 @@ public class CookieLoginTest {
      */
     @MockBean JwtManager mockJwtManager;
     @MockBean Member2UserDetailsAdapter mockUserDetailsAdapter;
-
+    @MockBean MemberContextHelper memberContextHelper;
     @Mock UserDetails mockUserDetails;
     String mockUsername="201730683314";
     String mockPassword="123456789";
@@ -71,7 +73,7 @@ public class CookieLoginTest {
 
 
     /**
-     * 用存在的用户进行登陆测试，应当返回Cookie和302状态(成功登陆后进行转发)
+     * 用存在的用户进行登陆测试，应当返回Cookie和200状态(成功登陆后返回个人信息)
      * @throws Exception
      */
     @Test
@@ -79,13 +81,16 @@ public class CookieLoginTest {
         //模拟登陆并返回结果
         MvcResult result= performLoginWithMockUser();
 
-        //测试Cookie和转发
-        assertCookieAndRedirect(result);
+        //测试Cookie和返回信息
+        assertCookieAndResponseBody(result);
     }
 
     @Before
     public void before() throws JoseException {
-        mockMember= Member.builder().studentNumber(Long.valueOf(mockUsername)).build();
+        mockMember= Member.builder()
+                .studentNumber(Long.valueOf(mockUsername))
+                .authorityList(new ArrayList<>())
+                .build();
 
         //Mock JwtManager
         when(mockJwtManager.encode(any(UserDetails.class))).thenReturn(mockUsername);
@@ -106,6 +111,9 @@ public class CookieLoginTest {
         when(mockUserDetailsAdapter.from(mockUserDetails)).thenReturn(mockMember);
         when(mockUserDetailsAdapter.to(mockMember)).thenReturn(mockUserDetails);
 
+        //Mock Context
+        doReturn(mockMember).when(memberContextHelper).getCurrentPrincipal();
+
         //配置MockMvc
         mockMvc= MockMvcBuilders.webAppContextSetup(context)
                 .apply(springSecurity())
@@ -117,14 +125,21 @@ public class CookieLoginTest {
     }
 
 
-    private void assertCookieAndRedirect(MvcResult mvcResult){
+    private void assertCookieAndResponseBody(MvcResult mvcResult) throws UnsupportedEncodingException {
         MockHttpServletResponse response=mvcResult.getResponse();
 
-        //成功后进行转发，转发到相应的Url
-        assertEquals(302,response.getStatus());
-        assertEquals("/",response.getRedirectedUrl());
+        //成功后返回个人信息
+        assertEquals(200,response.getStatus());
         //成功后应当携带Cookie
         assertEquals(mockUsername,response.getCookie("token").getValue());
+        //成功后应携带当前用户信息
+        JsonParser jsonParser=new JacksonJsonParser();
+        Long responseStudentNumber=(Long)jsonParser.parseMap(response.getContentAsString()).get("studentNumber");
+
+        assertEquals(
+                201730683314L,
+                responseStudentNumber.longValue()
+        );
     }
 
     private MvcResult performLoginWithMockUser() throws Exception {

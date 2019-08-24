@@ -6,7 +6,7 @@ import org.jose4j.lang.JoseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.stereotype.Component;
 
@@ -24,10 +24,12 @@ public class CustomUsernamePasswordAuthenticationFilter extends UsernamePassword
     final UserDetailsAdapter userDetailsAdapter;
 
     @Autowired
-    public CustomUsernamePasswordAuthenticationFilter(JwtManager jwtManager, AuthenticationManager authenticationManager, UserDetailsAdapter userDetailsAdapter){
+    public CustomUsernamePasswordAuthenticationFilter(JwtManager jwtManager, AuthenticationManager authenticationManager, UserDetailsAdapter userDetailsAdapter, AuthenticationSuccessHandler authenticationSuccessHandler){
         this.jwtManager = jwtManager;
-        setAuthenticationManager(authenticationManager);
         this.userDetailsAdapter = userDetailsAdapter;
+        setAuthenticationManager(authenticationManager);
+        setAuthenticationSuccessHandler(authenticationSuccessHandler);
+        setContinueChainBeforeSuccessfulAuthentication(true);
     }
 
     @SuppressWarnings("unchecked")
@@ -43,5 +45,6 @@ public class CustomUsernamePasswordAuthenticationFilter extends UsernamePassword
         }
         response.addCookie(new Cookie("token",token));
     }
+
 
 }

@@ -26,10 +26,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .addFilterAt(usernamePasswordAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .anonymous().disable()
                 .csrf().disable();
-//                .formLogin()
-//                    .usernameParameter(webConfig.getUsernameParameter()).passwordParameter(webConfig.getPasswordParameter())
-//                    .loginPage(webConfig.getLoginPage());
-
     }
 
 }
