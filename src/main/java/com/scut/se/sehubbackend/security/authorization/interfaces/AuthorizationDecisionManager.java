@@ -9,11 +9,12 @@ import com.scut.se.sehubbackend.enumeration.AuthorityEnum;
 public interface AuthorizationDecisionManager {
 
     /**
-     * 决定当前用户对target的权限是否有权变更
+     * 决定operator对target的权限是否有权变更
+     * @param operator 操作者
      * @param target 变更的对象
      * @param authority 要变更的权限
      * @return 是否有权变更
      */
-    Boolean decide(Member target, AuthorityEnum authority);
+    Boolean decide(Member operator,Member target, AuthorityEnum authority);
 
 }

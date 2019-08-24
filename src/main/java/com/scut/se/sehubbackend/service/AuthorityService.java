@@ -34,7 +34,8 @@ public class AuthorityService {
 
     private void authorityAlter(Long id, AuthorityEnum authority, AuthorityOperation operation) throws InvalidIdException {
         Member target=memberService.findById(id);
-        if(decisionManager.decide(target,authority)){
+        Member currentMember=contextHelper.getCurrentPrincipal();
+        if(decisionManager.decide(currentMember,target,authority)){
             Authority newAuthority=Authority.builder().authorityName(String.valueOf(authority)).build();
             switch (operation){
                 case Grant: target.addAuthority(newAuthority);

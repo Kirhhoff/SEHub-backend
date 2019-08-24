@@ -82,7 +82,7 @@ public class AuthorityServiceTest {
         memberRepository.save(target);
         idOfTarget=target.getStudentNumber();
     }
-    private void setUpAuthorityForAuthorization(boolean hasAuthorityForAuthorization){ when(decisionManager.decide(any(),any())).thenReturn(hasAuthorityForAuthorization); }
+    private void setUpAuthorityForAuthorization(boolean hasAuthorityForAuthorization){ when(decisionManager.decide(any(),any(),any())).thenReturn(hasAuthorityForAuthorization); }
     private void setUpAuthorityExistingEnvironment(){
         target.addAuthority(Authority.builder().authorityName(String.valueOf(authorityEnum)).build());
         memberRepository.saveAndFlush(target);
