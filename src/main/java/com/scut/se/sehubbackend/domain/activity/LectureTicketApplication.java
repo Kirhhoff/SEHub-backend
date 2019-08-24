@@ -1,6 +1,7 @@
 package com.scut.se.sehubbackend.domain.activity;
 
 import com.scut.se.sehubbackend.domain.Application;
+import com.scut.se.sehubbackend.enumeration.TicketType;
 import lombok.*;
 
 import javax.persistence.*;
@@ -27,6 +28,12 @@ public class LectureTicketApplication implements Application {
 
     @NotNull
     Integer numOfTicket;//讲座票数量
+
+    @NotNull
+    TicketType ticketType;//讲座票类型
+
+    @NotNull
+    Double ticketScore;//讲座票分值
 
     @ToString.Exclude
     @OneToOne(

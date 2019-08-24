@@ -40,6 +40,8 @@ public class LectureTicketApplicationService {
                 .activityBasicInfo(lectureTicketApplicationDTO.getActivityBasicInfo())
                 .checkInfo(checkInfoUtil.initialCheckInfo())
                 .numOfTicket(lectureTicketApplicationDTO.getNumOfTicket())
+                .ticketScore(lectureTicketApplicationDTO.getTicketScore())
+                .ticketType(lectureTicketApplicationDTO.getTicketType())
                 .activityThisBelongsTo(parentActivityApplication)
                 .build();
     }

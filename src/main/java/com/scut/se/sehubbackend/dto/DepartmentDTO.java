@@ -11,8 +11,6 @@ import java.util.List;
 @Data
 public class DepartmentDTO {
 
-    Long id;
-
     DepartmentNameEnum departmentName;//部门名称
 
     List<MemberDTO> memberList;//部门成员

@@ -5,7 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.NaturalId;
 
 import javax.persistence.*;
 import java.util.List;
@@ -20,10 +19,7 @@ import java.util.List;
 @AllArgsConstructor
 public class Department {
 
-    @Id@GeneratedValue
-    Long id;
-
-    @NaturalId
+    @Id
     @Enumerated(value = EnumType.STRING)
     DepartmentNameEnum departmentName;//部门名称
 

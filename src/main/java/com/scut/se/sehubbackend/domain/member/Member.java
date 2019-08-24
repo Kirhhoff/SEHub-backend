@@ -31,6 +31,8 @@ public class Member {
 
     String phoneNumber;//手机号
 
+    String email;//邮箱
+
     @ManyToOne
     @JoinColumn(name = "department_name")
     Department department;//所属部门

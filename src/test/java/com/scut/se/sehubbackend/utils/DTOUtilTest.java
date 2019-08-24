@@ -108,7 +108,6 @@ public class DTOUtilTest {
         memberDTOs.add(memberWithNoAuthorityDTO);
         memberDTOs.add(memberWithTwoAuthoritiesDTO);
         expectedDepartmentDTO= DepartmentDTO.builder()
-                .id(departmentToConvert.getId())
                 .departmentName(departmentToConvert.getDepartmentName())
                 .memberList(memberDTOs)
                 .departmentDescription(departmentToConvert.getDepartmentDescription())

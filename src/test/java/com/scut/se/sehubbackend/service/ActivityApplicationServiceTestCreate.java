@@ -5,6 +5,7 @@ import com.scut.se.sehubbackend.dao.member.MemberRepository;
 import com.scut.se.sehubbackend.domain.activity.*;
 import com.scut.se.sehubbackend.domain.member.Member;
 import com.scut.se.sehubbackend.dto.*;
+import com.scut.se.sehubbackend.enumeration.TicketType;
 import com.scut.se.sehubbackend.utils.MemberContextHelper;
 import org.junit.Before;
 import org.junit.Test;
@@ -83,6 +84,8 @@ public class ActivityApplicationServiceTestCreate {
         mockLectureTicketDTO=LectureTicketApplicationDTO.builder()
                 .activityBasicInfo(activityBasicInfo)
                 .numOfTicket(200)
+                .ticketScore(0.5)
+                .ticketType(TicketType.DeYu)
                 .build();
         mockPosterDTO=PosterApplicationDTO.builder()
                 .activityBasicInfo(activityBasicInfo)

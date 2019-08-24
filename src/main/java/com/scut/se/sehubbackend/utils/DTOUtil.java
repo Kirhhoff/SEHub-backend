@@ -93,7 +93,9 @@ public class DTOUtil {
                     .id(lectureTicketApplication.getId())
                     .activityBasicInfo(lectureTicketApplication.getActivityBasicInfo())
                     .numOfTicket(lectureTicketApplication.getNumOfTicket())
-                    .relatedActivity(
+                .ticketScore(lectureTicketApplication.getTicketScore())
+                .ticketType(lectureTicketApplication.getTicketType())
+                .relatedActivity(
                         lectureTicketApplication.getActivityThisBelongsTo()==null
                                 ?null
                                 :lectureTicketApplication.getActivityThisBelongsTo().getId())
@@ -133,6 +135,7 @@ public class DTOUtil {
                     .name(member.getName())
                     .position(member.getPosition())
                     .phoneNumber(member.getPhoneNumber())
+                    .email(member.getEmail())
                     .departmentName(departmentName)
                     .authorityList(authorityList)
                     .build();
@@ -148,7 +151,6 @@ public class DTOUtil {
                 memberList.add(toDTO(member));
 
             return DepartmentDTO.builder()
-                    .id(department.getId())
                     .departmentName(department.getDepartmentName())
                     .memberList(memberList)
                     .departmentDescription(department.getDepartmentDescription())

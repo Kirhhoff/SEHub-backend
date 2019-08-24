@@ -1,6 +1,7 @@
 package com.scut.se.sehubbackend.dto;
 
 import com.scut.se.sehubbackend.domain.activity.ActivityBasicInfo;
+import com.scut.se.sehubbackend.enumeration.TicketType;
 import lombok.Builder;
 import lombok.Data;
 
@@ -15,6 +16,10 @@ public class LectureTicketApplicationDTO {
     CheckInfoDTO checkInfoDTO;//审核、发起者相关信息
 
     Integer numOfTicket;//讲座票数量
+
+    Double ticketScore;//讲座票分值
+
+    TicketType ticketType;//讲座票类型
 
     Long relatedActivity;//相关活动的id
 }
