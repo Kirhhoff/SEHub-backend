@@ -26,6 +26,7 @@ public class Member {
 
     String name;//成员姓名
 
+    @Column(name = "`position`")
     @Enumerated(value = EnumType.STRING)
     PositionEnum position;//职位
 

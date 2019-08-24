@@ -20,7 +20,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
-                .authorizeRequests().antMatchers("/api/**").authenticated()
+                .authorizeRequests()
+                .antMatchers("/index.html").permitAll()
+                .antMatchers("/**").authenticated()
                 .and()
                 .addFilterAt(abstractPreAuthenticatedProcessingFilter, AbstractPreAuthenticatedProcessingFilter.class)
                 .addFilterAt(usernamePasswordAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)

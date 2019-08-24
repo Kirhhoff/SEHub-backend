@@ -55,5 +55,6 @@ dependencies {
     testCompile group: 'junit', name: 'junit', version:'4.12'
     compileOnly group: 'com.mitchellbosecke', name: 'pebble', version:'2.2.0'
     compileOnly group: 'com.github.subchen', name: 'jetbrick-template', version:'2.1.2'
+    annotationProcessor 'org.projectlombok:lombok:1.18.8'
 
 }
