@@ -1,12 +1,12 @@
 package com.scut.se.sehubbackend.security.authentication.provider;
 
 import com.scut.se.sehubbackend.security.UserDetailsAdapter;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
@@ -29,11 +29,13 @@ public class UsernamePasswordAuthenticationProvider implements AuthenticationPro
         UserDetails userDetailsInDatabase=userDetailsService.loadUserByUsername(username);
 
         if (password.equals(userDetailsInDatabase.getPassword())){
-            return new UsernamePasswordAuthenticationToken(
+            Authentication successAuthentication= new UsernamePasswordAuthenticationToken(
                     userDetailsAdapter.from(userDetailsInDatabase),
                     null,
                     userDetailsInDatabase.getAuthorities()
             );
+            SecurityContextHolder.getContext().setAuthentication(successAuthentication);
+            return successAuthentication;
         }else
             throw new AuthenticationServiceException("Password match failed!");
     }

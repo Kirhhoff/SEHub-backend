@@ -38,8 +38,9 @@ public class Member {
     Department department;//所属部门
 
     @OneToMany(
-            mappedBy = "authorityOwner"
-            ,cascade = CascadeType.ALL
+            mappedBy = "authorityOwner",
+            cascade = CascadeType.ALL,
+            fetch = FetchType.EAGER
     )
     List<Authority> authorityList;//该成员具备的所有权限
 

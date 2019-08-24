@@ -26,7 +26,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .addFilterAt(abstractPreAuthenticatedProcessingFilter, AbstractPreAuthenticatedProcessingFilter.class)
                 .addFilterAt(usernamePasswordAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
-                .anonymous().disable()
                 .csrf().disable();
     }
 
