@@ -17,7 +17,7 @@ public class DepartmentService {
         this.dtoUtil = dtoUtil;
     }
 
-    DepartmentDTO getCurrentDepartment(){
+    public DepartmentDTO getCurrentDepartment(){
         return dtoUtil.toDTO(
                 contextHelper.getCurrentPrincipal().getDepartment());
     }

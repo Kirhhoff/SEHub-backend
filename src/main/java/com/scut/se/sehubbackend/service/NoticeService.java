@@ -40,7 +40,7 @@ public class NoticeService {
      * @return 申请表通知的数组
      * @see ApplicationNotice
      */
-    List<ApplicationNotice> getApplicationNotices(){
+    public List<ApplicationNotice> getApplicationNotices(){
         DepartmentNameEnum departmentName=contextHelper.getCurrentPrincipal().getDepartment().getDepartmentName();
         List<? extends Application> applicationList=null;
         switch (departmentName){
