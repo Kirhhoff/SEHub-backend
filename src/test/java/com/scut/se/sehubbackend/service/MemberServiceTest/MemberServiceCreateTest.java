@@ -21,6 +21,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,6 +47,7 @@ public class MemberServiceCreateTest {
      */
     @Test
     @WithMockUser(roles = "Admin")
+    @Transactional
     public void testCreateWithNewIdWithStaff() throws InvalidIdException {
         MemberDTO validNewMember=memberDTO(newStaffStudentNumber,existingDepartmentName,staff);
         memberService.create(validNewMember);
@@ -59,6 +61,7 @@ public class MemberServiceCreateTest {
      */
     @Test
     @WithMockUser(roles = "Admin")
+    @Transactional
     public void testCreateWithNewIdWithMinister() throws InvalidIdException {
         MemberDTO validNewMember=memberDTO(newMinisterStudentNumber,existingDepartmentName,minister);
         memberService.create(validNewMember);

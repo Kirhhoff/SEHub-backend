@@ -33,7 +33,7 @@ import static org.junit.Assert.assertTrue;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-@AutoConfigureTestDatabase
+@AutoConfigureTestDatabase()
 public class MemberServiceGetDepartmentAndMemberTest {
 
     @Autowired MemberService memberService;
@@ -60,6 +60,7 @@ public class MemberServiceGetDepartmentAndMemberTest {
 
     @Before
     public void setUp() {
+        memberRepository.deleteAll();
         Department department1= Department.builder().departmentName(departmentName1).memberList(new ArrayList<>()).build();
         Department department2= Department.builder().departmentName(departmentName2).memberList(new ArrayList<>()).build();
         Member member1= Member.builder().studentNumber(id1).password(password).name(name).position(position).authorityList(new ArrayList<>()).build();
