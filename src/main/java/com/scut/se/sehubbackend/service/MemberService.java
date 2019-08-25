@@ -125,7 +125,7 @@ public class MemberService {
     @PreAuthorize("hasRole('Admin')")
     public Map<String,Object> getAllDepartmentNameAndAllMember(){
         Map<String,Object> data=new HashMap<>();
-        data.put("allDepartment", Arrays.asList(DepartmentNameEnum.values()));
+        data.put("allDepartment", departmentService.getAllCurrentlyExistingDepartmentName());
 
         List<Member> allMemberExceptAdmin=memberRepository.findAllByPositionNot(Admin);
         List<MemberDTO> allMemberDTO=new ArrayList<>();

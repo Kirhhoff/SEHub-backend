@@ -10,6 +10,9 @@ import com.scut.se.sehubbackend.security.ContextHelper;
 import com.scut.se.sehubbackend.utils.DTOUtil;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 public class DepartmentService {
 
@@ -28,7 +31,16 @@ public class DepartmentService {
                 contextHelper.getCurrentPrincipal().getDepartment());
     }
 
+    public List<String> getAllCurrentlyExistingDepartmentName(){
+        List<Department> departments=findAll();
+        List<String> names=new ArrayList<>();
+        for (Department department:departments)
+            names.add(department.getDepartmentName().toString());
+        return names;
+    }
+
     public Department findById(DepartmentNameEnum departmentName) throws InvalidIdException {return departmentRepository.findById(departmentName).orElseThrow(InvalidIdException::new);}
     public void save(Department department){departmentRepository.saveAndFlush(department);}
+    public List<Department> findAll(){return departmentRepository.findAll();}
 }
 

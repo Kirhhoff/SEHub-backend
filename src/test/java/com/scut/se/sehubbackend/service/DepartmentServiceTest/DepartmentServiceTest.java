@@ -1,4 +1,4 @@
-package com.scut.se.sehubbackend.service;
+package com.scut.se.sehubbackend.service.DepartmentServiceTest;
 
 import com.scut.se.sehubbackend.dao.member.DepartmentRepository;
 import com.scut.se.sehubbackend.domain.member.Department;
@@ -6,6 +6,7 @@ import com.scut.se.sehubbackend.domain.member.Member;
 import com.scut.se.sehubbackend.dto.DepartmentDTO;
 import com.scut.se.sehubbackend.enumeration.DepartmentNameEnum;
 import com.scut.se.sehubbackend.enumeration.PositionEnum;
+import com.scut.se.sehubbackend.service.DepartmentService;
 import com.scut.se.sehubbackend.utils.DTOUtil;
 import com.scut.se.sehubbackend.utils.MemberContextHelper;
 import org.junit.Before;
@@ -31,7 +32,8 @@ public class DepartmentServiceTest {
     @MockBean MemberContextHelper memberContextHelper;
     @MockBean DTOUtil dtoUtil;
     @Autowired DepartmentRepository departmentRepository;
-    @Autowired DepartmentService departmentService;
+    @Autowired
+    DepartmentService departmentService;
 
 
     /**

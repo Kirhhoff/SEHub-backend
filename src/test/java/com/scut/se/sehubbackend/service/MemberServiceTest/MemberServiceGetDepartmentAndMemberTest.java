@@ -7,6 +7,7 @@ import com.scut.se.sehubbackend.domain.member.Member;
 import com.scut.se.sehubbackend.dto.MemberDTO;
 import com.scut.se.sehubbackend.enumeration.DepartmentNameEnum;
 import com.scut.se.sehubbackend.enumeration.PositionEnum;
+import com.scut.se.sehubbackend.service.DepartmentService;
 import com.scut.se.sehubbackend.service.MemberService;
 import org.junit.Before;
 import org.junit.Test;
@@ -14,12 +15,12 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -29,6 +30,7 @@ import static com.scut.se.sehubbackend.enumeration.PositionEnum.Admin;
 import static com.scut.se.sehubbackend.enumeration.PositionEnum.Staff;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.doReturn;
 
 
 @RunWith(SpringRunner.class)
@@ -39,6 +41,7 @@ public class MemberServiceGetDepartmentAndMemberTest {
     @Autowired MemberService memberService;
     @Autowired DepartmentRepository departmentRepository;
     @Autowired MemberRepository memberRepository;
+    @SpyBean DepartmentService departmentService;
 
     /**
      * <p>测试有权限时候的访问，返回所有部门名和所有Member</p>
@@ -73,16 +76,21 @@ public class MemberServiceGetDepartmentAndMemberTest {
 
         memberDTO1= MemberDTO.builder().studentNumber(id1).name(name).position(position).departmentName(departmentName1).authorityList(new ArrayList<>()).build();
         memberDTO2= MemberDTO.builder().studentNumber(id2).name(name).position(position).departmentName(departmentName2).authorityList(new ArrayList<>()).build();
+
+        mockNames.add("haha");
+        mockNames.add("heihei");
+        doReturn(mockNames).when(departmentService).getAllCurrentlyExistingDepartmentName();
     }
 
     private void verifyReturnData(Map<String,Object> map){
-        List<DepartmentNameEnum> names= (List<DepartmentNameEnum>) map.get("allDepartment");
+        List<String> names= (List<String>) map.get("allDepartment");
         List<MemberDTO> members= (List<MemberDTO>) map.get("allMember");
 
-        assertEquals(Arrays.asList(DepartmentNameEnum.values()),names);
+        assertEquals(mockNames,names);
         assertTrue(members.contains(memberDTO1));
         assertTrue(members.contains(memberDTO2));
         assertEquals(2,members.size());
+
     }
     private DepartmentNameEnum departmentName1=Research;
     private DepartmentNameEnum departmentName2=Secretary;
@@ -96,5 +104,6 @@ public class MemberServiceGetDepartmentAndMemberTest {
 
     private MemberDTO memberDTO1;
     private MemberDTO memberDTO2;
+    List<String> mockNames=new ArrayList<>();
 
 }
