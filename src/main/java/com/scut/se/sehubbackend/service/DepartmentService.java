@@ -8,6 +8,7 @@ import com.scut.se.sehubbackend.enumeration.DepartmentNameEnum;
 import com.scut.se.sehubbackend.exception.InvalidIdException;
 import com.scut.se.sehubbackend.security.ContextHelper;
 import com.scut.se.sehubbackend.utils.DTOUtil;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -39,7 +40,7 @@ public class DepartmentService {
         return names;
     }
 
-    public Department findById(DepartmentNameEnum departmentName) throws InvalidIdException {return departmentRepository.findById(departmentName).orElseThrow(InvalidIdException::new);}
+    @PreAuthorize("hasRole('Admin')") public Department findById(DepartmentNameEnum departmentName) throws InvalidIdException {return departmentRepository.findById(departmentName).orElseThrow(InvalidIdException::new);}
     public void save(Department department){departmentRepository.saveAndFlush(department);}
     public List<Department> findAll(){return departmentRepository.findAll();}
 }

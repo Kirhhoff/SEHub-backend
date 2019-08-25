@@ -137,6 +137,7 @@ public class MemberService {
 
     public Member findById(Long id) throws InvalidIdException { return memberRepository.findById(id).orElseThrow(InvalidIdException::new); }
     public void save(Member member){memberRepository.saveAndFlush(member);}
+    @PreAuthorize("hasRole('Admin')") public void delete(Long studentNumber){memberRepository.deleteById(studentNumber);}
 
     private List<Authority> buildAuthority(DepartmentNameEnum department, PositionEnum position){
         List<Authority> authorities=new ArrayList<>();
