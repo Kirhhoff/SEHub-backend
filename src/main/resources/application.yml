@@ -17,17 +17,8 @@ jwt:
   rsaKeySize: 2048
   expired: 5
   issuer: SCUT-SE
-request:
-  uri:
-    login: /login
-    application:
-      prefix: /application
-      propaganda: /propaganda
-  header:
-    authority: jwt
-  parameter:
-    username: username
-    password: password
+default:
+  password: 123456
 
 
 ---

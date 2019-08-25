@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import static com.scut.se.sehubbackend.enumeration.PositionEnum.Minister;
 import static java.util.Optional.ofNullable;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
@@ -93,7 +94,7 @@ public class DatabaseUserDetailsServiceTest {
         Authority roleAuthority=new Authority();
 
         pureAuthority.setAuthorityName("PROCESS_APPLICATION");
-        roleAuthority.setAuthorityName(new Role("MINISTER").getAuthority());
+        roleAuthority.setAuthorityName(new Role(Minister).getAuthority());
 
         authorityList.add(pureAuthority);
         authorityList.add(roleAuthority);
@@ -101,7 +102,7 @@ public class DatabaseUserDetailsServiceTest {
 
     private void configureGrantedAuthorities(){
         GrantedAuthority pureAuthority= new SimpleGrantedAuthority("PROCESS_APPLICATION") ;
-        GrantedAuthority roleAuthority=new SimpleGrantedAuthority(new Role("MINISTER").getAuthority());
+        GrantedAuthority roleAuthority=new SimpleGrantedAuthority(new Role(Minister).getAuthority());
 
         grantedAuthorities.add(pureAuthority);
         grantedAuthorities.add(roleAuthority);

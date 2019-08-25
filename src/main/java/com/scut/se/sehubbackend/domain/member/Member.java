@@ -38,7 +38,6 @@ public class Member {
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
     @ManyToOne
-    @NotNull
     @JoinColumn(name = "department_name")
     Department department;//所属部门
 

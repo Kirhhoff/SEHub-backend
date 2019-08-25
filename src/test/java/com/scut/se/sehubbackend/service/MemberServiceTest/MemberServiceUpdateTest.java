@@ -1,4 +1,4 @@
-package com.scut.se.sehubbackend.service;
+package com.scut.se.sehubbackend.service.MemberServiceTest;
 
 import com.scut.se.sehubbackend.dao.member.DepartmentRepository;
 import com.scut.se.sehubbackend.dao.member.MemberRepository;
@@ -7,6 +7,7 @@ import com.scut.se.sehubbackend.domain.member.Member;
 import com.scut.se.sehubbackend.dto.MemberDTO;
 import com.scut.se.sehubbackend.enumeration.DepartmentNameEnum;
 import com.scut.se.sehubbackend.enumeration.PositionEnum;
+import com.scut.se.sehubbackend.service.MemberService;
 import com.scut.se.sehubbackend.utils.MemberContextHelper;
 import org.junit.Before;
 import org.junit.Test;
@@ -28,11 +29,12 @@ import static org.mockito.Mockito.doReturn;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @AutoConfigureTestDatabase
-public class MemberServiceTest {
+public class MemberServiceUpdateTest {
 
     @MockBean MemberContextHelper memberContextHelper;
     @Autowired DepartmentRepository departmentRepository;
-    @Autowired MemberService memberService;
+    @Autowired
+    MemberService memberService;
     @Autowired MemberRepository memberRepository;
 
     /**
