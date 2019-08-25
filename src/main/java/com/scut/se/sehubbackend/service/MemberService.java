@@ -10,13 +10,13 @@ import com.scut.se.sehubbackend.enumeration.PositionEnum;
 import com.scut.se.sehubbackend.exception.InvalidIdException;
 import com.scut.se.sehubbackend.security.ContextHelper;
 import com.scut.se.sehubbackend.security.Role;
+import com.scut.se.sehubbackend.utils.DTOUtil;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 import static com.scut.se.sehubbackend.enumeration.AuthorityEnum.*;
 import static com.scut.se.sehubbackend.enumeration.PositionEnum.Admin;
@@ -29,12 +29,14 @@ public class MemberService {
     final ContextHelper<Member> contextHelper;
     final DepartmentService departmentService;
     final String defaultPassword;
+    final DTOUtil dtoUtil;
 
-    public MemberService(MemberRepository memberRepository, ContextHelper<Member> contextHelper, DepartmentService departmentService, @Qualifier("defaultPassword") String defaultPassword) {
+    public MemberService(MemberRepository memberRepository, ContextHelper<Member> contextHelper, DepartmentService departmentService, @Qualifier("defaultPassword") String defaultPassword, DTOUtil dtoUtil) {
         this.memberRepository = memberRepository;
         this.contextHelper = contextHelper;
         this.departmentService = departmentService;
         this.defaultPassword = defaultPassword;
+        this.dtoUtil = dtoUtil;
     }
 
     /**
@@ -85,6 +87,19 @@ public class MemberService {
             return;
         }
         throw new InvalidIdException();
+    }
+
+    @PreAuthorize("hasRole('Admin')")
+    public Map<String,Object> getAllDepartmentNameAndAllMember(){
+        Map<String,Object> data=new HashMap<>();
+        data.put("allDepartment", Arrays.asList(DepartmentNameEnum.values()));
+
+        List<Member> allMemberExceptAdmin=memberRepository.findAllByPositionNot(Admin);
+        List<MemberDTO> allMemberDTO=new ArrayList<>();
+        for (Member member:allMemberExceptAdmin)
+            allMemberDTO.add(dtoUtil.toDTO(member));
+        data.put("allMember",allMemberDTO);
+        return data;
     }
 
     public Member findById(Long id) throws InvalidIdException { return memberRepository.findById(id).orElseThrow(InvalidIdException::new); }
