@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
@@ -56,6 +57,39 @@ public class MemberService {
     }
 
     /**
+     * <p>从管理员的角度修改一个人的信息，只能在姓名、职位、部门范围内修改</p>
+     * @param memberDTO 请求中的用户信息
+     */
+    @PreAuthorize("hasRole('Admin')")
+    @Transactional
+    public void modify(MemberDTO memberDTO) throws InvalidIdException {
+        if(memberDTO.getPosition()==Admin)
+            throw new AccessDeniedException("");
+        Member memberInDatabase=findById(memberDTO.getStudentNumber());
+        Department initialDepartment=memberInDatabase.getDepartment();
+        DepartmentNameEnum newDepartmentName=memberDTO.getDepartmentName();
+        Department newDepartment=null;
+        if (newDepartmentName!=initialDepartment.getDepartmentName()){
+            newDepartment=departmentService.findById(newDepartmentName);
+            initialDepartment.removeMember(memberInDatabase);
+            newDepartment.addMember(memberInDatabase);
+        }
+
+        memberInDatabase.setName(memberDTO.getName());
+        memberInDatabase.setPosition(memberDTO.getPosition());
+
+        memberInDatabase.removeAllAuthorities();
+        memberInDatabase.addAllAuthorities(
+                buildAuthority(memberDTO.getDepartmentName(),memberDTO.getPosition()));
+
+        if (newDepartment!=null){
+            departmentService.save(initialDepartment);
+            departmentService.save(newDepartment);
+        }else
+            save(memberInDatabase);
+    }
+
+    /**
      * <p>创建一个新用户，管理员才能执行</p>
      * @param memberDTO 新用户的信息，需包括学号、姓名、职位、部门
      */
@@ -78,9 +112,8 @@ public class MemberService {
                     .authorityList(new ArrayList<>())
                     .build();
 
-            List<Authority> authorities=buildAuthority(department.getDepartmentName(),position);
-            for (Authority authority:authorities)
-                member.addAuthority(authority);
+            member.addAllAuthorities(
+                    buildAuthority(department.getDepartmentName(),position));
 
             department.addMember(member);
             departmentService.save(department);

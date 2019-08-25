@@ -1,15 +1,18 @@
 package com.scut.se.sehubbackend.service.MemberServiceTest;
 
+import com.scut.se.sehubbackend.dao.member.AuthorityRepository;
 import com.scut.se.sehubbackend.dao.member.DepartmentRepository;
 import com.scut.se.sehubbackend.dao.member.MemberRepository;
+import com.scut.se.sehubbackend.domain.member.Authority;
 import com.scut.se.sehubbackend.domain.member.Department;
 import com.scut.se.sehubbackend.domain.member.Member;
 import com.scut.se.sehubbackend.dto.MemberDTO;
 import com.scut.se.sehubbackend.enumeration.DepartmentNameEnum;
 import com.scut.se.sehubbackend.enumeration.PositionEnum;
+import com.scut.se.sehubbackend.exception.InvalidIdException;
+import com.scut.se.sehubbackend.security.Role;
 import com.scut.se.sehubbackend.service.MemberService;
 import com.scut.se.sehubbackend.utils.MemberContextHelper;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,13 +20,18 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.scut.se.sehubbackend.enumeration.AuthorityEnum.LectureTicket;
+import static com.scut.se.sehubbackend.enumeration.PositionEnum.Minister;
+import static com.scut.se.sehubbackend.enumeration.PositionEnum.Staff;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.doReturn;
 
 @RunWith(SpringRunner.class)
@@ -33,9 +41,9 @@ public class MemberServiceUpdateTest {
 
     @MockBean MemberContextHelper memberContextHelper;
     @Autowired DepartmentRepository departmentRepository;
-    @Autowired
-    MemberService memberService;
+    @Autowired MemberService memberService;
     @Autowired MemberRepository memberRepository;
+    @Autowired AuthorityRepository authorityRepository;
 
     /**
      * <p>测试对自己个人信息的更新</p>
@@ -45,10 +53,12 @@ public class MemberServiceUpdateTest {
     @Test
     @Transactional
     public void testUpdateSelf() {
+        setUp();
         setUpCurrentMember(currentMember);
         memberService.update(memberDTO);
-        verifyMutableData();
-        verifyImmutableData();
+        verifyMutableDataForUpdate();
+        verifyImmutableDataForUpdate();
+        tearDown();
     }
 
     /**
@@ -57,11 +67,39 @@ public class MemberServiceUpdateTest {
      */
     @Test(expected = AccessDeniedException.class)
     public void testUpdateOthers(){
+        setUp();
         setUpCurrentMember(otherMember);
         memberService.update(memberDTO);
+        tearDown();
     }
 
-    @Before
+    @Test
+    @Transactional
+    @WithMockUser(roles = "Admin")
+    public void testModifyWithAdmin() throws InvalidIdException {
+        setUp();
+        memberService.modify(memberDTO);
+        verifyMutableDataForModification();
+        verifyImmutableDataForModification();
+        tearDown();
+    }
+
+    @Test(expected = AccessDeniedException.class)
+    @WithMockUser
+    public void testModifyWithoutAdmin() throws InvalidIdException {
+        setUp();
+        memberService.modify(memberDTO);
+        tearDown();
+    }
+
+    @Test(expected = InvalidIdException.class)
+    @WithMockUser(roles = "Admin")
+    public void testModifyWithNonExistingId() throws InvalidIdException {
+        setUp();
+        memberService.modify(nonExistingMember);
+        tearDown();
+    }
+
     public void setUp(){
         initialDepartment= Department.builder().departmentName(initialDepartmentName).memberList(new ArrayList<>()).build();
         newDepartment= Department.builder().departmentName(newDepartmentName).memberList(new ArrayList<>()).build();
@@ -70,7 +108,7 @@ public class MemberServiceUpdateTest {
                 .studentNumber(201730683314L)
                 .password("123456")
                 .name("彭天祥")
-                .position(PositionEnum.Minister)
+                .position(Minister)
                 .phoneNumber("15564278737")
                 .email("1070280566@qq.com")
                 .authorityList(new ArrayList<>())
@@ -79,11 +117,14 @@ public class MemberServiceUpdateTest {
                 .studentNumber(201830662011L)
                 .password("785678")
                 .name("光度")
-                .position(PositionEnum.Minister)
+                .position(Minister)
                 .phoneNumber("15521093401")
                 .email("15564278737@163.com")
                 .authorityList(new ArrayList<>())
                 .build();
+        currentMember.addAuthority(Authority.builder().authorityName(new Role(Minister).getAuthority()).build());
+        currentMember.addAuthority(Authority.builder().authorityName(new Role(initialDepartmentName).getAuthority()).build());
+        currentMember.addAuthority(Authority.builder().authorityName(LectureTicket.toString()).build());
 
         initialDepartment.addMember(currentMember);
         newDepartment.addMember(otherMember);
@@ -103,28 +144,67 @@ public class MemberServiceUpdateTest {
                 .authorityList(authorities)
                 .build();
     }
+
+    public void tearDown(){
+        authorityRepository.deleteAll();
+        memberRepository.deleteAll();
+        departmentRepository.deleteAll();
+    }
     private void setUpCurrentMember(Member currentMember){ doReturn(currentMember).when(memberContextHelper).getCurrentPrincipal(); }
-    private void verifyMutableData(){
+    private void verifyMutableDataForUpdate(){
         Member memberAfterAlter=memberRepository.findById(currentMember.getStudentNumber()).get();
         assertEquals(memberDTO.getName(),memberAfterAlter.getName());
         assertEquals(memberDTO.getPhoneNumber(),memberAfterAlter.getPhoneNumber());
         assertEquals(memberDTO.getEmail(),memberAfterAlter.getEmail());
     }
-    private void verifyImmutableData(){
+    private void verifyImmutableDataForUpdate(){
         Member memberAfterAlter=memberRepository.findById(currentMember.getStudentNumber()).get();
-        assertEquals(PositionEnum.Minister,memberAfterAlter.getPosition());
-        assertEquals(initialDepartment,memberAfterAlter.getDepartment());
-        assertEquals(new ArrayList<>(),memberAfterAlter.getAuthorityList());
+        assertEquals(Minister,memberAfterAlter.getPosition());
+        assertEquals(initialDepartmentName,memberAfterAlter.getDepartment().getDepartmentName());
+        assertEquals("123456",memberAfterAlter.getPassword());
+
+        List<String> authorityStrings=authorityStrings(memberAfterAlter);
+        assertTrue(authorityStrings.contains("ROLE_Research"));
+        assertTrue(authorityStrings.contains("ROLE_Minister"));
+        assertTrue(authorityStrings.contains("LectureTicket"));
+        assertEquals(3,authorityStrings.size());
+    }
+
+    private void verifyMutableDataForModification(){
+        Member memberAfterAlter=memberRepository.findById(currentMember.getStudentNumber()).get();
+        assertEquals(memberDTO.getName(),memberAfterAlter.getName());
+        assertEquals(Staff,memberAfterAlter.getPosition());
+        assertEquals(newDepartmentName,memberAfterAlter.getDepartment().getDepartmentName());
+
+        List<String> authorityStrings=authorityStrings(memberAfterAlter);
+        assertTrue(authorityStrings.contains("ROLE_Quality"));
+        assertTrue(authorityStrings.contains("ROLE_Staff"));
+        assertEquals(2,authorityStrings.size());
+    }
+
+    private void verifyImmutableDataForModification(){
+        Member memberAfterAlter=memberRepository.findById(currentMember.getStudentNumber()).get();
+        assertEquals("15564278737",memberAfterAlter.getPhoneNumber());
+        assertEquals("1070280566@qq.com",memberAfterAlter.getEmail());
+        assertEquals("123456",memberAfterAlter.getPassword());
+    }
+
+    private List<String> authorityStrings(Member member){
+        List<Authority> authorities=member.getAuthorityList();
+        List<String> authorityStrings=new ArrayList<>();
+        for (Authority authority:authorities)
+            authorityStrings.add(authority.getAuthorityName());
+        return authorityStrings;
     }
 
     Member currentMember;
     Member otherMember;
     MemberDTO memberDTO;
+    MemberDTO nonExistingMember= MemberDTO.builder().studentNumber(5554524L).build();
 
     Department initialDepartment;
     Department newDepartment;
 
     DepartmentNameEnum initialDepartmentName=DepartmentNameEnum.Research;
     DepartmentNameEnum newDepartmentName=DepartmentNameEnum.Quality;
-
 }

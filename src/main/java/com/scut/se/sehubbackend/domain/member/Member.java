@@ -44,7 +44,8 @@ public class Member {
     @OneToMany(
             mappedBy = "authorityOwner",
             cascade = CascadeType.ALL,
-            fetch = FetchType.EAGER
+            fetch = FetchType.EAGER,
+            orphanRemoval = true
     )
     List<Authority> authorityList;//该成员具备的所有权限
 
@@ -56,6 +57,11 @@ public class Member {
         authorityList.add(authority);
     }
 
+    public void addAllAuthorities(List<Authority> authorities){
+        for (Authority authority:authorities)
+            addAuthority(authority);
+    }
+
     public void removeAuthority(Authority authority){
         int size=authorityList.size();
         for(int index=0;index<size;index++){
@@ -64,6 +70,15 @@ public class Member {
                 _authority.setAuthorityOwner(null);
                 authorityList.remove(_authority);
             }
+        }
+    }
+
+    public void removeAllAuthorities(){
+        int size=authorityList.size();
+        for(int index=size-1;index>=0;index--){
+            Authority authority=authorityList.get(index);
+            authority.setAuthorityOwner(null);
+            authorityList.remove(authority);
         }
     }
 }

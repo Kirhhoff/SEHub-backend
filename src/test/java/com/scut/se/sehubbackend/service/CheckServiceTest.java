@@ -87,8 +87,8 @@ public class CheckServiceTest {
     @Before
     public void before(){
         Department department=Department.builder().departmentName(DepartmentNameEnum.Research).memberList(new ArrayList<>()).build();
-        checker = Member.builder().studentNumber(201730683314L).password("123").name("光度").position(PositionEnum.Minister).build();
-        requester=Member.builder().studentNumber(201830662011L).password("123").name("光度").position(PositionEnum.Minister).build();
+        checker = Member.builder().studentNumber(201730683314L).password("123").name("光度").position(PositionEnum.Minister).authorityList(new ArrayList<>()).build();
+        requester=Member.builder().studentNumber(201830662011L).password("123").name("光度").position(PositionEnum.Minister).authorityList(new ArrayList<>()).build();
         department.addMember(checker);
         department.addMember(requester);
         departmentRepository.saveAndFlush(department);
