@@ -1,12 +1,16 @@
 package com.scut.se.sehubbackend.service;
 
+import com.scut.se.sehubbackend.dao.member.DepartmentRepository;
 import com.scut.se.sehubbackend.dao.member.MemberRepository;
 import com.scut.se.sehubbackend.domain.activity.ActivityApplication;
 import com.scut.se.sehubbackend.domain.activity.ActivityBasicInfo;
 import com.scut.se.sehubbackend.domain.activity.ActivitySupplementaryInfo;
 import com.scut.se.sehubbackend.domain.activity.CheckInfo;
+import com.scut.se.sehubbackend.domain.member.Department;
 import com.scut.se.sehubbackend.domain.member.Member;
 import com.scut.se.sehubbackend.enumeration.CheckStatusEnum;
+import com.scut.se.sehubbackend.enumeration.DepartmentNameEnum;
+import com.scut.se.sehubbackend.enumeration.PositionEnum;
 import com.scut.se.sehubbackend.exception.CheckHasBeenOperatedException;
 import com.scut.se.sehubbackend.exception.InvalidIdException;
 import com.scut.se.sehubbackend.utils.MemberContextHelper;
@@ -22,6 +26,7 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 import static org.junit.Assert.assertEquals;
@@ -37,6 +42,7 @@ public class CheckServiceTest {
     @Autowired ActivityApplicationService activityApplicationService;
     @Autowired CheckService checkService;
     @Autowired MemberRepository memberRepository;
+    @Autowired DepartmentRepository departmentRepository;
 
     /**
      * 测试没有权限
@@ -80,10 +86,12 @@ public class CheckServiceTest {
 
     @Before
     public void before(){
-        checker = Member.builder().studentNumber(201730683314L).build();
-        requester=Member.builder().studentNumber(201830662011L).build();
-        memberRepository.save(checker);
-        memberRepository.save(requester);
+        Department department=Department.builder().departmentName(DepartmentNameEnum.Research).memberList(new ArrayList<>()).build();
+        checker = Member.builder().studentNumber(201730683314L).password("123").name("光度").position(PositionEnum.Minister).build();
+        requester=Member.builder().studentNumber(201830662011L).password("123").name("光度").position(PositionEnum.Minister).build();
+        department.addMember(checker);
+        department.addMember(requester);
+        departmentRepository.saveAndFlush(department);
 
         submissionDate=new Date();
 

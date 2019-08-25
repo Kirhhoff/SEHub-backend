@@ -1,13 +1,16 @@
 package com.scut.se.sehubbackend.service;
 
 import com.scut.se.sehubbackend.dao.activity.EtiquetteApplicationRepository;
+import com.scut.se.sehubbackend.dao.member.DepartmentRepository;
 import com.scut.se.sehubbackend.dao.member.MemberRepository;
 import com.scut.se.sehubbackend.domain.activity.ActivityBasicInfo;
 import com.scut.se.sehubbackend.domain.activity.CheckInfo;
 import com.scut.se.sehubbackend.domain.activity.EtiquetteApplication;
+import com.scut.se.sehubbackend.domain.member.Department;
 import com.scut.se.sehubbackend.domain.member.Member;
 import com.scut.se.sehubbackend.dto.EtiquetteApplicationDTO;
 import com.scut.se.sehubbackend.enumeration.CheckStatusEnum;
+import com.scut.se.sehubbackend.enumeration.DepartmentNameEnum;
 import com.scut.se.sehubbackend.enumeration.PositionEnum;
 import com.scut.se.sehubbackend.utils.MemberContextHelper;
 import org.junit.Before;
@@ -36,6 +39,7 @@ public class EtiquetteApplicationServiceTest {
     @Autowired EtiquetteApplicationService etiquetteApplicationService;
     @Autowired EtiquetteApplicationRepository etiquetteApplicationRepository;
     @Autowired MemberRepository memberRepository;
+    @Autowired DepartmentRepository departmentRepository;
 
     /**
      * <p>测试创建不与活动关联的礼仪申请表</p>
@@ -61,14 +65,16 @@ public class EtiquetteApplicationServiceTest {
 
     private void setUpData(){
         timestampBeforeCreation=new Date();
+        Department department=Department.builder().departmentName(DepartmentNameEnum.Research).memberList(new ArrayList<>()).build();
         mockMember= Member.builder()
                 .studentNumber(201730683314L)
                 .password("password")
                 .name("Luminosity")
                 .position(PositionEnum.Minister)
                 .authorityList(new ArrayList<>())
-                .department(null)
                 .build();
+        department.addMember(mockMember);
+        departmentRepository.saveAndFlush(department);
         mockRequestDTO= EtiquetteApplicationDTO.builder()
                 .activityBasicInfo(
                         ActivityBasicInfo.builder()
@@ -84,7 +90,6 @@ public class EtiquetteApplicationServiceTest {
                 .rehearsalSite("光度场")
                 .descOfJob("学习独立过程")
                 .build();
-        memberRepository.save(mockMember);
     }
 
     private void verifyDataCreation(){

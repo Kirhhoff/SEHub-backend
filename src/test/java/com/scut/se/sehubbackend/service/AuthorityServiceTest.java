@@ -1,10 +1,14 @@
 package com.scut.se.sehubbackend.service;
 
 import com.scut.se.sehubbackend.dao.member.AuthorityRepository;
+import com.scut.se.sehubbackend.dao.member.DepartmentRepository;
 import com.scut.se.sehubbackend.dao.member.MemberRepository;
 import com.scut.se.sehubbackend.domain.member.Authority;
+import com.scut.se.sehubbackend.domain.member.Department;
 import com.scut.se.sehubbackend.domain.member.Member;
 import com.scut.se.sehubbackend.enumeration.AuthorityEnum;
+import com.scut.se.sehubbackend.enumeration.DepartmentNameEnum;
+import com.scut.se.sehubbackend.enumeration.PositionEnum;
 import com.scut.se.sehubbackend.exception.InvalidIdException;
 import com.scut.se.sehubbackend.security.authorization.interfaces.AuthorizationDecisionManager;
 import com.scut.se.sehubbackend.utils.MemberContextHelper;
@@ -36,6 +40,7 @@ public class AuthorityServiceTest {
     @Autowired AuthorityService authorityService;
     @Autowired AuthorityRepository authorityRepository;
     @Autowired MemberRepository memberRepository;
+    @Autowired DepartmentRepository departmentRepository;
 
 
     /**
@@ -74,12 +79,16 @@ public class AuthorityServiceTest {
 
     @Before
     public void setUp() {
+        Department department= Department.builder().departmentName(DepartmentNameEnum.Research).memberList(new ArrayList<>()).build();
         target=Member.builder()
                 .studentNumber(201730683314L)
-                .department(null)
+                .password("123")
+                .name("光度")
+                .position(PositionEnum.Minister)
                 .authorityList(new ArrayList<>())
                 .build();
-        memberRepository.save(target);
+        department.addMember(target);
+        departmentRepository.saveAndFlush(department);
         idOfTarget=target.getStudentNumber();
     }
     private void setUpAuthorityForAuthorization(boolean hasAuthorityForAuthorization){ when(decisionManager.decide(any(),any(),any())).thenReturn(hasAuthorityForAuthorization); }

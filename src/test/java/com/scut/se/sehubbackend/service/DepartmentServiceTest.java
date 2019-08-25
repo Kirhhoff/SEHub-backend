@@ -5,6 +5,7 @@ import com.scut.se.sehubbackend.domain.member.Department;
 import com.scut.se.sehubbackend.domain.member.Member;
 import com.scut.se.sehubbackend.dto.DepartmentDTO;
 import com.scut.se.sehubbackend.enumeration.DepartmentNameEnum;
+import com.scut.se.sehubbackend.enumeration.PositionEnum;
 import com.scut.se.sehubbackend.utils.DTOUtil;
 import com.scut.se.sehubbackend.utils.MemberContextHelper;
 import org.junit.Before;
@@ -55,9 +56,15 @@ public class DepartmentServiceTest {
 
     private Member currentMember= Member.builder()
             .studentNumber(201730683314L)
+            .password("123")
+            .name("光度")
+            .position(PositionEnum.Minister)
             .build();
     private Member anotherMember= Member.builder()
             .studentNumber(201830662011L)
+            .password("123")
+            .name("光度")
+            .position(PositionEnum.Minister)
             .build();
     private Department department= Department.builder()
             .departmentName(DepartmentNameEnum.Research)

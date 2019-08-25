@@ -2,7 +2,6 @@ package com.scut.se.sehubbackend.service;
 
 import com.scut.se.sehubbackend.dao.activity.EtiquetteApplicationRepository;
 import com.scut.se.sehubbackend.dao.member.DepartmentRepository;
-import com.scut.se.sehubbackend.dao.member.MemberRepository;
 import com.scut.se.sehubbackend.domain.activity.ActivityBasicInfo;
 import com.scut.se.sehubbackend.domain.activity.CheckInfo;
 import com.scut.se.sehubbackend.domain.activity.EtiquetteApplication;
@@ -13,6 +12,7 @@ import com.scut.se.sehubbackend.dto.CheckInfoDTO;
 import com.scut.se.sehubbackend.dto.MemberDTO;
 import com.scut.se.sehubbackend.enumeration.CheckStatusEnum;
 import com.scut.se.sehubbackend.enumeration.DepartmentNameEnum;
+import com.scut.se.sehubbackend.enumeration.PositionEnum;
 import com.scut.se.sehubbackend.utils.DTOUtil;
 import com.scut.se.sehubbackend.utils.MemberContextHelper;
 import org.junit.Before;
@@ -45,7 +45,6 @@ public class NoticeServiceTest {
     @MockBean MemberContextHelper mockContextHelper;
     @Autowired NoticeService noticeService;
     @Autowired DepartmentRepository departmentRepository;
-    @Autowired MemberRepository memberRepository;
     @Autowired EtiquetteApplicationRepository etiquetteApplicationRepository;
     @SpyBean DTOUtil dtoUtil;
 
@@ -76,7 +75,7 @@ public class NoticeServiceTest {
     }
 
     private void setUpDatabase(){
-        relationDepartmentChecker = Member.builder().studentNumber(201830662011L).department(mockRelationDepartment).build();
+        relationDepartmentChecker = Member.builder().studentNumber(201830662011L).password("123").name("光度").position(PositionEnum.Minister).build();
         checkInfo=CheckInfo.builder()
                 .submissionDate(submissionDate)
                 .checkStatus(checkStatus)
@@ -93,9 +92,11 @@ public class NoticeServiceTest {
                 .rehearsalSite("地球")
                 .descOfJob("巴巴罗亚婆婆的语言")
                 .build();
+        Department otherDepartment=Department.builder().departmentName(DepartmentNameEnum.Research).memberList(new ArrayList<>()).build();
+        mockRelationDepartment.addMember(relationDepartmentChecker);
+        otherDepartment.addMember(requester);
         departmentRepository.save(mockRelationDepartment);
-        memberRepository.save(requester);
-        memberRepository.save(relationDepartmentChecker);
+        departmentRepository.saveAndFlush(otherDepartment);
         etiquetteApplicationRepository.save(mockEtiquette);
     }
     private void setUpExpectedResult(){
@@ -119,8 +120,9 @@ public class NoticeServiceTest {
 
     private Department mockRelationDepartment = Department.builder()
             .departmentName(DepartmentNameEnum.Relation)
+            .memberList(new ArrayList<>())
             .build();
-    private Member requester= Member.builder().studentNumber(201730683314L).build();
+    private Member requester= Member.builder().studentNumber(201730683314L).password("123").name("光度").position(PositionEnum.Minister).build();
     private Member relationDepartmentChecker;
     private ActivityBasicInfo activityBasicInfo=ActivityBasicInfo.builder().name("崩星爆裂拳").build();
     private Date submissionDate=new Date();

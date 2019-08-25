@@ -4,6 +4,7 @@ import com.scut.se.sehubbackend.enumeration.PositionEnum;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 /**
@@ -19,11 +20,14 @@ public class Member {
     @Id
     Long studentNumber;//学号
 
+    @NotNull
     String password;//密码
 
+    @NotNull
     String name;//成员姓名
 
     @Column(name = "`position`")
+    @NotNull
     @Enumerated(value = EnumType.STRING)
     PositionEnum position;//职位
 
@@ -34,6 +38,7 @@ public class Member {
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
     @ManyToOne
+    @NotNull
     @JoinColumn(name = "department_name")
     Department department;//所属部门
 

@@ -53,10 +53,10 @@ public class AuthorizationDecisionManagerTest {
     private void _assertTrue(Member operator,Member target,AuthorityEnum authorityEnum){ assertTrue(authorizationDecisionManager.decide(operator,target, authorityEnum)); }
     private void _assertFalse(Member operator,Member target,AuthorityEnum authorityEnum){ assertFalse(authorizationDecisionManager.decide(operator,target, authorityEnum)); }
 
-    private Member researchMinister= Member.builder().position(PositionEnum.Minister).studentNumber(201730683314L).build();
-    private Member researchStaff= Member.builder().position(PositionEnum.Staff).studentNumber(201830662011L).build();
-    private Member secretaryMinister= Member.builder().position(PositionEnum.Minister).studentNumber(201918181919L).build();
-    private Member standingCommittee= Member.builder().position(PositionEnum.StandingCommittee).studentNumber(202077776666L).build();
+    private Member researchMinister= Member.builder().position(PositionEnum.Minister).studentNumber(201730683314L).password("123").name("光度").build();
+    private Member researchStaff= Member.builder().position(PositionEnum.Staff).studentNumber(201830662011L).password("123").name("光度").build();
+    private Member secretaryMinister= Member.builder().position(PositionEnum.Minister).studentNumber(201918181919L).password("123").name("光度").build();
+    private Member standingCommittee= Member.builder().position(PositionEnum.StandingCommittee).studentNumber(202077776666L).password("123").name("光度").build();
     private Department secretaryDepartment= Department.builder().departmentName(DepartmentNameEnum.Secretary).memberList(new ArrayList<>()).build();
     private Department researchDepartment=Department.builder().departmentName(DepartmentNameEnum.Research).memberList(new ArrayList<>()).build();
     private Department standingCommitteeDepartment=Department.builder().departmentName(DepartmentNameEnum.StandingCommittee).memberList(new ArrayList<>()).build();

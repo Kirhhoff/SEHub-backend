@@ -1,10 +1,14 @@
 package com.scut.se.sehubbackend.service;
 
 import com.scut.se.sehubbackend.dao.activity.*;
+import com.scut.se.sehubbackend.dao.member.DepartmentRepository;
 import com.scut.se.sehubbackend.dao.member.MemberRepository;
 import com.scut.se.sehubbackend.domain.activity.*;
+import com.scut.se.sehubbackend.domain.member.Department;
 import com.scut.se.sehubbackend.domain.member.Member;
 import com.scut.se.sehubbackend.dto.*;
+import com.scut.se.sehubbackend.enumeration.DepartmentNameEnum;
+import com.scut.se.sehubbackend.enumeration.PositionEnum;
 import com.scut.se.sehubbackend.enumeration.TicketType;
 import com.scut.se.sehubbackend.utils.MemberContextHelper;
 import org.junit.Before;
@@ -17,6 +21,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -39,6 +44,7 @@ public class ActivityApplicationServiceTestCreate {
     @Autowired LectureTicketApplicationRepository lectureTicketApplicationRepository;
     @Autowired PosterApplicationRepository posterApplicationRepository;
     @Autowired MemberRepository memberRepository;
+    @Autowired DepartmentRepository departmentRepository;
     @MockBean MemberContextHelper mockContextHelper;
 
 
@@ -71,9 +77,15 @@ public class ActivityApplicationServiceTestCreate {
                 .expectedNumOfParticipants(50000)
                 .note("蒙着耳朵")
                 .build();
+        Department department= Department.builder().departmentName(DepartmentNameEnum.Research).memberList(new ArrayList<>()).build();
         mockMember= Member.builder()
                 .studentNumber(currentUserId)
+                .password("123")
+                .name("光度")
+                .position(PositionEnum.Minister)
                 .build();
+        department.addMember(mockMember);
+        departmentRepository.saveAndFlush(department);
 
         mockEtiquetteDTO=null;
         mockHostDTO= HostApplicationDTO.builder()
