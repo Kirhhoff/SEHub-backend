@@ -12,7 +12,6 @@ import org.springframework.stereotype.Component;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -29,7 +28,7 @@ public class CustomUsernamePasswordAuthenticationFilter extends UsernamePassword
         this.userDetailsAdapter = userDetailsAdapter;
         setAuthenticationManager(authenticationManager);
         setAuthenticationSuccessHandler(authenticationSuccessHandler);
-        setContinueChainBeforeSuccessfulAuthentication(true);
+//        setContinueChainBeforeSuccessfulAuthentication(true);
     }
 
     @SuppressWarnings("unchecked")
@@ -43,7 +42,8 @@ public class CustomUsernamePasswordAuthenticationFilter extends UsernamePassword
         } catch (JoseException e) {
             e.printStackTrace();
         }
-        response.addCookie(new Cookie("token",token));
+//        response.addCookie(new Cookie("token",token));
+        response.setHeader("token",token);
     }
 
 

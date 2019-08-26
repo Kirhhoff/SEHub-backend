@@ -1,7 +1,7 @@
 insert into member(student_number, email, name, password, phone_number, position, department_name)
     values(996996996,NULL ,'King','007007007',NULL,'Admin',NULL );
 insert into authority(id, authority_name, authority_owner_student_number)
-    values(1,'ROLE_Admin',996996996);
+    values(0,'ROLE_Admin',996996996);
 insert into department(department_name, department_description)
     values('Secretary',NULL );
 insert into department(department_name, department_description)

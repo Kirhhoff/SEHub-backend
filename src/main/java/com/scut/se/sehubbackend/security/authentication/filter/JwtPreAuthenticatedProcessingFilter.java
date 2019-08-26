@@ -7,7 +7,6 @@ import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.web.authentication.preauth.AbstractPreAuthenticatedProcessingFilter;
 import org.springframework.stereotype.Component;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 
 @Component
@@ -36,13 +35,14 @@ public class JwtPreAuthenticatedProcessingFilter extends AbstractPreAuthenticate
     }
 
     private String getJwt(HttpServletRequest request){
-        Cookie[] cookies=request.getCookies();
-        if (cookies!=null){
-            for(Cookie cookie: cookies)
-                if (cookie.getName().equals("token"))
-                    return cookie.getValue();
-        }
-        return null;
+//        Cookie[] cookies=request.getCookies();
+//        if (cookies!=null){
+//            for(Cookie cookie: cookies)
+//                if (cookie.getName().equals("token"))
+//                    return cookie.getValue();
+//        }
+//        return null;
+        return request.getHeader("token");
     }
 
 }

@@ -1,13 +1,17 @@
 package com.scut.se.sehubbackend.dto;
 
 import com.scut.se.sehubbackend.enumeration.CheckStatusEnum;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.Date;
 
 @Builder
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class CheckInfoDTO {
     CheckStatusEnum checkStatus;//申请表的审核状态
 

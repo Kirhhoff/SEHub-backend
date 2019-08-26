@@ -1,8 +1,11 @@
 package com.scut.se.sehubbackend.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.scut.se.sehubbackend.domain.activity.ActivityBasicInfo;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * <p>关于申请表的通知，每个申请表对应一条</p>
@@ -16,6 +19,8 @@ import lombok.Data;
  */
 @Builder
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class ApplicationNotice {
 
     Long id;//申请表的id
@@ -24,5 +29,6 @@ public class ApplicationNotice {
 
     ActivityBasicInfo activityBasicInfo;//对应申请表的该字段
 
+    @JsonProperty("checkInfo")
     CheckInfoDTO checkInfoDTO;//对应申请表的该字段（已经转化为DTO）
 }

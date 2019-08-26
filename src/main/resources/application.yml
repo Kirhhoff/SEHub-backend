@@ -1,6 +1,29 @@
 spring:
   profiles:
-    active: dev
+    active: release
+server:
+  port: 8081
+jwt:
+  rsaKeySize: 2048
+  expired: 5
+  issuer: SCUT-SE
+default:
+  password: 123456
+---
+spring:
+  profiles: dev
+  datasource:
+    url: jdbc:mysql://127.0.0.1:3306/SE_backend?serverTimezone=GMT
+    username: root
+    password: 240036
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+---
+spring:
+  profiles: test
   datasource:
     url: jdbc:mysql://127.0.0.1:3306/SE_backend?serverTimezone=GMT
     username: root
@@ -10,30 +33,15 @@ spring:
     hibernate:
       ddl-auto: create-drop
     show-sql: true
-server:
-  port: 8081
-
-jwt:
-  rsaKeySize: 2048
-  expired: 5
-  issuer: SCUT-SE
-default:
-  password: 123456
-
-
 ---
 spring:
-     profiles: dev
+  profiles: release
+  datasource:
+    url: jdbc:mysql://mysql-docker-container:3306/SE_backend?useSSL=false
+    username: app_user
+    password: test123
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
 
-my:
-  name: pentix
----
-spring:
-     profiles:test
-my:
-  name: kirhhoff
----
-spring:
-     profiles:release
-my:
-  name: northy

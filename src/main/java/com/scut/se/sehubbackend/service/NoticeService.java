@@ -8,6 +8,7 @@ import com.scut.se.sehubbackend.security.ContextHelper;
 import com.scut.se.sehubbackend.utils.DTOUtil;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -41,6 +42,8 @@ public class NoticeService {
      * @see ApplicationNotice
      */
     public List<ApplicationNotice> getApplicationNotices(){
+        if(contextHelper.getCurrentPrincipal().getDepartment()==null)
+            return new ArrayList<>();
         DepartmentNameEnum departmentName=contextHelper.getCurrentPrincipal().getDepartment().getDepartmentName();
         List<? extends Application> applicationList=null;
         switch (departmentName){
