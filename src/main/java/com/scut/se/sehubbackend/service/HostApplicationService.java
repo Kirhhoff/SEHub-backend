@@ -12,24 +12,30 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+import static com.scut.se.sehubbackend.enumeration.AuthorityEnum.Host;
+
 @Service
 public class HostApplicationService {
 
-    final HostApplicationRepository hostApplicationRepository;
-    final CheckInfoUtil checkInfoUtil;
+    private final HostApplicationRepository hostApplicationRepository;
+    private final CheckInfoUtil checkInfoUtil;
+    private final EmailService emailService;
 
-    public HostApplicationService(HostApplicationRepository hostApplicationRepository, CheckInfoUtil checkInfoUtil) {
+    public HostApplicationService(HostApplicationRepository hostApplicationRepository, CheckInfoUtil checkInfoUtil, EmailService emailService) {
         this.hostApplicationRepository = hostApplicationRepository;
         this.checkInfoUtil = checkInfoUtil;
+        this.emailService = emailService;
     }
 
 
     /**
      * 参考{@link EtiquetteApplicationService#create(EtiquetteApplicationDTO)}
      */
-    public void create(HostApplicationDTO hostApplicationDTO){
+    public void create(HostApplicationDTO hostApplicationDTO)  {
         HostApplication hostApplication= toDO(hostApplicationDTO,null);
         hostApplicationRepository.saveAndFlush(hostApplication);
+        emailService.sendEmailByAuthority(Host.toString(),"新表来了，看看吧");
+
     }
 
     /**

@@ -1,4 +1,4 @@
-package com.scut.se.sehubbackend.security;
+package com.scut.se.sehubbackend.utils;
 
 import com.scut.se.sehubbackend.domain.member.Authority;
 import org.springframework.security.core.GrantedAuthority;
@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 /**
- * 负责将Authority数据对象转化为Spring的GrantedAuthority
+ * <p>将Authority数据对象转化为Spring的GrantedAuthority的工具类</p>
  */
 @Component
 public class AuthorityUtil {

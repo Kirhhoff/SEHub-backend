@@ -11,28 +11,35 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+import static com.scut.se.sehubbackend.enumeration.AuthorityEnum.Etiquette;
+
 @Service
 public class EtiquetteApplicationService {
 
-    final EtiquetteApplicationRepository etiquetteApplicationRepository;
-    final CheckInfoUtil checkInfoUtil;
+    private final EtiquetteApplicationRepository etiquetteApplicationRepository;
+    private final CheckInfoUtil checkInfoUtil;
+    private final EmailService emailService;
 
-    public EtiquetteApplicationService(EtiquetteApplicationRepository etiquetteApplicationRepository, CheckInfoUtil checkInfoUtil) {
+    public EtiquetteApplicationService(EtiquetteApplicationRepository etiquetteApplicationRepository, CheckInfoUtil checkInfoUtil, EmailService emailService) {
         this.etiquetteApplicationRepository = etiquetteApplicationRepository;
         this.checkInfoUtil = checkInfoUtil;
+        this.emailService = emailService;
     }
 
     /**
-     * 单独创建一张礼仪申请表，没有所属的活动申请表
+     * <p>单独创建一张礼仪申请表，没有所属的活动申请表，同时发出一张通知</p>
      * @param etiquetteApplicationDTO 请求中的DTO数据
      */
-    public void create(EtiquetteApplicationDTO etiquetteApplicationDTO){
+    public void create(EtiquetteApplicationDTO etiquetteApplicationDTO) {
 
         //转化得到DO形式的表
         EtiquetteApplication etiquetteApplication=toDO(etiquetteApplicationDTO,null);
 
         //持久化
         etiquetteApplicationRepository.saveAndFlush(etiquetteApplication);
+
+        //发出Email通知
+        emailService.sendEmailByAuthority(Etiquette.toString(),"新表来了，看看吧");
     }
 
     /**

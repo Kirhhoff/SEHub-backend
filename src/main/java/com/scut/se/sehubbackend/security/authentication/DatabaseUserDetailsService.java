@@ -1,6 +1,6 @@
 package com.scut.se.sehubbackend.security.authentication;
 
-import com.scut.se.sehubbackend.security.UserDetailsAdapter;
+import com.scut.se.sehubbackend.utils.UserDetailsAdapter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -11,13 +11,12 @@ import org.springframework.stereotype.Component;
 import java.util.Collection;
 
 /**
- * <p>功能：根据用户名从数据库中提取用户</p>
- * <p>定位：从数据库层面到应用层面数据对象的转化器</p>
+ * <p>根据用户名从数据库中提取用户</p>
  */
 @Component
 public class DatabaseUserDetailsService implements UserDetailsService {
 
-    final UserDetailsAdapter userDetailsAdapter;
+    private final UserDetailsAdapter userDetailsAdapter;
 
     @Autowired
     public DatabaseUserDetailsService(UserDetailsAdapter userDetailsAdapter) {

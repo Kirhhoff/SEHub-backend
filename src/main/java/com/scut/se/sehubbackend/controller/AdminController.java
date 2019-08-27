@@ -7,7 +7,6 @@ import com.scut.se.sehubbackend.exception.InvalidIdException;
 import com.scut.se.sehubbackend.service.DepartmentService;
 import com.scut.se.sehubbackend.service.MemberService;
 import com.scut.se.sehubbackend.utils.DTOUtil;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,9 +18,15 @@ import java.util.Map;
 @PreAuthorize("hasRole('Admin')")
 public class AdminController {
 
-    @Autowired MemberService memberService;
-    @Autowired DepartmentService departmentService;
-    @Autowired DTOUtil dtoUtil;
+    private final MemberService memberService;
+    private final DepartmentService departmentService;
+    private final DTOUtil dtoUtil;
+
+    public AdminController(MemberService memberService, DepartmentService departmentService, DTOUtil dtoUtil) {
+        this.memberService = memberService;
+        this.departmentService = departmentService;
+        this.dtoUtil = dtoUtil;
+    }
 
     @GetMapping("/department")
     public List<String> getAllCurrentlyExistingDepartmentName(){ return departmentService.getAllCurrentlyExistingDepartmentName(); }

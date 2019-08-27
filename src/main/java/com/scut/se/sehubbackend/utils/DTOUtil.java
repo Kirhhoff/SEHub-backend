@@ -12,6 +12,9 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * <p>将数据库类型（DO对象）转化为传输类型（DTO对象）的工具类</p>
+ */
 @Component
 public class DTOUtil {
 
@@ -60,6 +63,7 @@ public class DTOUtil {
                 : EtiquetteApplicationDTO.builder()
                     .id(etiquetteApplication.getId())
                     .activityBasicInfo(etiquetteApplication.getActivityBasicInfo())
+                    .checkInfoDTO(toDTO(etiquetteApplication.getCheckInfo()))
                     .numOfEtiquette(etiquetteApplication.getNumOfEtiquette())
                     .rehearsalTime(etiquetteApplication.getRehearsalTime())
                     .rehearsalSite(etiquetteApplication.getRehearsalSite())
@@ -77,6 +81,7 @@ public class DTOUtil {
                 : HostApplicationDTO.builder()
                     .id(hostApplication.getId())
                     .activityBasicInfo(hostApplication.getActivityBasicInfo())
+                    .checkInfoDTO(toDTO(hostApplication.getCheckInfo()))
                     .numOfHost(hostApplication.getNumOfHost())
                     .descOfJob(hostApplication.getDescOfJob())
                     .relatedActivity(
@@ -92,13 +97,14 @@ public class DTOUtil {
                 : LectureTicketApplicationDTO.builder()
                     .id(lectureTicketApplication.getId())
                     .activityBasicInfo(lectureTicketApplication.getActivityBasicInfo())
+                    .checkInfoDTO(toDTO(lectureTicketApplication.getCheckInfo()))
                     .numOfTicket(lectureTicketApplication.getNumOfTicket())
-                .ticketScore(lectureTicketApplication.getTicketScore())
-                .ticketType(lectureTicketApplication.getTicketType())
-                .relatedActivity(
-                        lectureTicketApplication.getActivityThisBelongsTo()==null
-                                ?null
-                                :lectureTicketApplication.getActivityThisBelongsTo().getId())
+                    .ticketScore(lectureTicketApplication.getTicketScore())
+                    .ticketType(lectureTicketApplication.getTicketType())
+                    .relatedActivity(
+                            lectureTicketApplication.getActivityThisBelongsTo()==null
+                                    ?null
+                                    :lectureTicketApplication.getActivityThisBelongsTo().getId())
                     .build();
     }
 
@@ -108,6 +114,7 @@ public class DTOUtil {
                 : PosterApplicationDTO.builder()
                     .id(posterApplication.getId())
                     .activityBasicInfo(posterApplication.getActivityBasicInfo())
+                    .checkInfoDTO(toDTO(posterApplication.getCheckInfo()))
                     .deadline(posterApplication.getDeadline())
                     .propagandaTextRequirement(posterApplication.getPropagandaTextRequirement())
                     .posterSize(posterApplication.getPosterSize())

@@ -1,4 +1,4 @@
-package com.scut.se.sehubbackend.security;
+package com.scut.se.sehubbackend.utils;
 
 import org.springframework.security.core.userdetails.UserDetails;
 

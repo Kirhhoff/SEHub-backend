@@ -1,6 +1,5 @@
 package com.scut.se.sehubbackend.security.jwt;
 
-import com.scut.se.sehubbackend.config.JwtConfig;
 import org.jose4j.jwk.RsaJsonWebKey;
 import org.jose4j.jws.AlgorithmIdentifiers;
 import org.jose4j.jws.JsonWebSignature;
@@ -9,6 +8,7 @@ import org.jose4j.jwt.MalformedClaimException;
 import org.jose4j.jwt.consumer.InvalidJwtException;
 import org.jose4j.jwt.consumer.JwtConsumer;
 import org.jose4j.lang.JoseException;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
@@ -18,23 +18,25 @@ import org.springframework.stereotype.Component;
 @Component
 public class JwtManager {
 
-    final RsaJsonWebKey rsaJsonWebKey;//密钥对
-    final JsonWebSignature jsonWebSignature;//签名
-    final JwtConsumer jwtConsumer;//反向构造器
-    final JwtConfig jwtConfig;//配置类
+    private final RsaJsonWebKey rsaJsonWebKey;//密钥对
+    private final JsonWebSignature jsonWebSignature;//签名
+    private final JwtConsumer jwtConsumer;//反向构造器
+    private final String issuer;
+    private final Integer expired;
 
-    public JwtManager(RsaJsonWebKey rsaJsonWebKey, JsonWebSignature jsonWebSignature, JwtConsumer jwtConsumer, JwtConfig jwtConfig) {
+    public JwtManager(RsaJsonWebKey rsaJsonWebKey, JsonWebSignature jsonWebSignature, JwtConsumer jwtConsumer, @Qualifier("issuer")String issuer, @Qualifier("expired")Integer expired) {
         this.rsaJsonWebKey = rsaJsonWebKey;
         this.jsonWebSignature = jsonWebSignature;
         this.jwtConsumer = jwtConsumer;
-        this.jwtConfig = jwtConfig;
+        this.issuer = issuer;
+        this.expired = expired;
     }
 
     public String encode(UserDetails userDetails) throws JoseException {
         JwtClaims jwtClaims=new JwtClaims();//创建一个jwt
-        jwtClaims.setIssuer(jwtConfig.getIssuer());//发布组织
+        jwtClaims.setIssuer(issuer);//发布组织
         jwtClaims.setSubject(userDetails.getUsername());//以学号为验证信息
-        jwtClaims.setExpirationTimeMinutesInTheFuture(jwtConfig.getExpired());//过期时间
+        jwtClaims.setExpirationTimeMinutesInTheFuture(expired);//过期时间
         jwtClaims.setIssuedAtToNow();//发布时间
 
         jsonWebSignature.setPayload(jwtClaims.toJson());//设置Payload

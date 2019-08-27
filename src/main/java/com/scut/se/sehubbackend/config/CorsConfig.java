@@ -4,6 +4,10 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+/**
+ * <p>CORS的配置文件</p>
+ * <p>这里允许所有域的访问，允许cookie，允许所有header，允许四个请求方法</p>
+ */
 @Configuration
 public class CorsConfig implements WebMvcConfigurer {
 
@@ -13,7 +17,7 @@ public class CorsConfig implements WebMvcConfigurer {
                 .allowCredentials(true)
                 .allowedOrigins("*")
                 .allowedHeaders("*")
-                .allowedMethods(new String[]{"GET","POST","PUT","DELETE"});
+                .allowedMethods("GET","POST","PUT","DELETE");
     }
 
 }

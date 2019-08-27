@@ -3,12 +3,10 @@ package com.scut.se.sehubbackend.service.DepartmentServiceTest;
 import com.scut.se.sehubbackend.dao.member.DepartmentRepository;
 import com.scut.se.sehubbackend.domain.member.Department;
 import com.scut.se.sehubbackend.domain.member.Member;
-import com.scut.se.sehubbackend.dto.DepartmentDTO;
-import com.scut.se.sehubbackend.enumeration.DepartmentNameEnum;
 import com.scut.se.sehubbackend.enumeration.PositionEnum;
 import com.scut.se.sehubbackend.service.DepartmentService;
-import com.scut.se.sehubbackend.utils.DTOUtil;
 import com.scut.se.sehubbackend.utils.MemberContextHelper;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -20,9 +18,9 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.ArrayList;
 
+import static com.scut.se.sehubbackend.enumeration.DepartmentNameEnum.Research;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.when;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -30,10 +28,8 @@ import static org.mockito.Mockito.when;
 public class DepartmentServiceTest {
 
     @MockBean MemberContextHelper memberContextHelper;
-    @MockBean DTOUtil dtoUtil;
     @Autowired DepartmentRepository departmentRepository;
-    @Autowired
-    DepartmentService departmentService;
+    @Autowired DepartmentService departmentService;
 
 
     /**
@@ -42,8 +38,8 @@ public class DepartmentServiceTest {
     @Test
     public void getCurrentDepartment() {
         assertEquals(
-            expectedDepartmentDTO,
-            departmentService.getCurrentDepartment());
+            Research,
+            departmentService.getCurrentDepartment().getDepartmentName());
     }
 
     @Before
@@ -53,7 +49,6 @@ public class DepartmentServiceTest {
         departmentRepository.saveAndFlush(department);
 
         doReturn(currentMember).when(memberContextHelper).getCurrentPrincipal();
-        when(dtoUtil.toDTO(department)).thenReturn(expectedDepartmentDTO);
     }
 
     private Member currentMember= Member.builder()
@@ -69,11 +64,13 @@ public class DepartmentServiceTest {
             .position(PositionEnum.Minister)
             .build();
     private Department department= Department.builder()
-            .departmentName(DepartmentNameEnum.Research)
+            .departmentName(Research)
             .memberList(new ArrayList<>())
             .departmentDescription("")
             .build();
-    private DepartmentDTO expectedDepartmentDTO= DepartmentDTO.builder()
-            .departmentName(DepartmentNameEnum.Research)
-            .build();
+
+    @After
+    public void tearDown() {
+        departmentRepository.deleteAll();
+    }
 }

@@ -13,6 +13,7 @@ import com.scut.se.sehubbackend.exception.InvalidIdException;
 import com.scut.se.sehubbackend.security.Role;
 import com.scut.se.sehubbackend.service.MemberService;
 import com.scut.se.sehubbackend.utils.MemberContextHelper;
+import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -145,11 +146,6 @@ public class MemberServiceUpdateTest {
                 .build();
     }
 
-    public void tearDown(){
-        authorityRepository.deleteAll();
-        memberRepository.deleteAll();
-        departmentRepository.deleteAll();
-    }
     private void setUpCurrentMember(Member currentMember){ doReturn(currentMember).when(memberContextHelper).getCurrentPrincipal(); }
     private void verifyMutableDataForUpdate(){
         Member memberAfterAlter=memberRepository.findById(currentMember.getStudentNumber()).get();
@@ -207,4 +203,10 @@ public class MemberServiceUpdateTest {
 
     DepartmentNameEnum initialDepartmentName=DepartmentNameEnum.Research;
     DepartmentNameEnum newDepartmentName=DepartmentNameEnum.Quality;
+
+    @After
+    public void tearDown() {
+        departmentRepository.deleteAll();
+
+    }
 }

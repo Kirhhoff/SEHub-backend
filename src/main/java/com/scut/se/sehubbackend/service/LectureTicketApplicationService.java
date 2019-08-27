@@ -12,23 +12,29 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+import static com.scut.se.sehubbackend.enumeration.AuthorityEnum.LectureTicket;
+
 @Service
 public class LectureTicketApplicationService {
 
-    final LectureTicketApplicationRepository lectureTicketApplicationRepository;
-    final CheckInfoUtil checkInfoUtil;
+    private final LectureTicketApplicationRepository lectureTicketApplicationRepository;
+    private final CheckInfoUtil checkInfoUtil;
+    private final EmailService emailService;
 
-    public LectureTicketApplicationService(LectureTicketApplicationRepository lectureTicketApplicationRepository, CheckInfoUtil checkInfoUtil) {
+    public LectureTicketApplicationService(LectureTicketApplicationRepository lectureTicketApplicationRepository, CheckInfoUtil checkInfoUtil, EmailService emailService) {
         this.lectureTicketApplicationRepository = lectureTicketApplicationRepository;
         this.checkInfoUtil = checkInfoUtil;
+        this.emailService = emailService;
     }
 
     /**
      * 参考{@link EtiquetteApplicationService#create(EtiquetteApplicationDTO)}
      */
-    public void create(LectureTicketApplicationDTO lectureTicketApplicationDTO){
+    public void create(LectureTicketApplicationDTO lectureTicketApplicationDTO) {
         LectureTicketApplication lectureTicketApplication=toDO(lectureTicketApplicationDTO,null);
         lectureTicketApplicationRepository.saveAndFlush(lectureTicketApplication);
+        emailService.sendEmailByAuthority(LectureTicket.toString(),"新表来了，看看吧");
+
     }
 
     /**

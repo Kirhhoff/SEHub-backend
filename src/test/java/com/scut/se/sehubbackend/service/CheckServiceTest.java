@@ -1,5 +1,6 @@
 package com.scut.se.sehubbackend.service;
 
+import com.scut.se.sehubbackend.dao.activity.ActivityApplicationRepository;
 import com.scut.se.sehubbackend.dao.member.DepartmentRepository;
 import com.scut.se.sehubbackend.dao.member.MemberRepository;
 import com.scut.se.sehubbackend.domain.activity.ActivityApplication;
@@ -14,6 +15,7 @@ import com.scut.se.sehubbackend.enumeration.PositionEnum;
 import com.scut.se.sehubbackend.exception.CheckHasBeenOperatedException;
 import com.scut.se.sehubbackend.exception.InvalidIdException;
 import com.scut.se.sehubbackend.utils.MemberContextHelper;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -43,6 +45,7 @@ public class CheckServiceTest {
     @Autowired CheckService checkService;
     @Autowired MemberRepository memberRepository;
     @Autowired DepartmentRepository departmentRepository;
+    @Autowired ActivityApplicationRepository activityApplicationRepository;
 
     /**
      * 测试没有权限
@@ -145,4 +148,10 @@ public class CheckServiceTest {
             .checkStatus(CheckStatusEnum.WAIT)
             .build();
     private String feedback="行";
+
+    @After
+    public void tearDown() {
+        activityApplicationRepository.deleteAll();
+        departmentRepository.deleteAll();
+    }
 }

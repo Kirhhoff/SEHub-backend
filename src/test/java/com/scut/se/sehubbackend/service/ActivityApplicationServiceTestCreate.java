@@ -11,6 +11,7 @@ import com.scut.se.sehubbackend.enumeration.DepartmentNameEnum;
 import com.scut.se.sehubbackend.enumeration.PositionEnum;
 import com.scut.se.sehubbackend.enumeration.TicketType;
 import com.scut.se.sehubbackend.utils.MemberContextHelper;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -192,4 +193,14 @@ public class ActivityApplicationServiceTestCreate {
     private HostApplication actualHost;
     private LectureTicketApplication actualLecture;
     private PosterApplication actualPoster;
+
+    @After
+    public void tearDown() {
+        activityApplicationRepository.deleteAll();
+        etiquetteApplicationRepository.deleteAll();
+        hostApplicationRepository.deleteAll();
+        lectureTicketApplicationRepository.deleteAll();
+        posterApplicationRepository.deleteAll();
+        departmentRepository.deleteAll();
+    }
 }

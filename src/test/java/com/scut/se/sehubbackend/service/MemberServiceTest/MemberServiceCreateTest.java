@@ -11,6 +11,7 @@ import com.scut.se.sehubbackend.enumeration.PositionEnum;
 import com.scut.se.sehubbackend.exception.InvalidIdException;
 import com.scut.se.sehubbackend.security.Role;
 import com.scut.se.sehubbackend.service.MemberService;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -172,4 +173,9 @@ public class MemberServiceCreateTest {
     @Autowired@Qualifier("defaultPassword") String defaultPassword;
     PositionEnum minister =Minister;
     PositionEnum staff=Staff;
+
+    @After
+    public void tearDown() {
+        departmentRepository.deleteAll();
+    }
 }

@@ -8,7 +8,7 @@ import com.scut.se.sehubbackend.dto.MemberDTO;
 import com.scut.se.sehubbackend.enumeration.DepartmentNameEnum;
 import com.scut.se.sehubbackend.enumeration.PositionEnum;
 import com.scut.se.sehubbackend.exception.InvalidIdException;
-import com.scut.se.sehubbackend.security.ContextHelper;
+import com.scut.se.sehubbackend.utils.ContextHelper;
 import com.scut.se.sehubbackend.security.Role;
 import com.scut.se.sehubbackend.utils.DTOUtil;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -26,11 +26,11 @@ import static com.scut.se.sehubbackend.enumeration.PositionEnum.Minister;
 @Service
 public class MemberService {
 
-    final MemberRepository memberRepository;
-    final ContextHelper<Member> contextHelper;
-    final DepartmentService departmentService;
-    final String defaultPassword;
-    final DTOUtil dtoUtil;
+    private final MemberRepository memberRepository;
+    private final ContextHelper<Member> contextHelper;
+    private final DepartmentService departmentService;
+    private final String defaultPassword;
+    private final DTOUtil dtoUtil;
 
     public MemberService(MemberRepository memberRepository, ContextHelper<Member> contextHelper, DepartmentService departmentService, @Qualifier("defaultPassword") String defaultPassword, DTOUtil dtoUtil) {
         this.memberRepository = memberRepository;
@@ -46,6 +46,7 @@ public class MemberService {
      */
     public void update(MemberDTO memberDTO){
         Member currentMember=contextHelper.getCurrentPrincipal();
+        //确保要修改的用户就是当前用户
         if (!currentMember.getStudentNumber().equals(memberDTO.getStudentNumber()))
             throw new AccessDeniedException("");
         else {
@@ -63,8 +64,11 @@ public class MemberService {
     @PreAuthorize("hasRole('Admin')")
     @Transactional
     public void modify(MemberDTO memberDTO) throws InvalidIdException {
+        //管理员既不能修改自己的信息，也不能把其他人设为管理员
         if(memberDTO.getPosition()==Admin)
             throw new AccessDeniedException("");
+
+        //检查部门是否被修改，如果是的话，则相应地更新部门关联
         Member memberInDatabase=findById(memberDTO.getStudentNumber());
         Department initialDepartment=memberInDatabase.getDepartment();
         DepartmentNameEnum newDepartmentName=memberDTO.getDepartmentName();
@@ -75,13 +79,16 @@ public class MemberService {
             newDepartment.addMember(memberInDatabase);
         }
 
+        //更行姓名和职位
         memberInDatabase.setName(memberDTO.getName());
         memberInDatabase.setPosition(memberDTO.getPosition());
 
+        //重新计算权限
         memberInDatabase.removeAllAuthorities();
         memberInDatabase.addAllAuthorities(
                 buildAuthority(memberDTO.getDepartmentName(),memberDTO.getPosition()));
 
+        //如果更新了部门，则通过部门更新级联更新用户信息，否则只更新用户信息
         if (newDepartment!=null){
             departmentService.save(initialDepartment);
             departmentService.save(newDepartment);
@@ -96,14 +103,20 @@ public class MemberService {
     @PreAuthorize("hasRole('Admin')")
     public void create(MemberDTO memberDTO) throws InvalidIdException {
         Long studentNumber=memberDTO.getStudentNumber();
+
+        //要确保新学号不存在，也就是要确保这里一定扔出异常，如果不扔出异常，说明学号已经存在，则报错
         try {
             findById(studentNumber);
         } catch (InvalidIdException e) {
+            //确保新学号不存在后，要确保所属的部门是存在的，否则也需要报异常
             Department department=departmentService.findById(memberDTO.getDepartmentName());
+
+            //不允许创建管理员
             PositionEnum position=memberDTO.getPosition();
             if(position==Admin)
                 throw new InvalidIdException();
 
+            //构建新用户信息，权限根据计算得到
             Member member= Member.builder()
                     .studentNumber(studentNumber)
                     .password(defaultPassword)
@@ -111,17 +124,24 @@ public class MemberService {
                     .position(position)
                     .authorityList(new ArrayList<>())
                     .build();
-
             member.addAllAuthorities(
                     buildAuthority(department.getDepartmentName(),position));
 
+            //通过更新部门级联更新用户信息
             department.addMember(member);
             departmentService.save(department);
+
             return;
         }
+
+        //学号已存在或部门不存在
         throw new InvalidIdException();
     }
 
+    /**
+     * 获取所有部门名字和所有成员信息（前端的奇怪要求，没办法只能照做，返回的类型都是临时的Map）
+     * @return 字符串形式的部门名字和MemberDTO形式的所有成员列表
+     */
     @PreAuthorize("hasRole('Admin')")
     public Map<String,Object> getAllDepartmentNameAndAllMember(){
         Map<String,Object> data=new HashMap<>();
@@ -139,10 +159,20 @@ public class MemberService {
     public void save(Member member){memberRepository.saveAndFlush(member);}
     @PreAuthorize("hasRole('Admin')") public void delete(Long studentNumber){memberRepository.deleteById(studentNumber);}
 
+    /**
+     * 通过一个成员的部门和职位计算这个成员应当具有的权限，部员默认不设置动态权限
+     * @param department 部门名
+     * @param position 职位名
+     * @return 构建好待add到具体member的权限list
+     */
     private List<Authority> buildAuthority(DepartmentNameEnum department, PositionEnum position){
         List<Authority> authorities=new ArrayList<>();
+
+        //静态的部门、职位权限
         authorities.add(Authority.builder().authorityName(new Role(department).getAuthority()).build());
         authorities.add(Authority.builder().authorityName(new Role(position).getAuthority()).build());
+
+        //对于部长，根据部门设置动态权限
         if(position==Minister){
             switch (department){
                 case Relation:authorities.add(Authority.builder().authorityName(Etiquette.toString()).build());

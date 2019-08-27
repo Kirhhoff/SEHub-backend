@@ -1,7 +1,6 @@
 package com.scut.se.sehubbackend.security.authentication.provider;
 
-import com.scut.se.sehubbackend.security.UserDetailsAdapter;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.scut.se.sehubbackend.utils.UserDetailsAdapter;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -12,11 +11,15 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationToken;
 import org.springframework.stereotype.Component;
 
+/**
+ * <p>对jwt请求进行实际认证的provider</p>
+ * <p>成功鉴权后，principal将直接放授权后的Member</p>
+ */
 @Component
 public class JwtAuthenticationProvider implements AuthenticationProvider {
 
-    final UserDetailsService userDetailsService;
-    final UserDetailsAdapter userDetailsAdapter;
+    private final UserDetailsService userDetailsService;
+    private final UserDetailsAdapter userDetailsAdapter;
 
     public JwtAuthenticationProvider(UserDetailsService userDetailsService, UserDetailsAdapter userDetailsAdapter) {
         this.userDetailsService = userDetailsService;

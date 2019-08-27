@@ -10,8 +10,9 @@ import com.scut.se.sehubbackend.enumeration.AuthorityEnum;
 import com.scut.se.sehubbackend.enumeration.DepartmentNameEnum;
 import com.scut.se.sehubbackend.enumeration.PositionEnum;
 import com.scut.se.sehubbackend.exception.InvalidIdException;
-import com.scut.se.sehubbackend.security.authorization.interfaces.AuthorizationDecisionManager;
+import com.scut.se.sehubbackend.security.authorization.AuthorizationDecisionManager;
 import com.scut.se.sehubbackend.utils.MemberContextHelper;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -116,4 +117,9 @@ public class AuthorityServiceTest {
     private Member target;
     private Long idOfTarget;
     private AuthorityEnum authorityEnum=AuthorityEnum.Etiquette;
+
+    @After
+    public void tearDown() {
+        departmentRepository.deleteAll();
+    }
 }

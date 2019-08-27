@@ -6,7 +6,7 @@ import com.scut.se.sehubbackend.domain.member.Member;
 import com.scut.se.sehubbackend.enumeration.CheckStatusEnum;
 import com.scut.se.sehubbackend.exception.CheckHasBeenOperatedException;
 import com.scut.se.sehubbackend.exception.InvalidIdException;
-import com.scut.se.sehubbackend.security.ContextHelper;
+import com.scut.se.sehubbackend.utils.ContextHelper;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
@@ -15,20 +15,22 @@ import java.util.Date;
 @Service
 public class CheckService {
 
-    final ActivityApplicationService activityApplicationService;
-    final ContextHelper<Member> contextHelper;
-    final EtiquetteApplicationService etiquetteApplicationService;
-    final HostApplicationService hostApplicationService;
-    final LectureTicketApplicationService lectureTicketApplicationService;
-    final PosterApplicationService posterApplicationService;
+    private final ActivityApplicationService activityApplicationService;
+    private final ContextHelper<Member> contextHelper;
+    private final EtiquetteApplicationService etiquetteApplicationService;
+    private final HostApplicationService hostApplicationService;
+    private final LectureTicketApplicationService lectureTicketApplicationService;
+    private final PosterApplicationService posterApplicationService;
+    private final EmailService emailService;
 
-    public CheckService(ActivityApplicationService activityApplicationService, ContextHelper<Member> contextHelper, EtiquetteApplicationService etiquetteApplicationService, HostApplicationService hostApplicationService, LectureTicketApplicationService lectureTicketApplicationService, PosterApplicationService posterApplicationService) {
+    public CheckService(ActivityApplicationService activityApplicationService, ContextHelper<Member> contextHelper, EtiquetteApplicationService etiquetteApplicationService, HostApplicationService hostApplicationService, LectureTicketApplicationService lectureTicketApplicationService, PosterApplicationService posterApplicationService, EmailService emailService) {
         this.activityApplicationService = activityApplicationService;
         this.contextHelper = contextHelper;
         this.etiquetteApplicationService = etiquetteApplicationService;
         this.hostApplicationService = hostApplicationService;
         this.lectureTicketApplicationService = lectureTicketApplicationService;
         this.posterApplicationService = posterApplicationService;
+        this.emailService = emailService;
     }
 
     /**
@@ -140,6 +142,7 @@ public class CheckService {
             preCheckInfo.setCheckDate(new Date());
             preCheckInfo.setLastModifier(contextHelper.getCurrentPrincipal());
 
+            emailService.sendEmailByMember(preCheckInfo.getInitializer(),"您发起的申请审核进度已经更新，请查看哦！");
             return application;
         }
     }

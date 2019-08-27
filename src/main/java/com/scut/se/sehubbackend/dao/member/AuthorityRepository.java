@@ -8,4 +8,6 @@ import java.util.List;
 
 public interface AuthorityRepository extends JpaRepository<Authority, Long> {
     List<Authority> findAllByAuthorityOwner(Member authorityOwner);
+
+    List<Authority> findAllByAuthorityName(String authorityName);
 }

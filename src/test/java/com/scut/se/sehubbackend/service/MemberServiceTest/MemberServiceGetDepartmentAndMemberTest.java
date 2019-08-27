@@ -9,6 +9,7 @@ import com.scut.se.sehubbackend.enumeration.DepartmentNameEnum;
 import com.scut.se.sehubbackend.enumeration.PositionEnum;
 import com.scut.se.sehubbackend.service.DepartmentService;
 import com.scut.se.sehubbackend.service.MemberService;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -63,7 +64,6 @@ public class MemberServiceGetDepartmentAndMemberTest {
 
     @Before
     public void setUp() {
-        memberRepository.deleteAll();
         Department department1= Department.builder().departmentName(departmentName1).memberList(new ArrayList<>()).build();
         Department department2= Department.builder().departmentName(departmentName2).memberList(new ArrayList<>()).build();
         Member member1= Member.builder().studentNumber(id1).password(password).name(name).position(position).authorityList(new ArrayList<>()).build();
@@ -106,4 +106,8 @@ public class MemberServiceGetDepartmentAndMemberTest {
     private MemberDTO memberDTO2;
     List<String> mockNames=new ArrayList<>();
 
+    @After
+    public void tearDown() {
+        departmentRepository.deleteAll();
+    }
 }

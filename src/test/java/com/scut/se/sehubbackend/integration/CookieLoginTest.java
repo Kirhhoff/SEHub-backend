@@ -129,7 +129,7 @@ public class CookieLoginTest {
         //成功后返回个人信息
         assertEquals(200,response.getStatus());
         //成功后应当携带Cookie
-        assertEquals(mockUsername,response.getCookie("token").getValue());
+        assertEquals(mockUsername,response.getHeader("token"));
         //成功后应携带当前用户信息
 //        JsonParser jsonParser=new JacksonJsonParser();
 //        Long responseStudentNumber=(Long)jsonParser.parseMap(response.getContentAsString()).get("studentNumber");

@@ -8,6 +8,9 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 
+/**
+ * <p>SpringBoot要求必须提供一个默认的ProviderManager，因此这里提供一个，仅设置构造函数</p>
+ */
 @Component
 public class WebAuthenticationManager extends ProviderManager {
 

@@ -3,7 +3,6 @@ package com.scut.se.sehubbackend.controller;
 import com.scut.se.sehubbackend.enumeration.AuthorityEnum;
 import com.scut.se.sehubbackend.exception.InvalidIdException;
 import com.scut.se.sehubbackend.service.AuthorityService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -12,8 +11,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class AuthorityController {
 
-    @Autowired
-    AuthorityService authorityService;
+    private final AuthorityService authorityService;
+
+    public AuthorityController(AuthorityService authorityService) {
+        this.authorityService = authorityService;
+    }
 
     @PostMapping("/authority/add/{id}")
     public void add(@PathVariable Long id, @RequestParam("authority") AuthorityEnum authority) throws InvalidIdException {

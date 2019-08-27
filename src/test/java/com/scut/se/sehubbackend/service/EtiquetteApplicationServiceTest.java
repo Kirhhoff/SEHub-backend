@@ -13,6 +13,7 @@ import com.scut.se.sehubbackend.enumeration.CheckStatusEnum;
 import com.scut.se.sehubbackend.enumeration.DepartmentNameEnum;
 import com.scut.se.sehubbackend.enumeration.PositionEnum;
 import com.scut.se.sehubbackend.utils.MemberContextHelper;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -147,4 +148,10 @@ public class EtiquetteApplicationServiceTest {
     private Member mockMember;
     private EtiquetteApplicationDTO mockRequestDTO;
     private Date timestampBeforeCreation;
+
+    @After
+    public void tearDown() {
+        etiquetteApplicationRepository.deleteAll();
+        departmentRepository.deleteAll();
+    }
 }

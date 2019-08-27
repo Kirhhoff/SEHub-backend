@@ -2,20 +2,20 @@ package com.scut.se.sehubbackend.utils;
 
 import com.scut.se.sehubbackend.dao.member.MemberRepository;
 import com.scut.se.sehubbackend.domain.member.Member;
-import com.scut.se.sehubbackend.security.AuthorityUtil;
-import com.scut.se.sehubbackend.security.UserDetailsAdapter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import java.util.Collection;
 
+/**
+ * <p>Member与默认UserDetails之间的适配器工具类</p>
+ */
 @Component
 public class Member2UserDetailsAdapter implements UserDetailsAdapter<Member> {
 
-    final MemberRepository memberRepository;
-    final AuthorityUtil authorityUtil;
-    private Member currentMember;
+    private final MemberRepository memberRepository;
+    private final AuthorityUtil authorityUtil;
 
     public Member2UserDetailsAdapter(MemberRepository memberRepository, AuthorityUtil authorityUtil) {
         this.memberRepository = memberRepository;

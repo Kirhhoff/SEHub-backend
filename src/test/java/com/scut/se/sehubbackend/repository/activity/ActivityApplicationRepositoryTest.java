@@ -12,6 +12,7 @@ import com.scut.se.sehubbackend.domain.member.Member;
 import com.scut.se.sehubbackend.enumeration.CheckStatusEnum;
 import com.scut.se.sehubbackend.enumeration.DepartmentNameEnum;
 import com.scut.se.sehubbackend.enumeration.PositionEnum;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -178,4 +179,10 @@ public class ActivityApplicationRepositoryTest {
     private ActivityApplication researchApplication2;
 
     private ActivityApplication secretaryApplication;
+
+    @After
+    public void tearDown() {
+        departmentRepository.deleteAll();
+        activityApplicationRepository.deleteAll();
+    }
 }

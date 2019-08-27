@@ -3,7 +3,6 @@ package com.scut.se.sehubbackend.utils;
 import com.scut.se.sehubbackend.domain.activity.CheckInfo;
 import com.scut.se.sehubbackend.domain.member.Member;
 import com.scut.se.sehubbackend.enumeration.CheckStatusEnum;
-import com.scut.se.sehubbackend.security.ContextHelper;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
@@ -14,7 +13,7 @@ import java.util.Date;
 @Component
 public class CheckInfoUtil {
 
-    final ContextHelper<Member> contextHelper;
+    private final ContextHelper<Member> contextHelper;
 
     public CheckInfoUtil(ContextHelper<Member> contextHelper) {
         this.contextHelper = contextHelper;

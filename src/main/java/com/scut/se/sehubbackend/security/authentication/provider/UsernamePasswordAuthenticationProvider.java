@@ -1,21 +1,24 @@
 package com.scut.se.sehubbackend.security.authentication.provider;
 
-import com.scut.se.sehubbackend.security.UserDetailsAdapter;
+import com.scut.se.sehubbackend.utils.UserDetailsAdapter;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 
+/**
+ * <p>使用username和password对请求进行实际认证的provider</p>
+ * <p>成功鉴权后，principal将直接放授权后的Member</p>
+ */
 @Component
 public class UsernamePasswordAuthenticationProvider implements AuthenticationProvider {
 
-    final UserDetailsService userDetailsService;
-    final UserDetailsAdapter userDetailsAdapter;
+    private final UserDetailsService userDetailsService;
+    private final UserDetailsAdapter userDetailsAdapter;
 
     public UsernamePasswordAuthenticationProvider(UserDetailsService userDetailsService, UserDetailsAdapter userDetailsAdapter) {
         this.userDetailsService = userDetailsService;
@@ -29,13 +32,11 @@ public class UsernamePasswordAuthenticationProvider implements AuthenticationPro
         UserDetails userDetailsInDatabase=userDetailsService.loadUserByUsername(username);
 
         if (password.equals(userDetailsInDatabase.getPassword())){
-            Authentication successAuthentication= new UsernamePasswordAuthenticationToken(
+            return new UsernamePasswordAuthenticationToken(
                     userDetailsAdapter.from(userDetailsInDatabase),
                     null,
                     userDetailsInDatabase.getAuthorities()
             );
-            SecurityContextHolder.getContext().setAuthentication(successAuthentication);
-            return successAuthentication;
         }else
             throw new AuthenticationServiceException("Password match failed!");
     }

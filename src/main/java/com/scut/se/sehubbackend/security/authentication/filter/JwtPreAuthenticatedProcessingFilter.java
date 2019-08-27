@@ -9,10 +9,15 @@ import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
 
+/**
+ * <p>识别token的Filter</p>
+ * <p>在UsernamePasswordFilter之前工作，如果没有token的话才交给后面的Filter使用username和password</p>
+ * <p>获取token的方法是尝试读取请求头中的"token"字段，然后解析得到学号，交给后续provider来认证</p>
+ */
 @Component
 public class JwtPreAuthenticatedProcessingFilter extends AbstractPreAuthenticatedProcessingFilter {
 
-    final JwtManager jwtManager;
+    private final JwtManager jwtManager;
 
     @Autowired
     public JwtPreAuthenticatedProcessingFilter(ProviderManager providerManager, JwtManager jwtManager){

@@ -4,6 +4,7 @@ import com.scut.se.sehubbackend.dao.member.DepartmentRepository;
 import com.scut.se.sehubbackend.domain.member.Department;
 import com.scut.se.sehubbackend.enumeration.DepartmentNameEnum;
 import com.scut.se.sehubbackend.service.DepartmentService;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -41,8 +42,7 @@ public class DepartmentServiceGetAllCurrentlyExistingDepartmentNameTest {
     }
 
     @Before
-    public void setUp() throws Exception {
-        departmentRepository.deleteAll();
+    public void setUp() {
         Department department1= Department.builder().departmentName(name1).memberList(new ArrayList<>()).build();
         Department department2= Department.builder().departmentName(name2).memberList(new ArrayList<>()).build();
 
@@ -52,4 +52,9 @@ public class DepartmentServiceGetAllCurrentlyExistingDepartmentNameTest {
 
     private DepartmentNameEnum name1=Research;
     private DepartmentNameEnum name2=Quality;
+
+    @After
+    public void tearDown() {
+        departmentRepository.deleteAll();
+    }
 }

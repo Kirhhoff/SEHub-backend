@@ -51,7 +51,7 @@ public class CookieExtractionTest {
         //没有cookie时访问api返回403
         mockMvc.perform(get(existedApi)).andExpect(status().isForbidden());
         //带着cookie时访问api返回200
-        mockMvc.perform(get(existedApi).cookie(mockCookie)).andExpect(status().isOk());
+        mockMvc.perform(get(existedApi).header("token",mockToken)).andExpect(status().isOk());
     }
 
     @Before

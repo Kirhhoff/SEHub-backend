@@ -6,7 +6,7 @@ import com.scut.se.sehubbackend.domain.member.Department;
 import com.scut.se.sehubbackend.domain.member.Member;
 import com.scut.se.sehubbackend.dto.ActivityApplicationDTO;
 import com.scut.se.sehubbackend.exception.InvalidIdException;
-import com.scut.se.sehubbackend.security.ContextHelper;
+import com.scut.se.sehubbackend.utils.ContextHelper;
 import com.scut.se.sehubbackend.utils.CheckInfoUtil;
 import com.scut.se.sehubbackend.utils.DTOUtil;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -17,14 +17,14 @@ import java.util.List;
 @Service
 public class ActivityApplicationService {
 
-    final ActivityApplicationRepository activityApplicationRepository;
-    final DTOUtil dtoUtil;
-    final ContextHelper<Member> contextHelper;
-    final EtiquetteApplicationService etiquetteApplicationService;
-    final HostApplicationService hostApplicationService;
-    final LectureTicketApplicationService lectureTicketApplicationService;
-    final PosterApplicationService posterApplicationService;
-    final CheckInfoUtil checkInfoUtil;
+    private final ActivityApplicationRepository activityApplicationRepository;
+    private final DTOUtil dtoUtil;
+    private final ContextHelper<Member> contextHelper;
+    private final EtiquetteApplicationService etiquetteApplicationService;
+    private final HostApplicationService hostApplicationService;
+    private final LectureTicketApplicationService lectureTicketApplicationService;
+    private final PosterApplicationService posterApplicationService;
+    private final CheckInfoUtil checkInfoUtil;
 
     public ActivityApplicationService(ActivityApplicationRepository activityApplicationRepository, DTOUtil dtoUtil, ContextHelper<Member> contextHelper, EtiquetteApplicationService etiquetteApplicationService, HostApplicationService hostApplicationService, LectureTicketApplicationService lectureTicketApplicationService, PosterApplicationService posterApplicationService, CheckInfoUtil checkInfoUtil) {
         this.activityApplicationRepository = activityApplicationRepository;
@@ -36,25 +36,6 @@ public class ActivityApplicationService {
         this.posterApplicationService = posterApplicationService;
         this.checkInfoUtil = checkInfoUtil;
     }
-
-    //
-//    @Autowired
-//    private ActivityApplicationRepository activityApplicationRepository;
-//
-//    @Autowired
-//    private EtiquetteApplicationService etiquetteApplicationService;
-//
-//    @Autowired
-//    private HostApplicationService hostApplicationService;
-//
-//    @Autowired
-//    private LectureTicketApplicationService lectureTicketApplicationService;
-//
-//    @Autowired
-//    private PosterApplicationService posterApplicationService;
-//
-//    // DTO的目的是没有必要返回给前端礼仪申请等各种辅助信息，辅助信息可选展示即点击按钮再展示
-//
 
     /**
      * 获取当前用户所在部门的所有申请表

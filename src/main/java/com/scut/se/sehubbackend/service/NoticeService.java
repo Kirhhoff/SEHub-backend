@@ -4,7 +4,7 @@ import com.scut.se.sehubbackend.domain.Application;
 import com.scut.se.sehubbackend.domain.member.Member;
 import com.scut.se.sehubbackend.dto.ApplicationNotice;
 import com.scut.se.sehubbackend.enumeration.DepartmentNameEnum;
-import com.scut.se.sehubbackend.security.ContextHelper;
+import com.scut.se.sehubbackend.utils.ContextHelper;
 import com.scut.se.sehubbackend.utils.DTOUtil;
 import org.springframework.stereotype.Service;
 
@@ -17,13 +17,13 @@ import java.util.List;
 @Service
 public class NoticeService {
 
-    final DTOUtil dtoUtil;
-    final ContextHelper<Member> contextHelper;
-    final ActivityApplicationService activityApplicationService;
-    final EtiquetteApplicationService etiquetteApplicationService;
-    final HostApplicationService hostApplicationService;
-    final LectureTicketApplicationService lectureTicketApplicationService;
-    final PosterApplicationService posterApplicationService;
+    private final DTOUtil dtoUtil;
+    private final ContextHelper<Member> contextHelper;
+    private final ActivityApplicationService activityApplicationService;
+    private final EtiquetteApplicationService etiquetteApplicationService;
+    private final HostApplicationService hostApplicationService;
+    private final LectureTicketApplicationService lectureTicketApplicationService;
+    private final PosterApplicationService posterApplicationService;
 
     public NoticeService(ActivityApplicationService activityApplicationService, ContextHelper<Member> contextHelper, EtiquetteApplicationService etiquetteApplicationService, HostApplicationService hostApplicationService, LectureTicketApplicationService lectureTicketApplicationService, PosterApplicationService posterApplicationService, DTOUtil dtoUtil) {
         this.activityApplicationService = activityApplicationService;
@@ -42,8 +42,12 @@ public class NoticeService {
      * @see ApplicationNotice
      */
     public List<ApplicationNotice> getApplicationNotices(){
+
+        //部门不能为空
         if(contextHelper.getCurrentPrincipal().getDepartment()==null)
             return new ArrayList<>();
+
+        //根据部门名获取相应表的通知
         DepartmentNameEnum departmentName=contextHelper.getCurrentPrincipal().getDepartment().getDepartmentName();
         List<? extends Application> applicationList=null;
         switch (departmentName){
@@ -57,6 +61,7 @@ public class NoticeService {
                 break;
             case Propaganda: applicationList=posterApplicationService.findAll();
         }
+
         return dtoUtil.toApplicationNotice(applicationList);
     }
 

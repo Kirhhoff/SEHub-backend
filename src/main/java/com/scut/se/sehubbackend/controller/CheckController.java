@@ -3,7 +3,6 @@ package com.scut.se.sehubbackend.controller;
 import com.scut.se.sehubbackend.exception.CheckHasBeenOperatedException;
 import com.scut.se.sehubbackend.exception.InvalidIdException;
 import com.scut.se.sehubbackend.service.CheckService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -12,8 +11,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class CheckController {
 
-    @Autowired
-    CheckService checkService;
+    private final CheckService checkService;
+
+    public CheckController(CheckService checkService) {
+        this.checkService = checkService;
+    }
 
     @RequestMapping("/application/activity/check/{id}")
     public void checkActivity(@PathVariable Long id,

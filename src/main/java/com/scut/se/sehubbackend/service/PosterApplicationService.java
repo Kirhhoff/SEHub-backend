@@ -12,15 +12,19 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+import static com.scut.se.sehubbackend.enumeration.AuthorityEnum.Poster;
+
 @Service
 public class PosterApplicationService {
 
-    final PosterApplicationRepository posterApplicationRepository;
-    final CheckInfoUtil checkInfoUtil;
+    private final PosterApplicationRepository posterApplicationRepository;
+    private final CheckInfoUtil checkInfoUtil;
+    private final EmailService emailService;
 
-    public PosterApplicationService(PosterApplicationRepository posterApplicationRepository, CheckInfoUtil checkInfoUtil) {
+    public PosterApplicationService(PosterApplicationRepository posterApplicationRepository, CheckInfoUtil checkInfoUtil, EmailService emailService) {
         this.posterApplicationRepository = posterApplicationRepository;
         this.checkInfoUtil = checkInfoUtil;
+        this.emailService = emailService;
     }
 
     /**
@@ -29,6 +33,7 @@ public class PosterApplicationService {
     public void create(PosterApplicationDTO posterApplicationDTO){
         PosterApplication posterApplication=toDO(posterApplicationDTO,null);
         posterApplicationRepository.saveAndFlush(posterApplication);
+        emailService.sendEmailByAuthority(Poster.toString(),"新表来了，看看吧");
     }
 
     /**

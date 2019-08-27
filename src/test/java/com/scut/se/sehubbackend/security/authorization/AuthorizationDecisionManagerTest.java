@@ -1,4 +1,4 @@
-package com.scut.se.sehubbackend.security.authorization.interfaces;
+package com.scut.se.sehubbackend.security.authorization;
 
 import com.scut.se.sehubbackend.dao.member.DepartmentRepository;
 import com.scut.se.sehubbackend.domain.member.Department;
@@ -6,6 +6,7 @@ import com.scut.se.sehubbackend.domain.member.Member;
 import com.scut.se.sehubbackend.enumeration.AuthorityEnum;
 import com.scut.se.sehubbackend.enumeration.DepartmentNameEnum;
 import com.scut.se.sehubbackend.enumeration.PositionEnum;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -32,6 +33,10 @@ public class AuthorizationDecisionManagerTest {
      */
     @Test
     public void testDecide() {
+
+        //因为原来的调用方式会有很多不必要的“.”运算符，写起来很长，这里简单的封装了一下
+        //_assertTrue就是断言可以修改
+        //_assertFalse就是断言不可以修改
         _assertTrue(researchMinister,researchStaff, AuthorityEnum.LectureTicket);
         _assertFalse(researchMinister,researchStaff,AuthorityEnum.Etiquette);
         _assertFalse(standingCommittee,researchStaff,AuthorityEnum.LectureTicket);
@@ -61,4 +66,8 @@ public class AuthorizationDecisionManagerTest {
     private Department researchDepartment=Department.builder().departmentName(DepartmentNameEnum.Research).memberList(new ArrayList<>()).build();
     private Department standingCommitteeDepartment=Department.builder().departmentName(DepartmentNameEnum.StandingCommittee).memberList(new ArrayList<>()).build();
 
+    @After
+    public void tearDown() {
+        departmentRepository.deleteAll();
+    }
 }

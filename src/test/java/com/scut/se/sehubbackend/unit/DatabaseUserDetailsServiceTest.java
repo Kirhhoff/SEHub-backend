@@ -4,7 +4,7 @@ package com.scut.se.sehubbackend.unit;
 import com.scut.se.sehubbackend.dao.member.MemberRepository;
 import com.scut.se.sehubbackend.domain.member.Authority;
 import com.scut.se.sehubbackend.domain.member.Member;
-import com.scut.se.sehubbackend.security.AuthorityUtil;
+import com.scut.se.sehubbackend.utils.AuthorityUtil;
 import com.scut.se.sehubbackend.security.Role;
 import com.scut.se.sehubbackend.security.authentication.DatabaseUserDetailsService;
 import com.scut.se.sehubbackend.utils.Member2UserDetailsAdapter;

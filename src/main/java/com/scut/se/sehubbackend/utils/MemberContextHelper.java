@@ -1,11 +1,13 @@
 package com.scut.se.sehubbackend.utils;
 
 import com.scut.se.sehubbackend.domain.member.Member;
-import com.scut.se.sehubbackend.security.ContextHelper;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
+/**
+ * @see ContextHelper
+ */
 @Component
 public class MemberContextHelper implements ContextHelper<Member> {
 

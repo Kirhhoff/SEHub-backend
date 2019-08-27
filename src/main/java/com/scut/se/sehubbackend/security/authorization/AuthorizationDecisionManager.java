@@ -1,4 +1,4 @@
-package com.scut.se.sehubbackend.security.authorization.interfaces;
+package com.scut.se.sehubbackend.security.authorization;
 
 import com.scut.se.sehubbackend.domain.member.Member;
 import com.scut.se.sehubbackend.enumeration.AuthorityEnum;
