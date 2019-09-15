@@ -31,24 +31,24 @@ public class EmailService {
                 .send();
     }
 
-    public void sendEmailByAuthority(String authority,String content) {
-        List<String> emails=authorityService.findAllEmailsWhoseOwnerHasAuthority(authority);
-        for (String email:emails){
-            if (email!=null) {
-                try {
-                    sendEmail(email,content);
-                } catch (SendMailException e) {
-                }
-            }
-        }
-    }
-
-    public void sendEmailByMember(Member member, String content) {
-        if (member.getEmail()!=null){
-            try {
-                sendEmail(member.getEmail(),content);
-            } catch (SendMailException e) {
-            }
-        }
-    }
+//    public void sendEmailByAuthority(String authority,String content) {
+//        List<String> emails=authorityService.findAllEmailsWhoseOwnerHasAuthority(authority);
+//        for (String email:emails){
+//            if (email!=null) {
+//                try {
+//                    sendEmail(email,content);
+//                } catch (SendMailException e) {
+//                }
+//            }
+//        }
+//    }
+//
+//    public void sendEmailByMember(Member member, String content) {
+//        if (member.getEmail()!=null){
+//            try {
+//                sendEmail(member.getEmail(),content);
+//            } catch (SendMailException e) {
+//            }
+//        }
+//    }
 }

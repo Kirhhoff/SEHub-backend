@@ -5,8 +5,11 @@ import com.scut.se.sehubbackend.domain.activity.ActivityApplication;
 import com.scut.se.sehubbackend.domain.activity.HostApplication;
 import com.scut.se.sehubbackend.dto.EtiquetteApplicationDTO;
 import com.scut.se.sehubbackend.dto.HostApplicationDTO;
+import com.scut.se.sehubbackend.email.SendEmailCreatedEvent;
 import com.scut.se.sehubbackend.exception.InvalidIdException;
 import com.scut.se.sehubbackend.utils.CheckInfoUtil;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
@@ -19,12 +22,12 @@ public class HostApplicationService {
 
     private final HostApplicationRepository hostApplicationRepository;
     private final CheckInfoUtil checkInfoUtil;
-    private final EmailService emailService;
+    @Autowired
+    private ApplicationContext context;
 
     public HostApplicationService(HostApplicationRepository hostApplicationRepository, CheckInfoUtil checkInfoUtil, EmailService emailService) {
         this.hostApplicationRepository = hostApplicationRepository;
         this.checkInfoUtil = checkInfoUtil;
-        this.emailService = emailService;
     }
 
 
@@ -34,8 +37,7 @@ public class HostApplicationService {
     public void create(HostApplicationDTO hostApplicationDTO)  {
         HostApplication hostApplication= toDO(hostApplicationDTO,null);
         hostApplicationRepository.saveAndFlush(hostApplication);
-        emailService.sendEmailByAuthority(Host.toString(),"新表来了，看看吧");
-
+        context.publishEvent(new SendEmailCreatedEvent(this, Host.toString()));
     }
 
     /**

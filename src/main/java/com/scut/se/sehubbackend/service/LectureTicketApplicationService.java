@@ -5,13 +5,18 @@ import com.scut.se.sehubbackend.domain.activity.ActivityApplication;
 import com.scut.se.sehubbackend.domain.activity.LectureTicketApplication;
 import com.scut.se.sehubbackend.dto.EtiquetteApplicationDTO;
 import com.scut.se.sehubbackend.dto.LectureTicketApplicationDTO;
+import com.scut.se.sehubbackend.email.SendEmailCreatedEvent;
 import com.scut.se.sehubbackend.exception.InvalidIdException;
 import com.scut.se.sehubbackend.utils.CheckInfoUtil;
+import javafx.application.Application;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+import static com.scut.se.sehubbackend.enumeration.AuthorityEnum.Etiquette;
 import static com.scut.se.sehubbackend.enumeration.AuthorityEnum.LectureTicket;
 
 @Service
@@ -19,12 +24,12 @@ public class LectureTicketApplicationService {
 
     private final LectureTicketApplicationRepository lectureTicketApplicationRepository;
     private final CheckInfoUtil checkInfoUtil;
-    private final EmailService emailService;
+    @Autowired
+    private ApplicationContext context;
 
     public LectureTicketApplicationService(LectureTicketApplicationRepository lectureTicketApplicationRepository, CheckInfoUtil checkInfoUtil, EmailService emailService) {
         this.lectureTicketApplicationRepository = lectureTicketApplicationRepository;
         this.checkInfoUtil = checkInfoUtil;
-        this.emailService = emailService;
     }
 
     /**
@@ -33,8 +38,7 @@ public class LectureTicketApplicationService {
     public void create(LectureTicketApplicationDTO lectureTicketApplicationDTO) {
         LectureTicketApplication lectureTicketApplication=toDO(lectureTicketApplicationDTO,null);
         lectureTicketApplicationRepository.saveAndFlush(lectureTicketApplication);
-        emailService.sendEmailByAuthority(LectureTicket.toString(),"新表来了，看看吧");
-
+        context.publishEvent(new SendEmailCreatedEvent(this, LectureTicket.toString()));
     }
 
     /**

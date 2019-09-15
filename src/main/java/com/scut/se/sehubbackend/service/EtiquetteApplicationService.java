@@ -4,8 +4,11 @@ import com.scut.se.sehubbackend.dao.activity.EtiquetteApplicationRepository;
 import com.scut.se.sehubbackend.domain.activity.ActivityApplication;
 import com.scut.se.sehubbackend.domain.activity.EtiquetteApplication;
 import com.scut.se.sehubbackend.dto.EtiquetteApplicationDTO;
+import com.scut.se.sehubbackend.email.SendEmailCreatedEvent;
 import com.scut.se.sehubbackend.exception.InvalidIdException;
 import com.scut.se.sehubbackend.utils.CheckInfoUtil;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
@@ -18,12 +21,12 @@ public class EtiquetteApplicationService {
 
     private final EtiquetteApplicationRepository etiquetteApplicationRepository;
     private final CheckInfoUtil checkInfoUtil;
-    private final EmailService emailService;
+    @Autowired
+    private ApplicationContext context;
 
     public EtiquetteApplicationService(EtiquetteApplicationRepository etiquetteApplicationRepository, CheckInfoUtil checkInfoUtil, EmailService emailService) {
         this.etiquetteApplicationRepository = etiquetteApplicationRepository;
         this.checkInfoUtil = checkInfoUtil;
-        this.emailService = emailService;
     }
 
     /**
@@ -38,8 +41,8 @@ public class EtiquetteApplicationService {
         //持久化
         etiquetteApplicationRepository.saveAndFlush(etiquetteApplication);
 
-        //发出Email通知
-        emailService.sendEmailByAuthority(Etiquette.toString(),"新表来了，看看吧");
+        //发送Email
+        context.publishEvent(new SendEmailCreatedEvent(this, Etiquette.toString()));
     }
 
     /**

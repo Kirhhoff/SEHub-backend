@@ -5,8 +5,9 @@ import com.mitchellbosecke.pebble.error.PebbleException;
 import com.mitchellbosecke.pebble.template.PebbleTemplate;
 import com.scut.se.sehubbackend.email.OhMyEmail;
 import com.scut.se.sehubbackend.email.SendMailException;
-//import jetbrick.template.JetEngine;
-//import jetbrick.template.JetTemplate;
+import jetbrick.io.resource.ResourceNotFoundException;
+import jetbrick.template.JetEngine;
+import jetbrick.template.JetTemplate;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -110,27 +111,27 @@ public class OhMyEmailTest {
     }
 
     /*该部分功能存在异常*/
-//    @Test
-//    public void testJetx() throws SendMailException {
-//        JetEngine engine   = JetEngine.create();
-//        JetTemplate template = engine.getTemplate("/register.jetx");
-//
-//        Map<String, Object> context = new HashMap<String, Object>();
-//        context.put("username", "biezhi");
-//        context.put("email", "admin@biezhi.me");
-//        context.put("url", "<a href='http://biezhi.me'>https://biezhi.me/active/asdkjajdasjdkaweoi</a>");
-//
-//        StringWriter writer = new StringWriter();
-//        template.render(context, writer);
-//        String output = writer.toString();
-//        System.out.println(output);
-//
-//        OhMyEmail.subject("这是一封测试Jetx模板邮件")
-//                .from("小姐姐的邮箱")
-//                .to(TO_EMAIL)
-//                .html(output)
-//                .send();
-//        Assert.assertTrue(true);
-//    }
+    @Test
+    public void testJetx() throws SendMailException {
+        JetEngine engine   = JetEngine.create();
+        JetTemplate template = engine.getTemplate("/register.jetx");
+
+        Map<String, Object> context = new HashMap<String, Object>();
+        context.put("username", "biezhi");
+        context.put("email", "admin@biezhi.me");
+        context.put("url", "<a href='http://biezhi.me'>https://biezhi.me/active/asdkjajdasjdkaweoi</a>");
+
+        StringWriter writer = new StringWriter();
+        template.render(context, writer);
+        String output = writer.toString();
+        System.out.println(output);
+
+        OhMyEmail.subject("这是一封测试Jetx模板邮件")
+                .from("小姐姐的邮箱")
+                .to(TO_EMAIL)
+                .html(output)
+                .send();
+        Assert.assertTrue(true);
+    }
 
 }

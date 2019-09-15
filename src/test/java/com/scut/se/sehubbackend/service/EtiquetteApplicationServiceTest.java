@@ -73,6 +73,7 @@ public class EtiquetteApplicationServiceTest {
                 .name("Luminosity")
                 .position(PositionEnum.Minister)
                 .authorityList(new ArrayList<>())
+                .email("scut_sub@outlook.com")
                 .build();
         department.addMember(mockMember);
         departmentRepository.saveAndFlush(department);

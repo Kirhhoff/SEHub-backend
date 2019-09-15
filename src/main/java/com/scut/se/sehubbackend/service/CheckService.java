@@ -3,10 +3,13 @@ package com.scut.se.sehubbackend.service;
 import com.scut.se.sehubbackend.domain.Application;
 import com.scut.se.sehubbackend.domain.activity.*;
 import com.scut.se.sehubbackend.domain.member.Member;
+import com.scut.se.sehubbackend.email.SendEmailCheckedEvent;
 import com.scut.se.sehubbackend.enumeration.CheckStatusEnum;
 import com.scut.se.sehubbackend.exception.CheckHasBeenOperatedException;
 import com.scut.se.sehubbackend.exception.InvalidIdException;
 import com.scut.se.sehubbackend.utils.ContextHelper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
@@ -21,7 +24,8 @@ public class CheckService {
     private final HostApplicationService hostApplicationService;
     private final LectureTicketApplicationService lectureTicketApplicationService;
     private final PosterApplicationService posterApplicationService;
-    private final EmailService emailService;
+    @Autowired
+    private ApplicationContext context;
 
     public CheckService(ActivityApplicationService activityApplicationService, ContextHelper<Member> contextHelper, EtiquetteApplicationService etiquetteApplicationService, HostApplicationService hostApplicationService, LectureTicketApplicationService lectureTicketApplicationService, PosterApplicationService posterApplicationService, EmailService emailService) {
         this.activityApplicationService = activityApplicationService;
@@ -30,7 +34,6 @@ public class CheckService {
         this.hostApplicationService = hostApplicationService;
         this.lectureTicketApplicationService = lectureTicketApplicationService;
         this.posterApplicationService = posterApplicationService;
-        this.emailService = emailService;
     }
 
     /**
@@ -142,7 +145,7 @@ public class CheckService {
             preCheckInfo.setCheckDate(new Date());
             preCheckInfo.setLastModifier(contextHelper.getCurrentPrincipal());
 
-            emailService.sendEmailByMember(preCheckInfo.getInitializer(),"您发起的申请审核进度已经更新，请查看哦！");
+            context.publishEvent(new SendEmailCheckedEvent(this, preCheckInfo.getInitializer()));
             return application;
         }
     }
